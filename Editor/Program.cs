@@ -34,7 +34,9 @@ namespace EVEmuLivePacketEditor
 
             while (true)
             {
-                while (clientList.Count > 0) ;
+                Thread.Sleep(1);
+
+                while (clientList.Count > 0) Thread.Sleep(1);
 
                 TCPSocket client = socket.Accept();
 
