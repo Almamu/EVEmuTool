@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
+
 using EVEmuLivePacketEditor.Network;
 using EVEmuLivePacketEditor.Client;
 
@@ -33,12 +34,16 @@ namespace EVEmuLivePacketEditor
 
             while (true)
             {
+                while (clientList.Count > 0) ;
+
                 TCPSocket client = socket.Accept();
 
                 if (client != null)
                 {
                     client.Blocking = false;
                     clientList.Add(new Client.Client(client));
+
+                    Log.Debug("Main", "Incoming connection, waiting until it finishes");
                 }
             }
         }

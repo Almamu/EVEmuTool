@@ -3,9 +3,11 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading;
-using EVEmuLivePacketEditor.Network;
 using System.Net;
 using System.Net.Sockets;
+
+using EVEmuLivePacketEditor.Network;
+
 using Marshal;
 
 namespace EVEmuLivePacketEditor.Client
@@ -44,6 +46,7 @@ namespace EVEmuLivePacketEditor.Client
                 while (true)
                 {
                     Thread.Sleep(1);
+
                     // Get server and client packets and put them into the queue
                     byte[] serverData = new byte[connection.Available];
                     int serverBytes = 0;
@@ -141,7 +144,7 @@ namespace EVEmuLivePacketEditor.Client
                                     // TODO: Handle MakeUserError exceptions
                                     SendClient(packet);
                                 }
-                                else
+                                else // We do not know about more exceptions, so send them to the server by now
                                 {
                                     SendServer(packet);
                                 }
@@ -181,6 +184,7 @@ namespace EVEmuLivePacketEditor.Client
             {
 
             }
+
             Program.clientList.Remove(this);
         }
 
@@ -220,7 +224,7 @@ namespace EVEmuLivePacketEditor.Client
             {
                 // What to do now ?
                 Log.Error("Client", "Broadcast packets not supported yet");
-                throw new NotImplementedException();
+                throw new NotImplementedException("Broadcast packets are not supported yet");
             }
         }
 
