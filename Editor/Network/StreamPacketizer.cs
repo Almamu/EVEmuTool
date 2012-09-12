@@ -8,46 +8,97 @@ namespace EVEmuLivePacketEditor.Network
     public class StreamPacketizer
     {
         private Queue<byte[]> mOut;
+        private List<byte> input;
 
         public StreamPacketizer()
         {
             mOut = new Queue<byte[]>();
+            input = new List<byte>();
         }
 
-        public int QueuePackets(byte[] data)
+        // Lots of thread safe code here to prevent data corruption
+        public void QueuePackets(byte[] data, int bytes)
         {
-            try
+            lock (input)
             {
-                // Get the packet size:
-                int cur = 0;
-                int packets = 0;
+                byte[] tmp = new byte[bytes];
 
-                for (; cur != data.Length; )
-                {
-                    int count = BitConverter.ToInt32(data, cur);
-                    cur += 4;
-                    byte[] packet = new byte[count];
-                    Array.Copy(data, cur, packet, 0, count);
-                    cur += count;
-                    mOut.Enqueue(packet);
-                    packets += 1;
-                }
+                Array.Copy(data, tmp, bytes);
 
-                return packets;
+                input.AddRange(tmp);
             }
-            catch (Exception)
+        }
+
+        public int ProcessPackets()
+        {
+            lock (mOut)
             {
-                // The packets are malformed
-                return 0;
+                lock (input)
+                {
+                    try
+                    {
+                        // Get the packet size:
+                        int cur = 0;
+                        byte[] tmp = input.ToArray();
+
+                        while (cur != tmp.Length)
+                        {
+                            int size = BitConverter.ToInt32(tmp, cur);
+
+                            if (size + cur > tmp.Length) // The packet is longer than we have here
+                            {
+                                // Get rid off the data before it
+                                input.RemoveRange(0, cur);
+
+                                return mOut.Count;
+                            }
+
+                            cur += 4;
+
+                            // Get the packet and add it to the queue
+                            byte[] packet = new byte[size];
+                            Array.Copy(tmp, cur, packet, 0, size);
+
+                            cur += size;
+
+                            mOut.Enqueue(packet);
+                        }
+
+                        // If we are here all the packets were parsed correctly
+                        input.RemoveRange(0, input.Count);
+
+                        return mOut.Count;
+                    }
+                    catch (Exception)
+                    {
+                        // The packets are malformed
+                        return 0;
+                    }
+                }
             }
         }
 
         public byte[] PopItem()
         {
-            if( mOut.Count > 0 )
-                return mOut.Dequeue();
+            lock (mOut)
+            {
+                if (mOut.Count > 0)
+                    return mOut.Dequeue();
 
-            return null;
+                return null;
+            }
+        }
+
+        public void ClearPackets()
+        {
+            lock (mOut)
+            {
+                lock (input)
+                {
+                    mOut = new Queue<byte[]>();
+                    input = new List<byte>();
+                }
+            }
         }
     }
 }

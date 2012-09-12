@@ -36,13 +36,12 @@ namespace EVEmuLivePacketEditor
             {
                 Thread.Sleep(1);
 
-                while (clientList.Count > 0) Thread.Sleep(1);
+                while (clientList.Count > 0) Thread.Sleep(10);
 
                 TCPSocket client = socket.Accept();
 
                 if (client != null)
                 {
-                    client.Blocking = false;
                     clientList.Add(new Client.Client(client));
 
                     Log.Debug("Main", "Incoming connection, waiting until it finishes");

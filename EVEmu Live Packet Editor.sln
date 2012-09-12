@@ -1,9 +1,9 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 10.00
-# Visual C# Express 2008
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marshal", "Marshal\Marshal.csproj", "{B68DB35D-A125-4EB5-97B6-076823514B23}"
-EndProject
+Microsoft Visual Studio Solution File, Format Version 11.00
+# Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{7515494C-6A6D-439D-BB8C-8B53F464F8C1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Marshal", "..\..\Server\Marshal\Marshal.csproj", "{B68DB35D-A125-4EB5-97B6-076823514B23}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -11,14 +11,14 @@ Global
 		Release|Any CPU = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(ProjectConfigurationPlatforms) = postSolution
-		{B68DB35D-A125-4EB5-97B6-076823514B23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{B68DB35D-A125-4EB5-97B6-076823514B23}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{B68DB35D-A125-4EB5-97B6-076823514B23}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{B68DB35D-A125-4EB5-97B6-076823514B23}.Release|Any CPU.Build.0 = Release|Any CPU
 		{7515494C-6A6D-439D-BB8C-8B53F464F8C1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{7515494C-6A6D-439D-BB8C-8B53F464F8C1}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{7515494C-6A6D-439D-BB8C-8B53F464F8C1}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{7515494C-6A6D-439D-BB8C-8B53F464F8C1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{B68DB35D-A125-4EB5-97B6-076823514B23}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{B68DB35D-A125-4EB5-97B6-076823514B23}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{B68DB35D-A125-4EB5-97B6-076823514B23}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{B68DB35D-A125-4EB5-97B6-076823514B23}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
