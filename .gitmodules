@@ -1,0 +1,3 @@
+[submodule "External/EVESharp"]
+	path = External/EVESharp
+	url = https://github.com/Almamu/EVESharp.git

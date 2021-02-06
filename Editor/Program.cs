@@ -1,52 +1,28 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
+using System.Runtime.CompilerServices;
 using System.Threading;
+using System.Threading.Tasks;
+using System.Windows.Forms;
+using Common.Configuration;
+using Common.Logging;
+using Common.Logging.Streams;
 
-using EVEmuLivePacketEditor.Network;
-using EVEmuLivePacketEditor.Client;
-
-namespace EVEmuLivePacketEditor
+namespace Editor
 {
-    class Program
+    static class Program
     {
-        static private TCPSocket socket = null;
-        static public List<Client.Client> clientList = new List<Client.Client>();
-
-        static void Main(string[] args)
+        /// <summary>
+        ///  The main entry point for the application.
+        /// </summary>
+        [STAThread]
+        static void Main()
         {
-            Log.Init("packet-editor");
-
-            Log.Info("Main", "Starting listening socket");
-            socket = new TCPSocket(26000, false);
-
-            if (socket.Listen(5) == false)
-            {
-                Log.Error("Main", "Cannot start listening socket on port 26000.");
-                Log.Info("Main", "You should have your EVEmu server working on port 25999");
-                Log.Info("Main", "and port 26000 free of any server.");
-
-                while (true) Thread.Sleep(1);
-            }
-
-            Log.Info("Main", "Listening socket started succesful");
-
-            while (true)
-            {
-                Thread.Sleep(1);
-
-                while (clientList.Count > 0) Thread.Sleep(10);
-
-                TCPSocket client = socket.Accept();
-
-                if (client != null)
-                {
-                    clientList.Add(new Client.Client(client));
-
-                    Log.Debug("Main", "Incoming connection, waiting until it finishes");
-                }
-            }
+            Application.SetHighDpiMode(HighDpiMode.SystemAware);
+            Application.EnableVisualStyles();
+            Application.SetCompatibleTextRenderingDefault(false);
+            Application.Run(new MainWindow());
         }
     }
 }
