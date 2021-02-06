@@ -105,7 +105,7 @@ namespace Editor
 
         private string GetCall()
         {
-            if (this.Packet.Type == PyPacket.PacketType.CALL_RSP && this.Client.CallIDList.ContainsKey(this.CallID) == true)
+            if ((this.Packet.Type == PyPacket.PacketType.CALL_RSP || this.Packet.Type == PyPacket.PacketType.ERRORRESPONSE) && this.Client.CallIDList.ContainsKey(this.CallID) == true)
                 return this.Client.CallIDList[this.CallID];
 
             if (this.Packet.Type != PyPacket.PacketType.CALL_REQ)

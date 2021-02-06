@@ -124,23 +124,23 @@ namespace Editor
             // check the type of packet
             if (undeterminedCheckbox.Checked == false && packet.Packet == null)
                 return;
-            if (callReqCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.CALL_REQ)
+            if (packet.Packet != null && callReqCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.CALL_REQ)
                 return;
-            if (callRspCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.CALL_RSP)
+            if (packet.Packet != null && callRspCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.CALL_RSP)
                 return;
-            if (notificationCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.NOTIFICATION)
+            if (packet.Packet != null && notificationCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.NOTIFICATION)
                 return;
-            if (sessionChangeCheckbox.Checked == false && (packet.Packet.Type == PyPacket.PacketType.SESSIONCHANGENOTIFICATION || packet.Packet.Type == PyPacket.PacketType.SESSIONINITIALSTATENOTIFICATION))
+            if (packet.Packet != null && sessionChangeCheckbox.Checked == false && (packet.Packet.Type == PyPacket.PacketType.SESSIONCHANGENOTIFICATION || packet.Packet.Type == PyPacket.PacketType.SESSIONINITIALSTATENOTIFICATION))
                 return;
-            if (exceptionCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.ERRORRESPONSE)
+            if (packet.Packet != null && exceptionCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.ERRORRESPONSE)
                 return;
-            if (pingReqCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.PING_REQ)
+            if (packet.Packet != null && pingReqCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.PING_REQ)
                 return;
-            if (pingRspCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.PING_RSP)
+            if (packet.Packet != null && pingRspCheckbox.Checked == false && packet.Packet.Type == PyPacket.PacketType.PING_RSP)
                 return;
             
             // check for service calls ONLY if CallRes/CallRsp are selected and the packet is an actual packet
-            if (serviceNameTextbox.Text.Length > 0)
+            if (packet.Packet != null && serviceNameTextbox.Text.Length > 0)
             {
                 if (packet.Service != serviceNameTextbox.Text)
                     return;
