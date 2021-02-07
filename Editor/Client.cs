@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Windows.Forms;
-using Common.Network;
+﻿using System.Collections.Generic;
 using PythonTypes.Types.Network;
 using PythonTypes.Types.Primitives;
 
@@ -11,34 +8,19 @@ namespace Editor
     {
         public bool IncludePackets { get; set; } = true;
         public int ClientIndex { get; set; } = 0;
-        public string Username { get; set; } = "";
         public string Address { get; set; } = "";
+        public string Username { get; set; } = "";
         public Dictionary<long, string> CallIDList = new Dictionary<long, string>();
         public Dictionary<long, string> ServiceList = new Dictionary<long, string>();
         public Dictionary<string, string> BoundServices = new Dictionary<string, string>();
-
-        private EVEClientSocket mClientSocket = null;
-        private EVEClientSocket mServerSocket = null;
-        private MainWindow mMainWindow = null;
-
-        public Client(int index, EVEClientSocket socket, EVEClientSocket serverSocket, MainWindow mainWindow)
+        
+        public Client(int index)
         {
-            this.mServerSocket = serverSocket;
-            this.mClientSocket = socket;
-            this.Address = socket.GetRemoteAddress();
-            this.ClientIndex = index;
-            
-            // setup receive callbacks for the client and server connections
-            this.mServerSocket.SetReceiveCallback(ServerReceive);
-            this.mClientSocket.SetReceiveCallback(ClientReceive);
-            // setup connection close callbacks
-            this.mServerSocket.SetOnConnectionLostHandler(OnConnectionLost);
-            this.mClientSocket.SetOnConnectionLostHandler(OnConnectionLost);
             // store the window reference
-            this.mMainWindow = mainWindow;
+            this.ClientIndex = index;
         }
 
-        private void HandlePacket(PacketEntry entry)
+        protected void HandlePacket(PacketEntry entry)
         {
             int callID = 0;
             string call = "";
@@ -86,87 +68,6 @@ namespace Editor
                     this.BoundServices.Add(id, "BoundInventory (bound)");
                 }
             }
-        }
-
-        private void ServerReceive(PyDataType data)
-        {
-            // relay packet to client
-            this.mClientSocket.Send(data);
-
-            PacketEntry entry = new PacketEntry
-            {
-                RawPacket = data,
-                Client = this,
-                Direction = PacketDirection.ServerToClient,
-                Timestamp = DateTime.UtcNow
-            };
-
-
-            // try to parse a PyPacket, if it fails just store the raw data
-            try
-            {
-                entry.Packet = data;
-                this.HandlePacket(entry);
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-            
-            this.mMainWindow.OnPacketReceived(entry);
-        }
-
-        private void ClientReceive(PyDataType data)
-        {
-            // relay packet to server
-            this.mServerSocket.Send(data);
-
-            PacketEntry entry = new PacketEntry
-            {
-                RawPacket = data,
-                Client = this,
-                Direction = PacketDirection.ClientToServer,
-                Timestamp = DateTime.UtcNow
-            };
-
-            // try to parse a PyPacket, if it fails just store the raw data
-
-            try
-            {
-                entry.Packet = data;
-                this.HandlePacket(entry);
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-            
-            this.mMainWindow.OnPacketReceived(entry);
-        }
-
-        private void OnConnectionLost()
-        {
-            // forcefully disconnect sockets
-            try
-            {
-                this.mClientSocket.ForcefullyDisconnect();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            try
-            {
-                this.mServerSocket.ForcefullyDisconnect();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-            
-            // let the form know we're out
-            this.mMainWindow.OnClientDisconnected(this);
         }
     }
 }

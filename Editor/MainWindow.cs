@@ -12,13 +12,12 @@ namespace Editor
 {
     public partial class MainWindow : Form
     {
-        private delegate void ClientUpdateDelegate(Client newClient);
+        private delegate void ClientUpdateDelegate(Client newLiveClient);
         private delegate void ClientPacketReceivedDelegate(PacketEntry entry);
         private ClientUpdateDelegate mClientAdd;
-        private ClientUpdateDelegate mClientRemove;
         private ClientPacketReceivedDelegate mPacketReceived;
-        
-        private EVEBridgeServer mServer = new EVEBridgeServer();
+
+        private EVEBridgeServer mServer;
         private List<Client> mClients = new List<Client>();
         private BindingSource mClientBinding = new BindingSource();
         private List<PacketEntry> mPackets = new List<PacketEntry>();
@@ -26,16 +25,25 @@ namespace Editor
 
         private string mServerAddress = "127.0.0.1";
         private int mServerPort = 25999;
+        private bool mIgnoreIncomingPackets = false;
         
         public MainWindow()
         {
             this.mClientAdd = AddClient;
-            this.mClientRemove = RemoveClient;
             this.mPacketReceived = FilterPacket;
 
             InitializeComponent();
             ExtendComponents();
             
+            StartListening();
+
+            listenStatusLabel.Text = "Listen started";
+            clientCountLabel.Text = "0 clients connected";
+        }
+
+        private void StartListening()
+        {
+            this.mServer = new EVEBridgeServer();
             this.mServer.Listen();
             this.mServer.BeginAccept(ServerConnectionAccept);
         }
@@ -63,32 +71,32 @@ namespace Editor
                 EVEClientSocket serverSocket = new EVEClientSocket(server.Log);
                 serverSocket.Connect(this.mServerAddress, this.mServerPort);
 
-                Client newClient = new Client(this.mClients.Count, client, serverSocket, this);
+                LiveClient newLiveClient = new LiveClient(this.mClients.Count, client, serverSocket, this);
 
-                this.Invoke(this.mClientAdd, newClient);
+                this.Invoke(this.mClientAdd, newLiveClient);
+
+                clientCountLabel.Text = $"{this.mClients.Count} clients connected";
             }
             catch (Exception)
             {
                 // ignored
             }
-            
+
             // put the socket in accept state again
             this.mServer.BeginAccept(ServerConnectionAccept);
         }
 
-        private void AddClient(Client newClient)
+        private void AddClient(Client newLiveClient)
         {
+            if(this.mIgnoreIncomingPackets == true)
+                return;
+                
             // add the client to the list and data source
-            int index = this.mClientBinding.Add(newClient);
+            int index = this.mClientBinding.Add(newLiveClient);
 
-            newClient.ClientIndex = index;
+            newLiveClient.ClientIndex = index;
         }
-
-        private void RemoveClient(Client client)
-        {
-            this.mClientBinding.Remove(client);
-        }
-
+        
         private void serverAddressTextBox_TextChanged(object sender, EventArgs e)
         {
             this.mServerAddress = this.serverAddressTextBox.Text;
@@ -99,14 +107,15 @@ namespace Editor
             this.mServerPort = int.Parse(this.serverPortTextBox.Text);
         }
 
-        public void OnClientDisconnected(Client client)
-        {
-            this.Invoke(this.mClientRemove, client);
-        }
-
         public void OnPacketReceived(PacketEntry entry)
         {
-            this.mPackets.Add(entry);
+            // ignore incoming packets if we're reading a saved capture
+            if(this.mIgnoreIncomingPackets == true)
+                return;
+                
+            lock(this.mPackets)
+                this.mPackets.Add(entry);
+            
             this.Invoke(this.mPacketReceived, entry);
         }
 
@@ -155,6 +164,7 @@ namespace Editor
             this.packetTreeView.Nodes.Clear();
             this.packetTreeView.EndUpdate();
         }
+        
         private void packetGridView_SelectionChanged(object sender, EventArgs e)
         {
             // update the rich text box
@@ -202,21 +212,14 @@ namespace Editor
 
         private void FilterFullPacketList()
         {
-            // clear the packets first
-            this.mPacketListBinding.Clear();
-            
-            foreach (PacketEntry entry in this.mPackets)
-                this.FilterPacket(entry);
-        }
-
-        private void toolStripLabel1_Click(object sender, EventArgs e)
-        {
-            // clear lists to free memory
-            this.mPackets.Clear();
-            this.mPacketListBinding.Clear();
-            // clear client's calls cache
-            foreach (Client client in this.mClients)
-                client.CallIDList.Clear();
+            lock (this.mPackets)
+            {
+                // clear the packets first
+                this.mPacketListBinding.Clear();
+                
+                foreach (PacketEntry entry in this.mPackets)
+                    this.FilterPacket(entry);
+            }
         }
 
         private void packetGridView_CellClick(object sender, DataGridViewCellEventArgs e)
@@ -278,6 +281,119 @@ namespace Editor
                 {
                     this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.SeaGreen;
                 }
+            }
+        }
+        
+        private void newCaptureToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            // disable current clients (if any) so the connection is still relayed and not closed
+            foreach (Client client in this.mClients)
+                client.IncludePackets = false;
+                
+            lock (this.mPackets)
+            {
+                // clear lists to free memory
+                this.mPackets.Clear();
+                this.mPacketListBinding.Clear();
+            }
+
+            // clear clients too
+            this.mClients.Clear();
+            this.mClientBinding.Clear();
+            // clear textboxes and treeviews too
+            this.ClearPacketDetails();
+            
+            this.mIgnoreIncomingPackets = false;
+            
+        }
+
+        private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
+                PacketListFile.SavePackets(saveFileDialog1.FileName, this.mPackets, this.mClients);                
+        }
+
+        private void exitToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                // forcefully close the socket
+                this.mServer.ForcefullyDisconnect();
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
+
+            foreach (Client client in this.mClients)
+            {
+                if (client is LiveClient liveClient)
+                {
+                    try
+                    {
+                        liveClient.Stop();
+                    }
+                    catch (Exception)
+                    {
+                        // ignored
+                    }
+                }
+            }
+            
+            // close the form
+            this.Close();
+        }
+
+        private void openToolStripMenuItem_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+                {
+                    foreach (Client client in this.mClients)
+                    {
+                        if (client is LiveClient liveClient)
+                        {
+                            try
+                            {
+                                liveClient.Stop();
+                            }
+                            catch (Exception)
+                            {
+                                // ignored
+                            }
+                        }
+                    }
+                    
+                    this.mIgnoreIncomingPackets = true;
+                    
+                    PacketListFile.LoadPackets(this.openFileDialog1.FileName, out this.mPackets, out this.mClients);
+                    
+                    listenStatusLabel.Text = "Listener stopped on capture load. Start a new capture to listen again";
+
+                    // clear the list of clients in the grid view first
+                    this.mClientBinding.Clear();
+                    
+                    // add all clients to the grid view
+                    foreach (Client client in this.mClients)
+                        this.mClientBinding.Add(client);
+                    
+                    // re-create the packet window
+                    this.FilterFullPacketList();
+                }
+            }
+            catch (Exception exception)
+            {
+                MessageBox.Show(exception.Message, "Error opening file", MessageBoxButtons.OK, MessageBoxIcon.Error);
+            }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+            lock (this.mPackets)
+            {
+                this.mPackets.Clear();
+                this.mPacketListBinding.Clear();
             }
         }
     }
