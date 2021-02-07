@@ -72,6 +72,10 @@
             this.packetService = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.packetCall = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.packetTextBox = new System.Windows.Forms.RichTextBox();
+            this.tabControl2 = new System.Windows.Forms.TabControl();
+            this.tabPage3 = new System.Windows.Forms.TabPage();
+            this.tabPage4 = new System.Windows.Forms.TabPage();
+            this.packetTreeView = new System.Windows.Forms.TreeView();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.clientListGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -85,6 +89,9 @@
             this.splitContainer1.Panel2.SuspendLayout();
             this.splitContainer1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.packetGridView)).BeginInit();
+            this.tabControl2.SuspendLayout();
+            this.tabPage3.SuspendLayout();
+            this.tabPage4.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -157,13 +164,13 @@
             // 
             // tabControl1
             // 
-            this.tabControl1.Anchor = ((System.Windows.Forms.AnchorStyles) ((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) | System.Windows.Forms.AnchorStyles.Left) | System.Windows.Forms.AnchorStyles.Right)));
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Location = new System.Drawing.Point(0, 28);
+            this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(800, 420);
+            this.tabControl1.Size = new System.Drawing.Size(800, 425);
             this.tabControl1.TabIndex = 2;
             this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
@@ -176,7 +183,7 @@
             this.tabPage1.Location = new System.Drawing.Point(4, 22);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage1.Size = new System.Drawing.Size(792, 394);
+            this.tabPage1.Size = new System.Drawing.Size(792, 399);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Filter information";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -394,7 +401,7 @@
             this.tabPage2.Location = new System.Drawing.Point(4, 22);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage2.Size = new System.Drawing.Size(792, 394);
+            this.tabPage2.Size = new System.Drawing.Size(792, 399);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Packet data";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -412,9 +419,9 @@
             // 
             // splitContainer1.Panel2
             // 
-            this.splitContainer1.Panel2.Controls.Add(this.packetTextBox);
-            this.splitContainer1.Size = new System.Drawing.Size(792, 394);
-            this.splitContainer1.SplitterDistance = 169;
+            this.splitContainer1.Panel2.Controls.Add(this.tabControl2);
+            this.splitContainer1.Size = new System.Drawing.Size(792, 399);
+            this.splitContainer1.SplitterDistance = 171;
             this.splitContainer1.TabIndex = 2;
             // 
             // packetGridView
@@ -428,7 +435,7 @@
             this.packetGridView.Location = new System.Drawing.Point(0, 0);
             this.packetGridView.Name = "packetGridView";
             this.packetGridView.ReadOnly = true;
-            this.packetGridView.Size = new System.Drawing.Size(792, 169);
+            this.packetGridView.Size = new System.Drawing.Size(792, 171);
             this.packetGridView.TabIndex = 0;
             this.packetGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.packetGridView_CellClick);
             this.packetGridView.RowsAdded += new System.Windows.Forms.DataGridViewRowsAddedEventHandler(this.packetGridView_RowsAdded);
@@ -500,12 +507,53 @@
             // 
             this.packetTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
             this.packetTextBox.Font = new System.Drawing.Font("Segoe UI Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
-            this.packetTextBox.Location = new System.Drawing.Point(0, 0);
+            this.packetTextBox.Location = new System.Drawing.Point(3, 3);
             this.packetTextBox.Name = "packetTextBox";
             this.packetTextBox.ReadOnly = true;
-            this.packetTextBox.Size = new System.Drawing.Size(792, 221);
+            this.packetTextBox.Size = new System.Drawing.Size(778, 192);
             this.packetTextBox.TabIndex = 1;
             this.packetTextBox.Text = "";
+            // 
+            // tabControl2
+            // 
+            this.tabControl2.Controls.Add(this.tabPage3);
+            this.tabControl2.Controls.Add(this.tabPage4);
+            this.tabControl2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl2.Location = new System.Drawing.Point(0, 0);
+            this.tabControl2.Name = "tabControl2";
+            this.tabControl2.SelectedIndex = 0;
+            this.tabControl2.Size = new System.Drawing.Size(792, 224);
+            this.tabControl2.TabIndex = 2;
+            // 
+            // tabPage3
+            // 
+            this.tabPage3.Controls.Add(this.packetTextBox);
+            this.tabPage3.Location = new System.Drawing.Point(4, 22);
+            this.tabPage3.Name = "tabPage3";
+            this.tabPage3.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage3.Size = new System.Drawing.Size(784, 198);
+            this.tabPage3.TabIndex = 0;
+            this.tabPage3.Text = "Text View";
+            this.tabPage3.UseVisualStyleBackColor = true;
+            // 
+            // tabPage4
+            // 
+            this.tabPage4.Controls.Add(this.packetTreeView);
+            this.tabPage4.Location = new System.Drawing.Point(4, 22);
+            this.tabPage4.Name = "tabPage4";
+            this.tabPage4.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage4.Size = new System.Drawing.Size(784, 198);
+            this.tabPage4.TabIndex = 1;
+            this.tabPage4.Text = "Tree View";
+            this.tabPage4.UseVisualStyleBackColor = true;
+            // 
+            // packetTreeView
+            // 
+            this.packetTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.packetTreeView.Location = new System.Drawing.Point(3, 3);
+            this.packetTreeView.Name = "packetTreeView";
+            this.packetTreeView.Size = new System.Drawing.Size(778, 192);
+            this.packetTreeView.TabIndex = 0;
             // 
             // MainWindow
             // 
@@ -533,9 +581,18 @@
             ((System.ComponentModel.ISupportInitialize) (this.splitContainer1)).EndInit();
             this.splitContainer1.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize) (this.packetGridView)).EndInit();
+            this.tabControl2.ResumeLayout(false);
+            this.tabPage3.ResumeLayout(false);
+            this.tabPage4.ResumeLayout(false);
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.TreeView packetTreeView;
+
+        private System.Windows.Forms.TabControl tabControl2;
+        private System.Windows.Forms.TabPage tabPage3;
+        private System.Windows.Forms.TabPage tabPage4;
 
         private System.Windows.Forms.DataGridViewTextBoxColumn packetCall;
         private System.Windows.Forms.DataGridViewTextBoxColumn packetCallID;

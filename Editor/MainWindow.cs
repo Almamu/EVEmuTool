@@ -6,6 +6,7 @@ using System.Linq;
 using System.Windows.Forms;
 using Common.Network;
 using PythonTypes.Types.Network;
+using PythonTypes.Types.Primitives;
 
 namespace Editor
 {
@@ -53,16 +54,23 @@ namespace Editor
 
         public void ServerConnectionAccept(IAsyncResult ar)
         {
-            EVEBridgeServer server = ar.AsyncState as EVEBridgeServer;
-            EVEClientSocket client = server.EndAccept(ar);
+            try
+            {
+                EVEBridgeServer server = ar.AsyncState as EVEBridgeServer;
+                EVEClientSocket client = server.EndAccept(ar);
             
-            // open a connection to the server to relay info from this client
-            EVEClientSocket serverSocket = new EVEClientSocket(server.Log);
-            serverSocket.Connect(this.mServerAddress, this.mServerPort);
+                // open a connection to the server to relay info from this client
+                EVEClientSocket serverSocket = new EVEClientSocket(server.Log);
+                serverSocket.Connect(this.mServerAddress, this.mServerPort);
 
-            Client newClient = new Client(this.mClients.Count, client, serverSocket, this);
+                Client newClient = new Client(this.mClients.Count, client, serverSocket, this);
 
-            this.Invoke(this.mClientAdd, newClient);
+                this.Invoke(this.mClientAdd, newClient);
+            }
+            catch (Exception)
+            {
+                // ignored
+            }
             
             // put the socket in accept state again
             this.mServer.BeginAccept(ServerConnectionAccept);
@@ -102,18 +110,61 @@ namespace Editor
             this.Invoke(this.mPacketReceived, entry);
         }
 
+        private void LoadPacketDetails(int index)
+        {
+            PacketEntry packet = this.packetGridView.Rows[index].DataBoundItem as PacketEntry;
+
+            this.packetTextBox.Text = packet.PacketString;
+            
+            this.packetTreeView.BeginUpdate();
+            this.packetTreeView.Nodes.Clear();
+
+            if (packet.Packet != null)
+            {
+                if (packet.Packet.Type == PyPacket.PacketType.CALL_REQ)
+                {
+                    PyTuple callInfo = ((packet.Packet.Payload[0] as PyTuple)[1] as PySubStream).Stream as PyTuple;
+
+                    TreeViewPrettyPrinter.Process(callInfo[2], this.packetTreeView.Nodes.Add("Call Arguments"));
+                    TreeViewPrettyPrinter.Process(callInfo[3], this.packetTreeView.Nodes.Add("Named Call Arguments"));
+                }
+                else if (packet.Packet.Type == PyPacket.PacketType.CALL_RSP)
+                {
+                    PyDataType result = (packet.Packet.Payload[0] as PySubStream).Stream;
+
+                    TreeViewPrettyPrinter.Process(result, this.packetTreeView.Nodes.Add("Result"));
+                }
+                
+                TreeViewPrettyPrinter.Process(packet.Packet.OutOfBounds,
+                    packetTreeView.Nodes.Add("Out of bounds data"));
+            }
+            
+            TreeViewPrettyPrinter.Process(packet.RawPacket, this.packetTreeView.Nodes.Add("RawData"));
+
+            foreach (TreeNode node in this.packetTreeView.Nodes)
+                node.ExpandAll();
+
+            this.packetTreeView.Nodes[0].EnsureVisible();
+            this.packetTreeView.EndUpdate();
+        }
+
+        private void ClearPacketDetails()
+        {
+            this.packetTextBox.Text = "";
+            this.packetTreeView.BeginUpdate();
+            this.packetTreeView.Nodes.Clear();
+            this.packetTreeView.EndUpdate();
+        }
         private void packetGridView_SelectionChanged(object sender, EventArgs e)
         {
             // update the rich text box
             if (this.packetGridView.SelectedRows.Count == 0)
             {
-                this.packetTextBox.Text = "";
+                this.ClearPacketDetails();
                 return;
             }
 
-            PacketEntry packet = this.packetGridView.SelectedRows[0].DataBoundItem as PacketEntry;
-
-            this.packetTextBox.Text = packet.PacketString;
+            this.LoadPacketDetails(this.packetGridView.SelectedRows[0].Index);
         }
 
         private void FilterPacket(PacketEntry packet)
@@ -172,14 +223,11 @@ namespace Editor
         {
             if (this.packetGridView.SelectedCells.Count == 0)
             {
-                this.packetTextBox.Text = "";
+                this.ClearPacketDetails();
                 return;
             }
 
-
-            PacketEntry packet = this.packetGridView.Rows[this.packetGridView.SelectedCells[0].RowIndex].DataBoundItem as PacketEntry;
-
-            this.packetTextBox.Text = packet.PacketString;
+            this.LoadPacketDetails(this.packetGridView.SelectedCells[0].RowIndex);
         }
 
         private void tabControl1_Selected(object sender, TabControlEventArgs e)
