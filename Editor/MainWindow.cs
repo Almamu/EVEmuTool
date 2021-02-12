@@ -2,9 +2,12 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Windows.Forms;
 using Common.Network;
+using PythonTypes;
+using PythonTypes.Marshal;
 using PythonTypes.Types.Network;
 using PythonTypes.Types.Primitives;
 
@@ -157,6 +160,22 @@ namespace Editor
             this.packetTreeView.EndUpdate();
         }
 
+        private void LoadFileDetails(PyDataType packet)
+        {
+            this.fileTextBox.Text = PrettyPrinter.FromDataType(packet);
+            
+            this.fileTreeView.BeginUpdate();
+            this.fileTreeView.Nodes.Clear();
+
+            TreeViewPrettyPrinter.Process(packet, this.fileTreeView.Nodes.Add("RawData"));
+
+            foreach (TreeNode node in this.fileTreeView.Nodes)
+                node.ExpandAll();
+
+            this.fileTreeView.Nodes[0].EnsureVisible();
+            this.fileTreeView.EndUpdate();
+        }
+
         private void ClearPacketDetails()
         {
             this.packetTextBox.Text = "";
@@ -304,13 +323,12 @@ namespace Editor
             this.ClearPacketDetails();
             
             this.mIgnoreIncomingPackets = false;
-            
         }
 
         private void saveAsToolStripMenuItem_Click(object sender, EventArgs e)
         {
-            if (saveFileDialog1.ShowDialog() == DialogResult.OK)
-                PacketListFile.SavePackets(saveFileDialog1.FileName, this.mPackets, this.mClients);                
+            if (saveCaptureDialog.ShowDialog() == DialogResult.OK)
+                PacketListFile.SavePackets(saveCaptureDialog.FileName, this.mPackets, this.mClients);                
         }
 
         private void exitToolStripMenuItem_Click(object sender, EventArgs e)
@@ -348,7 +366,7 @@ namespace Editor
         {
             try
             {
-                if (this.openFileDialog1.ShowDialog() == DialogResult.OK)
+                if (this.openCaptureDialog.ShowDialog() == DialogResult.OK)
                 {
                     foreach (Client client in this.mClients)
                     {
@@ -367,7 +385,7 @@ namespace Editor
                     
                     this.mIgnoreIncomingPackets = true;
                     
-                    PacketListFile.LoadPackets(this.openFileDialog1.FileName, out this.mPackets, out this.mClients);
+                    PacketListFile.LoadPackets(this.openCaptureDialog.FileName, out this.mPackets, out this.mClients);
                     
                     listenStatusLabel.Text = "Listener stopped on capture load. Start a new capture to listen again";
 
@@ -394,6 +412,23 @@ namespace Editor
             {
                 this.mPackets.Clear();
                 this.mPacketListBinding.Clear();
+            }
+        }
+
+        private void openMarshalFileButton_Click(object sender, EventArgs e)
+        {
+            try
+            {
+                if (this.openMarshalFile.ShowDialog() == DialogResult.OK)
+                {
+                    byte[] fileContents = File.ReadAllBytes(this.openMarshalFile.FileName);
+                    LoadFileDetails(Unmarshal.ReadFromByteArray(fileContents));
+                }
+            }
+            catch (Exception exception)
+            {
+                Console.WriteLine(exception);
+                throw;
             }
         }
     }

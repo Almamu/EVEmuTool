@@ -38,6 +38,7 @@
             this.saveAsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
             this.clientListGridView = new System.Windows.Forms.DataGridView();
             this.selected = new System.Windows.Forms.DataGridViewCheckBoxColumn();
             this.clientID = new System.Windows.Forms.DataGridViewTextBoxColumn();
@@ -81,12 +82,19 @@
             this.packetTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.packetTreeView = new System.Windows.Forms.TreeView();
-            this.saveFileDialog1 = new System.Windows.Forms.SaveFileDialog();
-            this.openFileDialog1 = new System.Windows.Forms.OpenFileDialog();
+            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.tabControl3 = new System.Windows.Forms.TabControl();
+            this.tabPage6 = new System.Windows.Forms.TabPage();
+            this.fileTextBox = new System.Windows.Forms.RichTextBox();
+            this.tabPage7 = new System.Windows.Forms.TabPage();
+            this.fileTreeView = new System.Windows.Forms.TreeView();
+            this.openMarshalFileButton = new System.Windows.Forms.Button();
+            this.saveCaptureDialog = new System.Windows.Forms.SaveFileDialog();
+            this.openCaptureDialog = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.listenStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.clientCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.openMarshalFile = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.clientListGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -103,6 +111,10 @@
             this.tabControl2.SuspendLayout();
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
+            this.tabPage5.SuspendLayout();
+            this.tabControl3.SuspendLayout();
+            this.tabPage6.SuspendLayout();
+            this.tabPage7.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -128,40 +140,50 @@
             // newCaptureToolStripMenuItem
             // 
             this.newCaptureToolStripMenuItem.Name = "newCaptureToolStripMenuItem";
-            this.newCaptureToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.newCaptureToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.newCaptureToolStripMenuItem.Text = "New capture";
             this.newCaptureToolStripMenuItem.Click += new System.EventHandler(this.newCaptureToolStripMenuItem_Click);
             // 
             // toolStripSeparator1
             // 
             this.toolStripSeparator1.Name = "toolStripSeparator1";
-            this.toolStripSeparator1.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator1.Size = new System.Drawing.Size(138, 6);
             // 
             // openToolStripMenuItem
             // 
             this.openToolStripMenuItem.Name = "openToolStripMenuItem";
-            this.openToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.openToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.openToolStripMenuItem.Text = "Open";
             this.openToolStripMenuItem.Click += new System.EventHandler(this.openToolStripMenuItem_Click);
             // 
             // saveAsToolStripMenuItem
             // 
             this.saveAsToolStripMenuItem.Name = "saveAsToolStripMenuItem";
-            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.saveAsToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.saveAsToolStripMenuItem.Text = "Save As";
             this.saveAsToolStripMenuItem.Click += new System.EventHandler(this.saveAsToolStripMenuItem_Click);
             // 
             // toolStripSeparator2
             // 
             this.toolStripSeparator2.Name = "toolStripSeparator2";
-            this.toolStripSeparator2.Size = new System.Drawing.Size(149, 6);
+            this.toolStripSeparator2.Size = new System.Drawing.Size(138, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(152, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(141, 22);
             this.exitToolStripMenuItem.Text = "Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.exitToolStripMenuItem_Click);
+            // 
+            // toolStripButton1
+            // 
+            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
+            this.toolStripButton1.Image = ((System.Drawing.Image) (resources.GetObject("toolStripButton1.Image")));
+            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.toolStripButton1.Name = "toolStripButton1";
+            this.toolStripButton1.Size = new System.Drawing.Size(101, 22);
+            this.toolStripButton1.Text = "Empty packet list";
+            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
             // 
             // clientListGridView
             // 
@@ -210,6 +232,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
+            this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
@@ -599,15 +622,90 @@
             this.packetTreeView.Size = new System.Drawing.Size(778, 231);
             this.packetTreeView.TabIndex = 0;
             // 
-            // saveFileDialog1
+            // tabPage5
             // 
-            this.saveFileDialog1.DefaultExt = "marshal";
-            this.saveFileDialog1.Filter = "EVEmu Packet Capture|*.marshal";
+            this.tabPage5.Controls.Add(this.tabControl3);
+            this.tabPage5.Controls.Add(this.openMarshalFileButton);
+            this.tabPage5.Location = new System.Drawing.Point(4, 22);
+            this.tabPage5.Name = "tabPage5";
+            this.tabPage5.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage5.Size = new System.Drawing.Size(792, 466);
+            this.tabPage5.TabIndex = 2;
+            this.tabPage5.Text = "Marshal data";
+            this.tabPage5.UseVisualStyleBackColor = true;
             // 
-            // openFileDialog1
+            // tabControl3
             // 
-            this.openFileDialog1.DefaultExt = "marshal";
-            this.openFileDialog1.Filter = "EVEmu Packet Capture|*.marshal";
+            this.tabControl3.Controls.Add(this.tabPage6);
+            this.tabControl3.Controls.Add(this.tabPage7);
+            this.tabControl3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl3.Location = new System.Drawing.Point(3, 26);
+            this.tabControl3.Name = "tabControl3";
+            this.tabControl3.SelectedIndex = 0;
+            this.tabControl3.Size = new System.Drawing.Size(786, 437);
+            this.tabControl3.TabIndex = 3;
+            // 
+            // tabPage6
+            // 
+            this.tabPage6.Controls.Add(this.fileTextBox);
+            this.tabPage6.Location = new System.Drawing.Point(4, 22);
+            this.tabPage6.Name = "tabPage6";
+            this.tabPage6.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage6.Size = new System.Drawing.Size(778, 411);
+            this.tabPage6.TabIndex = 0;
+            this.tabPage6.Text = "Text View";
+            this.tabPage6.UseVisualStyleBackColor = true;
+            // 
+            // fileTextBox
+            // 
+            this.fileTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fileTextBox.Font = new System.Drawing.Font("Segoe UI Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.fileTextBox.Location = new System.Drawing.Point(3, 3);
+            this.fileTextBox.Name = "fileTextBox";
+            this.fileTextBox.ReadOnly = true;
+            this.fileTextBox.Size = new System.Drawing.Size(772, 405);
+            this.fileTextBox.TabIndex = 1;
+            this.fileTextBox.Text = "";
+            // 
+            // tabPage7
+            // 
+            this.tabPage7.Controls.Add(this.fileTreeView);
+            this.tabPage7.Location = new System.Drawing.Point(4, 22);
+            this.tabPage7.Name = "tabPage7";
+            this.tabPage7.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage7.Size = new System.Drawing.Size(778, 411);
+            this.tabPage7.TabIndex = 1;
+            this.tabPage7.Text = "Tree View";
+            this.tabPage7.UseVisualStyleBackColor = true;
+            // 
+            // fileTreeView
+            // 
+            this.fileTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.fileTreeView.Location = new System.Drawing.Point(3, 3);
+            this.fileTreeView.Name = "fileTreeView";
+            this.fileTreeView.Size = new System.Drawing.Size(772, 405);
+            this.fileTreeView.TabIndex = 0;
+            // 
+            // openMarshalFileButton
+            // 
+            this.openMarshalFileButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.openMarshalFileButton.Location = new System.Drawing.Point(3, 3);
+            this.openMarshalFileButton.Name = "openMarshalFileButton";
+            this.openMarshalFileButton.Size = new System.Drawing.Size(786, 23);
+            this.openMarshalFileButton.TabIndex = 0;
+            this.openMarshalFileButton.Text = "Open Marshal File";
+            this.openMarshalFileButton.UseVisualStyleBackColor = true;
+            this.openMarshalFileButton.Click += new System.EventHandler(this.openMarshalFileButton_Click);
+            // 
+            // saveCaptureDialog
+            // 
+            this.saveCaptureDialog.DefaultExt = "marshal";
+            this.saveCaptureDialog.Filter = "EVEmu Packet Capture|*.marshal";
+            // 
+            // openCaptureDialog
+            // 
+            this.openCaptureDialog.DefaultExt = "marshal";
+            this.openCaptureDialog.Filter = "EVEmu Packet Capture|*.marshal";
             // 
             // statusStrip1
             // 
@@ -630,15 +728,9 @@
             this.clientCountLabel.Size = new System.Drawing.Size(43, 17);
             this.clientCountLabel.Text = "Clients";
             // 
-            // toolStripButton1
+            // openMarshalFile
             // 
-            this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Text;
-            this.toolStripButton1.Image = ((System.Drawing.Image) (resources.GetObject("toolStripButton1.Image")));
-            this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
-            this.toolStripButton1.Name = "toolStripButton1";
-            this.toolStripButton1.Size = new System.Drawing.Size(101, 22);
-            this.toolStripButton1.Text = "Empty packet list";
-            this.toolStripButton1.Click += new System.EventHandler(this.toolStripButton1_Click);
+            this.openMarshalFile.FileName = "openFileDialog1";
             // 
             // MainWindow
             // 
@@ -670,11 +762,27 @@
             this.tabControl2.ResumeLayout(false);
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
+            this.tabPage5.ResumeLayout(false);
+            this.tabControl3.ResumeLayout(false);
+            this.tabPage6.ResumeLayout(false);
+            this.tabPage7.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.RichTextBox fileTextBox;
+        private System.Windows.Forms.TabControl tabControl3;
+        private System.Windows.Forms.TabPage tabPage6;
+        private System.Windows.Forms.TabPage tabPage7;
+        private System.Windows.Forms.TreeView fileTreeView;
+
+        private System.Windows.Forms.Button openMarshalFileButton;
+
+        private System.Windows.Forms.TabPage tabPage5;
+
+        private System.Windows.Forms.OpenFileDialog openMarshalFile;
 
         private System.Windows.Forms.ToolStripButton toolStripButton1;
 
@@ -684,7 +792,7 @@
 
         private System.Windows.Forms.StatusStrip statusStrip1;
 
-        private System.Windows.Forms.OpenFileDialog openFileDialog1;
+        private System.Windows.Forms.OpenFileDialog openCaptureDialog;
 
         private System.Windows.Forms.ToolStripMenuItem openToolStripMenuItem;
 
@@ -697,7 +805,7 @@
 
         private System.Windows.Forms.ToolStripMenuItem newCaptureToolStripMenuItem;
 
-        private System.Windows.Forms.SaveFileDialog saveFileDialog1;
+        private System.Windows.Forms.SaveFileDialog saveCaptureDialog;
 
         private System.Windows.Forms.TreeView packetTreeView;
 
