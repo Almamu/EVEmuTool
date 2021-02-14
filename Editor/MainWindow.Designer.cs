@@ -89,12 +89,20 @@
             this.tabPage7 = new System.Windows.Forms.TabPage();
             this.fileTreeView = new System.Windows.Forms.TreeView();
             this.openMarshalFileButton = new System.Windows.Forms.Button();
+            this.tabPage8 = new System.Windows.Forms.TabPage();
+            this.tabControl4 = new System.Windows.Forms.TabControl();
+            this.tabPage9 = new System.Windows.Forms.TabPage();
+            this.cacheTextBox = new System.Windows.Forms.RichTextBox();
+            this.tabPage10 = new System.Windows.Forms.TabPage();
+            this.cacheTreeView = new System.Windows.Forms.TreeView();
+            this.openCacheFileButton = new System.Windows.Forms.Button();
             this.saveCaptureDialog = new System.Windows.Forms.SaveFileDialog();
             this.openCaptureDialog = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
             this.listenStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.clientCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
-            this.openMarshalFile = new System.Windows.Forms.OpenFileDialog();
+            this.openMarshalFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.openCacheFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize) (this.clientListGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -115,6 +123,10 @@
             this.tabControl3.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
+            this.tabPage8.SuspendLayout();
+            this.tabControl4.SuspendLayout();
+            this.tabPage9.SuspendLayout();
+            this.tabPage10.SuspendLayout();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -233,6 +245,7 @@
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
             this.tabControl1.Name = "tabControl1";
@@ -697,6 +710,81 @@
             this.openMarshalFileButton.UseVisualStyleBackColor = true;
             this.openMarshalFileButton.Click += new System.EventHandler(this.openMarshalFileButton_Click);
             // 
+            // tabPage8
+            // 
+            this.tabPage8.Controls.Add(this.tabControl4);
+            this.tabPage8.Controls.Add(this.openCacheFileButton);
+            this.tabPage8.Location = new System.Drawing.Point(4, 22);
+            this.tabPage8.Name = "tabPage8";
+            this.tabPage8.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage8.Size = new System.Drawing.Size(792, 466);
+            this.tabPage8.TabIndex = 3;
+            this.tabPage8.Text = "Cache file";
+            this.tabPage8.UseVisualStyleBackColor = true;
+            // 
+            // tabControl4
+            // 
+            this.tabControl4.Controls.Add(this.tabPage9);
+            this.tabControl4.Controls.Add(this.tabPage10);
+            this.tabControl4.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.tabControl4.Location = new System.Drawing.Point(3, 26);
+            this.tabControl4.Name = "tabControl4";
+            this.tabControl4.SelectedIndex = 0;
+            this.tabControl4.Size = new System.Drawing.Size(786, 437);
+            this.tabControl4.TabIndex = 5;
+            // 
+            // tabPage9
+            // 
+            this.tabPage9.Controls.Add(this.cacheTextBox);
+            this.tabPage9.Location = new System.Drawing.Point(4, 22);
+            this.tabPage9.Name = "tabPage9";
+            this.tabPage9.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage9.Size = new System.Drawing.Size(778, 411);
+            this.tabPage9.TabIndex = 0;
+            this.tabPage9.Text = "Text View";
+            this.tabPage9.UseVisualStyleBackColor = true;
+            // 
+            // cacheTextBox
+            // 
+            this.cacheTextBox.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cacheTextBox.Font = new System.Drawing.Font("Segoe UI Mono", 8.25F, System.Drawing.FontStyle.Regular, System.Drawing.GraphicsUnit.Point, ((byte) (0)));
+            this.cacheTextBox.Location = new System.Drawing.Point(3, 3);
+            this.cacheTextBox.Name = "cacheTextBox";
+            this.cacheTextBox.ReadOnly = true;
+            this.cacheTextBox.Size = new System.Drawing.Size(772, 405);
+            this.cacheTextBox.TabIndex = 1;
+            this.cacheTextBox.Text = "";
+            // 
+            // tabPage10
+            // 
+            this.tabPage10.Controls.Add(this.cacheTreeView);
+            this.tabPage10.Location = new System.Drawing.Point(4, 22);
+            this.tabPage10.Name = "tabPage10";
+            this.tabPage10.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage10.Size = new System.Drawing.Size(778, 411);
+            this.tabPage10.TabIndex = 1;
+            this.tabPage10.Text = "Tree View";
+            this.tabPage10.UseVisualStyleBackColor = true;
+            // 
+            // cacheTreeView
+            // 
+            this.cacheTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.cacheTreeView.Location = new System.Drawing.Point(3, 3);
+            this.cacheTreeView.Name = "cacheTreeView";
+            this.cacheTreeView.Size = new System.Drawing.Size(772, 405);
+            this.cacheTreeView.TabIndex = 0;
+            // 
+            // openCacheFileButton
+            // 
+            this.openCacheFileButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.openCacheFileButton.Location = new System.Drawing.Point(3, 3);
+            this.openCacheFileButton.Name = "openCacheFileButton";
+            this.openCacheFileButton.Size = new System.Drawing.Size(786, 23);
+            this.openCacheFileButton.TabIndex = 4;
+            this.openCacheFileButton.Text = "Open Cache File";
+            this.openCacheFileButton.UseVisualStyleBackColor = true;
+            this.openCacheFileButton.Click += new System.EventHandler(this.openCacheFileButton_Click);
+            // 
             // saveCaptureDialog
             // 
             this.saveCaptureDialog.DefaultExt = "marshal";
@@ -728,9 +816,10 @@
             this.clientCountLabel.Size = new System.Drawing.Size(43, 17);
             this.clientCountLabel.Text = "Clients";
             // 
-            // openMarshalFile
+            // openCacheFileDialog
             // 
-            this.openMarshalFile.FileName = "openFileDialog1";
+            this.openCacheFileDialog.DefaultExt = "cache";
+            this.openCacheFileDialog.Filter = "EVE Online Cache File|*.cache";
             // 
             // MainWindow
             // 
@@ -766,11 +855,26 @@
             this.tabControl3.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
+            this.tabPage8.ResumeLayout(false);
+            this.tabControl4.ResumeLayout(false);
+            this.tabPage9.ResumeLayout(false);
+            this.tabPage10.ResumeLayout(false);
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
         }
+
+        private System.Windows.Forms.OpenFileDialog openCacheFileDialog;
+
+        private System.Windows.Forms.Button openCacheFileButton;
+        private System.Windows.Forms.RichTextBox cacheTextBox;
+        private System.Windows.Forms.TabControl tabControl4;
+        private System.Windows.Forms.TabPage tabPage10;
+        private System.Windows.Forms.TabPage tabPage9;
+        private System.Windows.Forms.TreeView cacheTreeView;
+
+        private System.Windows.Forms.TabPage tabPage8;
 
         private System.Windows.Forms.RichTextBox fileTextBox;
         private System.Windows.Forms.TabControl tabControl3;
@@ -782,7 +886,7 @@
 
         private System.Windows.Forms.TabPage tabPage5;
 
-        private System.Windows.Forms.OpenFileDialog openMarshalFile;
+        private System.Windows.Forms.OpenFileDialog openMarshalFileDialog;
 
         private System.Windows.Forms.ToolStripButton toolStripButton1;
 

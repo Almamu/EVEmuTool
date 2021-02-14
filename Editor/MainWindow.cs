@@ -4,10 +4,15 @@ using System.ComponentModel;
 using System.Drawing;
 using System.IO;
 using System.Linq;
+using System.Text;
 using System.Windows.Forms;
 using Common.Network;
+using Editor.CustomMarshal;
+using Org.BouncyCastle.Utilities.Zlib;
 using PythonTypes;
+using PythonTypes.Compression;
 using PythonTypes.Marshal;
+using PythonTypes.Types.Complex;
 using PythonTypes.Types.Network;
 using PythonTypes.Types.Primitives;
 
@@ -174,6 +179,43 @@ namespace Editor
 
             this.fileTreeView.Nodes[0].EnsureVisible();
             this.fileTreeView.EndUpdate();
+        }
+
+        private void LoadCacheDetails(PyDataType cache)
+        {
+            if (cache is PyTuple == false)
+                throw new Exception("Expected PyTuple");
+
+            PyTuple tuple = cache as PyTuple;
+
+            if (tuple.Count != 2)
+                throw new Exception("Expected PyTuple with 2 elements");
+
+            PyDataType name = tuple[0];
+            PyDataType data = tuple[1];
+
+            if (name is PyString == false)
+                throw new Exception("Cache name not found");
+            
+            if (data is PyObjectData == false)
+                throw new Exception("Expected PyObjectData as second element");
+
+            PyString cacheName = name as PyString;
+            PyCachedObject objectData = data as PyObjectData;
+            PyDataType cacheContent = Unmarshal.ReadFromByteArray(objectData.Cache.Value);
+            
+            this.cacheTextBox.Text = $"Object name: {cacheName.Value}" + Environment.NewLine + PrettyPrinter.FromDataType(cacheContent);
+            
+            this.cacheTreeView.BeginUpdate();
+            this.cacheTreeView.Nodes.Clear();
+            
+            TreeViewPrettyPrinter.Process(cacheContent, this.cacheTreeView.Nodes.Add("RawData"));
+            
+            foreach (TreeNode node in this.cacheTreeView.Nodes)
+                node.ExpandAll();
+
+            this.cacheTreeView.Nodes[0].EnsureVisible();
+            this.cacheTreeView.EndUpdate();
         }
 
         private void ClearPacketDetails()
@@ -417,18 +459,19 @@ namespace Editor
 
         private void openMarshalFileButton_Click(object sender, EventArgs e)
         {
-            try
+            if (this.openMarshalFileDialog.ShowDialog() == DialogResult.OK)
             {
-                if (this.openMarshalFile.ShowDialog() == DialogResult.OK)
-                {
-                    byte[] fileContents = File.ReadAllBytes(this.openMarshalFile.FileName);
-                    LoadFileDetails(Unmarshal.ReadFromByteArray(fileContents));
-                }
+                byte[] fileContents = File.ReadAllBytes(this.openMarshalFileDialog.FileName);
+                LoadFileDetails(Unmarshal.ReadFromByteArray(fileContents));
             }
-            catch (Exception exception)
+        }
+
+        private void openCacheFileButton_Click(object sender, EventArgs e)
+        {
+            if (this.openCacheFileDialog.ShowDialog () == DialogResult.OK)
             {
-                Console.WriteLine(exception);
-                throw;
+                byte[] fileContents = File.ReadAllBytes(this.openCacheFileDialog.FileName);
+                LoadCacheDetails(CustomUnmarshal.ReadFromByteArray(fileContents));
             }
         }
     }
