@@ -72,11 +72,10 @@ namespace Editor
         {
             try
             {
-                EVEBridgeServer server = ar.AsyncState as EVEBridgeServer;
-                EVEClientSocket client = server.EndAccept(ar);
+                EVEClientSocket client = this.mServer.EndAccept(ar);
             
                 // open a connection to the server to relay info from this client
-                EVEClientSocket serverSocket = new EVEClientSocket(server.Log);
+                EVEClientSocket serverSocket = new EVEClientSocket(this.mServer.Log);
                 serverSocket.Connect(this.mServerAddress, this.mServerPort);
 
                 LiveClient newLiveClient = new LiveClient(this.mClients.Count, client, serverSocket, this);

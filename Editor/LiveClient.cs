@@ -24,8 +24,8 @@ namespace Editor
             this.mServerSocket.SetReceiveCallback(ServerReceive);
             this.mClientSocket.SetReceiveCallback(ClientReceive);
             // setup connection close callbacks
-            this.mServerSocket.SetOnConnectionLostHandler(OnConnectionLost);
-            this.mClientSocket.SetOnConnectionLostHandler(OnConnectionLost);
+            this.mServerSocket.SetOnConnectionLostHandler(Stop);
+            this.mClientSocket.SetOnConnectionLostHandler(Stop);
         }
 
         private void ServerReceive(PyDataType data)
@@ -70,7 +70,6 @@ namespace Editor
             };
 
             // try to parse a PyPacket, if it fails just store the raw data
-
             try
             {
                 entry.Packet = data;
@@ -82,28 +81,6 @@ namespace Editor
             }
             
             this.mMainWindow.OnPacketReceived(entry);
-        }
-
-        private void OnConnectionLost()
-        {
-            // forcefully disconnect sockets
-            try
-            {
-                this.mClientSocket.ForcefullyDisconnect();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
-
-            try
-            {
-                this.mServerSocket.ForcefullyDisconnect();
-            }
-            catch (Exception)
-            {
-                // ignored
-            }
         }
 
         public void Stop()
@@ -126,7 +103,6 @@ namespace Editor
             {
                 // ignored
             }
-            
         }
     }
 }
