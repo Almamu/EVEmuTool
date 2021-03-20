@@ -67,13 +67,12 @@ namespace Editor
             this.packetGridView.MultiSelect = false;
         }
         
-
         public void ServerConnectionAccept(IAsyncResult ar)
         {
+            EVEClientSocket client = this.mServer.EndAccept(ar);
+            
             try
             {
-                EVEClientSocket client = this.mServer.EndAccept(ar);
-            
                 // open a connection to the server to relay info from this client
                 EVEClientSocket serverSocket = new EVEClientSocket(this.mServer.Log);
                 serverSocket.Connect(this.mServerAddress, this.mServerPort);
@@ -86,7 +85,15 @@ namespace Editor
             }
             catch (Exception)
             {
-                // ignored
+                try
+                {
+                    // connection to the server failed, force connection closing for the client
+                    client.ForcefullyDisconnect();
+                }
+                catch
+                {
+                    // ignored
+                }
             }
 
             // put the socket in accept state again
