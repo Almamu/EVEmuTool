@@ -2,6 +2,7 @@
 using System.Runtime.CompilerServices;
 using Google.Protobuf.WellKnownTypes;
 using PythonTypes;
+using PythonTypes.Types.Collections;
 using PythonTypes.Types.Network;
 using PythonTypes.Types.Primitives;
 

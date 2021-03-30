@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 using PythonTypes;
+using PythonTypes.Types.Collections;
 using PythonTypes.Types.Database;
 using PythonTypes.Types.Primitives;
 
@@ -102,7 +103,7 @@ namespace Editor
             TreeNode child = node.Nodes.Add($"[PyDictionary {dictionary.Length} entries]");
 
             // process all the keys and values
-            foreach (KeyValuePair<PyDataType, PyDataType> pair in dictionary)
+            foreach (PyDictionaryKeyValuePair<PyDataType, PyDataType> pair in dictionary)
             {
                 TreeNode keyChild = ProcessPythonType(pair.Key, child);
                 ProcessPythonType(pair.Value, keyChild);

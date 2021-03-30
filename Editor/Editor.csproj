@@ -2,12 +2,14 @@
 
     <PropertyGroup>
         <OutputType>WinExe</OutputType>
-        <TargetFramework>netcoreapp3.1</TargetFramework>
+        <TargetFramework>net5.0-windows</TargetFramework>
         <UseWindowsForms>true</UseWindowsForms>
+        <LangVersion>9</LangVersion>
     </PropertyGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\External\EVESharp\Server\Common\Common.csproj" />
+      <ProjectReference Include="..\External\EVESharp\Server\PythonTypes\PythonTypes.csproj" />
     </ItemGroup>
 
 </Project>
