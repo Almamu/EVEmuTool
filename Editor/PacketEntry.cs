@@ -31,6 +31,8 @@ namespace Editor
             }
         }
 
+        public byte[] PacketBytes { get; init; }
+
         public PyPacket Packet;
         public int ClientIndex => Client.ClientIndex;
         public string PacketString { get; private set; }

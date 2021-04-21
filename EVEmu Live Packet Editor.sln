@@ -1,11 +1,15 @@
 ﻿
-Microsoft Visual Studio Solution File, Format Version 11.00
-# Visual Studio 2010
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Common", "External\EVESharp\Server\Common\Common.csproj", "{F71DB9BE-3C99-4985-A231-DF61A2B7C45D}"
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.31205.134
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "External\EVESharp\Server\Common\Common.csproj", "{F71DB9BE-3C99-4985-A231-DF61A2B7C45D}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PythonTypes", "External\EVESharp\Server\PythonTypes\PythonTypes.csproj", "{293B7C83-2DE9-4DA5-9C33-C1525273E7C1}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PythonTypes", "External\EVESharp\Server\PythonTypes\PythonTypes.csproj", "{293B7C83-2DE9-4DA5-9C33-C1525273E7C1}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Editor", "Editor\Editor.csproj", "{5C202FBF-DDB2-4827-A637-0948B329F8C0}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Editor", "Editor\Editor.csproj", "{5C202FBF-DDB2-4827-A637-0948B329F8C0}"
+EndProject
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "EVE", "External\EVESharp\Server\EVE\EVE.csproj", "{BB489E2E-4EB6-4F5C-A39A-FDB8CF8610B6}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -25,8 +29,15 @@ Global
 		{5C202FBF-DDB2-4827-A637-0948B329F8C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{5C202FBF-DDB2-4827-A637-0948B329F8C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{5C202FBF-DDB2-4827-A637-0948B329F8C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{BB489E2E-4EB6-4F5C-A39A-FDB8CF8610B6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{BB489E2E-4EB6-4F5C-A39A-FDB8CF8610B6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{BB489E2E-4EB6-4F5C-A39A-FDB8CF8610B6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{BB489E2E-4EB6-4F5C-A39A-FDB8CF8610B6}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {59B5E021-EEE5-41E2-9467-3754CDB0639E}
 	EndGlobalSection
 EndGlobal

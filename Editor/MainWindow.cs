@@ -11,9 +11,10 @@ using Editor.CustomMarshal;
 using PythonTypes;
 using PythonTypes.Marshal;
 using PythonTypes.Types.Collections;
-using PythonTypes.Types.Complex;
 using PythonTypes.Types.Network;
 using PythonTypes.Types.Primitives;
+using System.ComponentModel.Design;
+using EVE.Packets.Complex;
 
 namespace Editor
 {
@@ -38,6 +39,11 @@ namespace Editor
         {
             this.mClientAdd = AddClient;
             this.mPacketReceived = FilterPacket;
+
+            // setup hex views as the editor removes the setup for some absurd reason
+            this.hexView = new WpfHexaEditor.HexEditor();
+            this.fileHexView = new WpfHexaEditor.HexEditor();
+            this.cacheHexView = new WpfHexaEditor.HexEditor();
 
             InitializeComponent();
             ExtendComponents();
@@ -64,16 +70,20 @@ namespace Editor
             this.packetGridView.DataSource = this.mPacketListBinding;
             // disable multiselect
             this.packetGridView.MultiSelect = false;
+            // set hex views as childs of whatever is needed
+            this.hexViewHost.Child = this.hexView;
+            this.cacheHexViewHost.Child = this.cacheHexView;
+            this.fileHexViewHost.Child = this.fileHexView;
         }
-        
+
         public void ServerConnectionAccept(IAsyncResult ar)
         {
-            EVEClientSocket client = this.mServer.EndAccept(ar);
+            CustomEVEClientSocket client = this.mServer.EndAccept(ar);
             
             try
             {
                 // open a connection to the server to relay info from this client
-                EVEClientSocket serverSocket = new EVEClientSocket(this.mServer.Log);
+                CustomEVEClientSocket serverSocket = new CustomEVEClientSocket(this.mServer.Log);
                 serverSocket.Connect(this.mServerAddress, this.mServerPort);
 
                 LiveClient newLiveClient = new LiveClient(this.mClients.Count, client, serverSocket, this);
@@ -134,10 +144,15 @@ namespace Editor
 
         private void LoadPacketDetails(int index)
         {
+            Cursor.Current = Cursors.WaitCursor;
             PacketEntry packet = this.packetGridView.Rows[index].DataBoundItem as PacketEntry;
 
             this.packetTextBox.Text = packet.PacketString;
-            
+            if (this.hexView.Stream != null)
+                this.hexView.Stream.Close();
+            this.hexView.Stream = new MemoryStream(packet.PacketBytes);
+            this.hexView.RefreshView();
+
             this.packetTreeView.BeginUpdate();
             this.packetTreeView.Nodes.Clear();
 
@@ -168,10 +183,16 @@ namespace Editor
 
             this.packetTreeView.Nodes[0].EnsureVisible();
             this.packetTreeView.EndUpdate();
+            Cursor.Current = Cursors.Default;
         }
 
-        private void LoadFileDetails(PyDataType packet)
+        private void LoadFileDetails(byte[] contents, PyDataType packet)
         {
+            if (this.fileHexView.Stream != null)
+                this.fileHexView.Stream.Close();
+            this.fileHexView.Stream = new MemoryStream(contents);
+            this.fileHexView.RefreshView();
+
             this.fileTextBox.Text = PrettyPrinter.FromDataType(packet);
             
             this.fileTreeView.BeginUpdate();
@@ -186,8 +207,13 @@ namespace Editor
             this.fileTreeView.EndUpdate();
         }
 
-        private void LoadCacheDetails(PyDataType cache)
+        private void LoadCacheDetails(byte[] contents, PyDataType cache)
         {
+            if (this.cacheHexView.Stream != null)
+                this.cacheHexView.Stream.Close();
+            this.cacheHexView.Stream = new MemoryStream(contents);
+            this.cacheHexView.RefreshView();
+
             if (cache is PyTuple == false)
                 throw new Exception("Expected PyTuple");
 
@@ -206,7 +232,7 @@ namespace Editor
                 throw new Exception("Expected PyObjectData as second element");
 
             PyString cacheName = name as PyString;
-            PyCachedObject objectData = data as PyObjectData;
+            CachedObject objectData = data as PyObjectData;
             PyDataType cacheContent = Unmarshal.ReadFromByteArray(objectData.Cache.Value);
             
             this.cacheTextBox.Text = $"Object name: {cacheName.Value}" + Environment.NewLine + PrettyPrinter.FromDataType(cacheContent);
@@ -267,9 +293,11 @@ namespace Editor
                 return;
             
             // check for service calls ONLY if CallRes/CallRsp are selected and the packet is an actual packet
-            if (packet.Packet != null && serviceNameTextbox.Text.Length > 0)
+            if (packet.Packet != null)
             {
-                if (packet.Service != serviceNameTextbox.Text)
+                if (serviceNameTextbox.Text.Length > 0 && packet.Service != serviceNameTextbox.Text)
+                    return;
+                if (callNameTextbox.Text.Length > 0 && packet.Call != callNameTextbox.Text)
                     return;
             }
             
@@ -466,8 +494,10 @@ namespace Editor
         {
             if (this.openMarshalFileDialog.ShowDialog() == DialogResult.OK)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 byte[] fileContents = File.ReadAllBytes(this.openMarshalFileDialog.FileName);
-                LoadFileDetails(Unmarshal.ReadFromByteArray(fileContents));
+                LoadFileDetails(fileContents, Unmarshal.ReadFromByteArray(fileContents));
+                Cursor.Current = Cursors.Default;
             }
         }
 
@@ -475,9 +505,22 @@ namespace Editor
         {
             if (this.openCacheFileDialog.ShowDialog () == DialogResult.OK)
             {
+                Cursor.Current = Cursors.WaitCursor;
                 byte[] fileContents = File.ReadAllBytes(this.openCacheFileDialog.FileName);
-                LoadCacheDetails(CustomUnmarshal.ReadFromByteArray(fileContents));
+                LoadCacheDetails(fileContents, CustomUnmarshal.ReadFromByteArray(fileContents));
+                Cursor.Current = Cursors.Default;
             }
+        }
+
+        private void packetGridView_CellEnter(object sender, DataGridViewCellEventArgs e)
+        {
+            if (this.packetGridView.SelectedCells.Count == 0)
+            {
+                this.ClearPacketDetails();
+                return;
+            }
+
+            this.LoadPacketDetails(this.packetGridView.SelectedCells[0].RowIndex);
         }
     }
 }

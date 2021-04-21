@@ -9,11 +9,11 @@ namespace Editor
 {
     public class LiveClient : Client
     {
-        private EVEClientSocket mClientSocket = null;
-        private EVEClientSocket mServerSocket = null;
+        private CustomEVEClientSocket mClientSocket = null;
+        private CustomEVEClientSocket mServerSocket = null;
         protected MainWindow mMainWindow = null;
 
-        public LiveClient(int index, EVEClientSocket socket, EVEClientSocket serverSocket, MainWindow mainWindow) : base(index)
+        public LiveClient(int index, CustomEVEClientSocket socket, CustomEVEClientSocket serverSocket, MainWindow mainWindow) : base(index)
         {
             this.mServerSocket = serverSocket;
             this.mClientSocket = socket;
@@ -28,7 +28,7 @@ namespace Editor
             this.mClientSocket.SetOnConnectionLostHandler(Stop);
         }
 
-        private void ServerReceive(PyDataType data)
+        private void ServerReceive(byte[] byteData, PyDataType data)
         {
             // relay packet to client
             this.mClientSocket.Send(data);
@@ -38,7 +38,8 @@ namespace Editor
                 RawPacket = data,
                 Client = this,
                 Direction = PacketDirection.ServerToClient,
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTime.UtcNow,
+                PacketBytes = byteData
             };
 
 
@@ -56,7 +57,7 @@ namespace Editor
             this.mMainWindow.OnPacketReceived(entry);
         }
 
-        private void ClientReceive(PyDataType data)
+        private void ClientReceive(byte[] byteData, PyDataType data)
         {
             // relay packet to server
             this.mServerSocket.Send(data);
@@ -66,7 +67,8 @@ namespace Editor
                 RawPacket = data,
                 Client = this,
                 Direction = PacketDirection.ClientToServer,
-                Timestamp = DateTime.UtcNow
+                Timestamp = DateTime.UtcNow,
+                PacketBytes = byteData
             };
 
             // try to parse a PyPacket, if it fails just store the raw data
