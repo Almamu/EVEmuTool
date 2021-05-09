@@ -46,13 +46,19 @@ namespace Editor
                 else if (entry.Packet.Destination is PyAddressClient client)
                     callID = client.CallID;
 
+                // payload must be a single substream for these handlers to do anything
+                if (entry.Packet.Payload[0] is PySubStream == false)
+                    return;
+
+                PySubStream subStream = entry.Packet.Payload[0] as PySubStream;
+                
                 call = this.CallIDList[callID];
 
                 if (call.EndsWith(" (MachoBindObject)") == true || call == "MachoBindObject")
                 {
                     // store the information for resolving this bound
                     PyString id =
-                        ((((((entry.Packet.Payload[0] as PySubStream)).Stream as PyTuple)[0] as PySubStruct)
+                        ((((subStream.Stream as PyTuple)[0] as PySubStruct)
                             .Definition as PySubStream).Stream as PyTuple)[0] as PyString;
 
                     this.BoundServices.Add(id, entry.Service + " (bound)");
@@ -63,10 +69,25 @@ namespace Editor
                 {
                     // store the information for resolving this bound
                     PyString id =
-                        (((((entry.Packet.Payload[0] as PySubStream)).Stream as PySubStruct).Definition as PySubStream)
+                        (((subStream.Stream as PySubStruct).Definition as PySubStream)
                             .Stream as PyTuple)[0] as PyString;
 
                     this.BoundServices.Add(id, "BoundInventory (bound)");
+                }
+                
+                // extra special case, SparseRowset are similar to bound services
+                if (subStream.Stream is PyObjectData == true)
+                {
+                    PyObjectData objectData = subStream.Stream as PyObjectData;
+
+                    if (objectData.Name == "util.SparseRowset")
+                    {
+                        // get the data off it
+                        PyString id = ((((objectData.Arguments as PyTuple)[1] as PySubStruct).Definition as PySubStream)
+                            .Stream as PyTuple)[0] as PyString;
+                        
+                        this.BoundServices.Add(id, "SparseRowset (bound) " + id.Value);
+                    }
                 }
             }
         }
