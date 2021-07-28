@@ -295,9 +295,9 @@ namespace Editor
             // check for service calls ONLY if CallRes/CallRsp are selected and the packet is an actual packet
             if (packet.Packet != null)
             {
-                if (serviceNameTextbox.Text.Length > 0 && packet.Service != serviceNameTextbox.Text)
+                if (serviceNameTextbox.Text.Length > 0 && (packet.Service is null || packet.Service.Contains(serviceNameTextbox.Text) == false))
                     return;
-                if (callNameTextbox.Text.Length > 0 && packet.Call != callNameTextbox.Text)
+                if (callNameTextbox.Text.Length > 0 && (packet.Call is null || packet.Call.Contains(callNameTextbox.Text) == false))
                     return;
             }
             
