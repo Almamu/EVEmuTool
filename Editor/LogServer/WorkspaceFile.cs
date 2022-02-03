@@ -1,4 +1,4 @@
-﻿using System.IO;
+﻿using System;
 
 namespace Editor.LogServer
 {
@@ -15,9 +15,14 @@ namespace Editor.LogServer
 
         public static WorkspaceFile BuildFromByteData(WorkspaceReader reader)
         {
+            long version = reader.ExpectPrefixedInteger();
+
+            if (version != 0x09)
+                throw new Exception("Only version 9 of the LBW file is supported");
+
             return new WorkspaceFile()
             {
-                Version = reader.ExpectPrefixedInteger(),
+                Version = version,
                 Name = reader.ExpectString(),
                 Description = reader.ExpectString(),
                 Created = reader.ExpectPrefixedLong(),

@@ -25,12 +25,12 @@ namespace Editor.LogServer
             long logbaseID = reader.ReadInt64(); // unknown value
             long initialCapacity = reader.ExpectPrefixedInteger();
             long incrementCapacity = reader.ExpectPrefixedInteger();
-            bool unk = reader.ExpectBoolean();
+            bool allwaysShowErrors = reader.ExpectBoolean();
             bool channelFilter = reader.ExpectBoolean();
             // this is exclusive to version 8 and 9 of the file, older versions do not have this int64
             reader.ReadInt64(); // ignore these bytes
             // read all the bytes that indicate the filters, these can be ignored as they're not useful to us
-            while (reader.ExpectPrefixedInteger() > 0) ;
+            while (reader.ExpectPrefixedInteger() >= 0) ;
 
             bool filterFlags = reader.ExpectBoolean();
             reader.ExpectPrefixedInteger();
