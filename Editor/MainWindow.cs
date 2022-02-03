@@ -15,6 +15,7 @@ using PythonTypes.Types.Network;
 using PythonTypes.Types.Primitives;
 using System.ComponentModel.Design;
 using EVE.Packets.Complex;
+using Editor.LogServer;
 
 namespace Editor
 {
@@ -30,6 +31,7 @@ namespace Editor
         private BindingSource mClientBinding = new BindingSource();
         private List<PacketEntry> mPackets = new List<PacketEntry>();
         private BindingSource mPacketListBinding = new BindingSource();
+        private BindingSource mWorkspaceListBinding = new BindingSource();
 
         private string mServerAddress = "127.0.0.1";
         private int mServerPort = 25999;
@@ -68,6 +70,8 @@ namespace Editor
             this.clientListGridView.DataSource = this.mClientBinding;
             this.packetGridView.AutoGenerateColumns = false;
             this.packetGridView.DataSource = this.mPacketListBinding;
+            this.workspaceGridView.AutoGenerateColumns = false;
+            this.workspaceGridView.DataSource = this.mWorkspaceListBinding;
             // disable multiselect
             this.packetGridView.MultiSelect = false;
             // set hex views as childs of whatever is needed
@@ -247,6 +251,75 @@ namespace Editor
 
             this.cacheTreeView.Nodes[0].EnsureVisible();
             this.cacheTreeView.EndUpdate();
+        }
+
+        private void LoadWorkspaceDetails(WorkspaceFile workspace)
+        {
+            // clear the tabs list and make sure it's visible
+            this.storagesTabs.TabPages.Clear();
+            this.storagesTabs.Visible = true;
+
+            // go through the device list
+            foreach (Device device in workspace.Devices)
+            {
+                // go through the storages
+                foreach (Storage storage in device.Storages)
+                {
+                    // generate the controls
+                    LogViewerHelper.CreateTabPage(storage.Name, out TabPage tabPage, out DataGridView gridView);
+                    // create a new binding for the grid view and add the data to it
+                    BindingSource binding = new BindingSource();
+
+                    // go through every line
+                    foreach (LogLine line in storage.Lines)
+                        binding.Add(new LogLineEntry(line, device));
+
+                    // add the data source
+                    gridView.DataSource = binding;
+                    // also add listener for index changed so we can show proper, full-length messages
+                    gridView.SelectionChanged += LogGrid_SelectionChanged;
+                    gridView.CellClick += LogGrid_CellClick;
+
+                    this.storagesTabs.TabPages.Add(tabPage);
+                }
+            }
+        }
+
+        private void LogGrid_SelectionChanged(object sender, EventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            BindingSource dataSource = gridView.DataSource as BindingSource;
+
+            // update the rich text box
+            if (gridView.SelectedRows.Count == 0)
+            {
+                this.ClearPacketDetails();
+                return;
+            }
+
+            LogLineEntry line = dataSource[gridView.SelectedRows[0].Index] as LogLineEntry;
+            logViewExpanded.Text = line.GetOriginal().Line;
+        }
+
+        private void LogGrid_CellClick(object sender, EventArgs e)
+        {
+            DataGridView gridView = sender as DataGridView;
+            BindingSource dataSource = gridView.DataSource as BindingSource;
+
+            // update the rich text box
+            if (gridView.SelectedCells.Count == 0)
+            {
+                this.ClearPacketDetails();
+                return;
+            }
+
+            LogLineEntry line = dataSource[gridView.SelectedCells[0].RowIndex] as LogLineEntry;
+            logViewExpanded.Text = line.GetOriginal().Line;
+        }
+
+        private void ClearLogPreview()
+        {
+            logViewExpanded.Text = "";
         }
 
         private void ClearPacketDetails()
@@ -521,6 +594,17 @@ namespace Editor
             }
 
             this.LoadPacketDetails(this.packetGridView.SelectedCells[0].RowIndex);
+        }
+
+        private void loadWorkspaceButton_Click(object sender, EventArgs e)
+        {
+            if (this.openWorkspaceFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                Cursor.Current = Cursors.WaitCursor;
+                WorkspaceReader reader = new WorkspaceReader(this.openWorkspaceFileDialog.OpenFile());
+                this.LoadWorkspaceDetails(WorkspaceFile.BuildFromByteData(reader));
+                Cursor.Current = Cursors.Default;
+            }
         }
     }
 }

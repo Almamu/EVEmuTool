@@ -102,6 +102,16 @@
             this.tabPage13 = new System.Windows.Forms.TabPage();
             this.cacheHexViewHost = new System.Windows.Forms.Integration.ElementHost();
             this.openCacheFileButton = new System.Windows.Forms.Button();
+            this.tabPage14 = new System.Windows.Forms.TabPage();
+            this.splitContainer2 = new System.Windows.Forms.SplitContainer();
+            this.storagesTabs = new System.Windows.Forms.TabControl();
+            this.tabPage15 = new System.Windows.Forms.TabPage();
+            this.logViewExpanded = new System.Windows.Forms.RichTextBox();
+            this.loadWorkspaceButton = new System.Windows.Forms.Button();
+            this.workspaceGridView = new System.Windows.Forms.DataGridView();
+            this.logLevelColumn = new System.Windows.Forms.DataGridViewImageColumn();
+            this.messageColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.originColumn = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.saveCaptureDialog = new System.Windows.Forms.SaveFileDialog();
             this.openCaptureDialog = new System.Windows.Forms.OpenFileDialog();
             this.statusStrip1 = new System.Windows.Forms.StatusStrip();
@@ -109,6 +119,8 @@
             this.clientCountLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.openMarshalFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.openCacheFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.openWorkspaceFileDialog = new System.Windows.Forms.OpenFileDialog();
+            this.panel1 = new System.Windows.Forms.Panel();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.clientListGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -136,6 +148,13 @@
             this.tabPage9.SuspendLayout();
             this.tabPage10.SuspendLayout();
             this.tabPage13.SuspendLayout();
+            this.tabPage14.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).BeginInit();
+            this.splitContainer2.Panel1.SuspendLayout();
+            this.splitContainer2.Panel2.SuspendLayout();
+            this.splitContainer2.SuspendLayout();
+            this.storagesTabs.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.workspaceGridView)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
             // 
@@ -269,12 +288,13 @@
             this.tabControl1.Controls.Add(this.tabPage2);
             this.tabControl1.Controls.Add(this.tabPage5);
             this.tabControl1.Controls.Add(this.tabPage8);
+            this.tabControl1.Controls.Add(this.tabPage14);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.tabControl1.Location = new System.Drawing.Point(0, 25);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 30);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
-            this.tabControl1.Size = new System.Drawing.Size(933, 609);
+            this.tabControl1.Size = new System.Drawing.Size(933, 587);
             this.tabControl1.TabIndex = 2;
             this.tabControl1.Selected += new System.Windows.Forms.TabControlEventHandler(this.tabControl1_Selected);
             // 
@@ -288,7 +308,7 @@
             this.tabPage1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage1.Name = "tabPage1";
             this.tabPage1.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage1.Size = new System.Drawing.Size(925, 581);
+            this.tabPage1.Size = new System.Drawing.Size(925, 559);
             this.tabPage1.TabIndex = 0;
             this.tabPage1.Text = "Filter information";
             this.tabPage1.UseVisualStyleBackColor = true;
@@ -530,7 +550,7 @@
             this.tabPage2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage2.Name = "tabPage2";
             this.tabPage2.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage2.Size = new System.Drawing.Size(925, 581);
+            this.tabPage2.Size = new System.Drawing.Size(925, 559);
             this.tabPage2.TabIndex = 1;
             this.tabPage2.Text = "Packet data";
             this.tabPage2.UseVisualStyleBackColor = true;
@@ -732,7 +752,7 @@
             this.tabPage5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage5.Name = "tabPage5";
             this.tabPage5.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage5.Size = new System.Drawing.Size(925, 581);
+            this.tabPage5.Size = new System.Drawing.Size(925, 559);
             this.tabPage5.TabIndex = 2;
             this.tabPage5.Text = "Marshal data";
             this.tabPage5.UseVisualStyleBackColor = true;
@@ -747,7 +767,7 @@
             this.tabControl3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControl3.Name = "tabControl3";
             this.tabControl3.SelectedIndex = 0;
-            this.tabControl3.Size = new System.Drawing.Size(917, 548);
+            this.tabControl3.Size = new System.Drawing.Size(917, 526);
             this.tabControl3.TabIndex = 3;
             // 
             // tabPage6
@@ -757,7 +777,7 @@
             this.tabPage6.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage6.Name = "tabPage6";
             this.tabPage6.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage6.Size = new System.Drawing.Size(909, 520);
+            this.tabPage6.Size = new System.Drawing.Size(909, 498);
             this.tabPage6.TabIndex = 0;
             this.tabPage6.Text = "Text View";
             this.tabPage6.UseVisualStyleBackColor = true;
@@ -770,7 +790,7 @@
             this.fileTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.fileTextBox.Name = "fileTextBox";
             this.fileTextBox.ReadOnly = true;
-            this.fileTextBox.Size = new System.Drawing.Size(901, 514);
+            this.fileTextBox.Size = new System.Drawing.Size(901, 492);
             this.fileTextBox.TabIndex = 1;
             this.fileTextBox.Text = "";
             // 
@@ -781,7 +801,7 @@
             this.tabPage7.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage7.Size = new System.Drawing.Size(909, 520);
+            this.tabPage7.Size = new System.Drawing.Size(909, 498);
             this.tabPage7.TabIndex = 1;
             this.tabPage7.Text = "Tree View";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -792,7 +812,7 @@
             this.fileTreeView.Location = new System.Drawing.Point(4, 3);
             this.fileTreeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.fileTreeView.Name = "fileTreeView";
-            this.fileTreeView.Size = new System.Drawing.Size(901, 514);
+            this.fileTreeView.Size = new System.Drawing.Size(901, 492);
             this.fileTreeView.TabIndex = 0;
             // 
             // tabPage12
@@ -800,7 +820,7 @@
             this.tabPage12.Controls.Add(this.fileHexViewHost);
             this.tabPage12.Location = new System.Drawing.Point(4, 24);
             this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(909, 520);
+            this.tabPage12.Size = new System.Drawing.Size(909, 498);
             this.tabPage12.TabIndex = 2;
             this.tabPage12.Text = "Hex View";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -811,7 +831,7 @@
             this.fileHexViewHost.Location = new System.Drawing.Point(0, 0);
             this.fileHexViewHost.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.fileHexViewHost.Name = "fileTextBox";
-            this.fileHexViewHost.Size = new System.Drawing.Size(909, 520);
+            this.fileHexViewHost.Size = new System.Drawing.Size(909, 498);
             this.fileHexViewHost.TabIndex = 1;
             // 
             // openMarshalFileButton
@@ -834,7 +854,7 @@
             this.tabPage8.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage8.Name = "tabPage8";
             this.tabPage8.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage8.Size = new System.Drawing.Size(925, 581);
+            this.tabPage8.Size = new System.Drawing.Size(925, 559);
             this.tabPage8.TabIndex = 3;
             this.tabPage8.Text = "Cache file";
             this.tabPage8.UseVisualStyleBackColor = true;
@@ -849,7 +869,7 @@
             this.tabControl4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControl4.Name = "tabControl4";
             this.tabControl4.SelectedIndex = 0;
-            this.tabControl4.Size = new System.Drawing.Size(917, 548);
+            this.tabControl4.Size = new System.Drawing.Size(917, 526);
             this.tabControl4.TabIndex = 5;
             // 
             // tabPage9
@@ -859,7 +879,7 @@
             this.tabPage9.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage9.Name = "tabPage9";
             this.tabPage9.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage9.Size = new System.Drawing.Size(909, 520);
+            this.tabPage9.Size = new System.Drawing.Size(909, 498);
             this.tabPage9.TabIndex = 0;
             this.tabPage9.Text = "Text View";
             this.tabPage9.UseVisualStyleBackColor = true;
@@ -872,7 +892,7 @@
             this.cacheTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cacheTextBox.Name = "cacheTextBox";
             this.cacheTextBox.ReadOnly = true;
-            this.cacheTextBox.Size = new System.Drawing.Size(901, 514);
+            this.cacheTextBox.Size = new System.Drawing.Size(901, 492);
             this.cacheTextBox.TabIndex = 1;
             this.cacheTextBox.Text = "";
             // 
@@ -883,7 +903,7 @@
             this.tabPage10.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage10.Size = new System.Drawing.Size(909, 520);
+            this.tabPage10.Size = new System.Drawing.Size(909, 498);
             this.tabPage10.TabIndex = 1;
             this.tabPage10.Text = "Tree View";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -894,7 +914,7 @@
             this.cacheTreeView.Location = new System.Drawing.Point(4, 3);
             this.cacheTreeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cacheTreeView.Name = "cacheTreeView";
-            this.cacheTreeView.Size = new System.Drawing.Size(901, 514);
+            this.cacheTreeView.Size = new System.Drawing.Size(901, 492);
             this.cacheTreeView.TabIndex = 0;
             // 
             // tabPage13
@@ -902,7 +922,7 @@
             this.tabPage13.Controls.Add(this.cacheHexViewHost);
             this.tabPage13.Location = new System.Drawing.Point(4, 24);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(909, 520);
+            this.tabPage13.Size = new System.Drawing.Size(909, 498);
             this.tabPage13.TabIndex = 2;
             this.tabPage13.Text = "Hex View";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -913,7 +933,7 @@
             this.cacheHexViewHost.Location = new System.Drawing.Point(0, 0);
             this.cacheHexViewHost.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cacheHexViewHost.Name = "fileTextBox";
-            this.cacheHexViewHost.Size = new System.Drawing.Size(909, 520);
+            this.cacheHexViewHost.Size = new System.Drawing.Size(909, 498);
             this.cacheHexViewHost.TabIndex = 1;
             // 
             // openCacheFileButton
@@ -927,6 +947,94 @@
             this.openCacheFileButton.Text = "Open Cache File";
             this.openCacheFileButton.UseVisualStyleBackColor = true;
             this.openCacheFileButton.Click += new System.EventHandler(this.openCacheFileButton_Click);
+            // 
+            // tabPage14
+            // 
+            this.tabPage14.Controls.Add(this.splitContainer2);
+            this.tabPage14.Controls.Add(this.loadWorkspaceButton);
+            this.tabPage14.Location = new System.Drawing.Point(4, 24);
+            this.tabPage14.Name = "tabPage14";
+            this.tabPage14.Padding = new System.Windows.Forms.Padding(3);
+            this.tabPage14.Size = new System.Drawing.Size(925, 559);
+            this.tabPage14.TabIndex = 4;
+            this.tabPage14.Text = "LogServer Workspace Viewer";
+            this.tabPage14.UseVisualStyleBackColor = true;
+            // 
+            // splitContainer2
+            // 
+            this.splitContainer2.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer2.Location = new System.Drawing.Point(3, 26);
+            this.splitContainer2.Name = "splitContainer2";
+            this.splitContainer2.Orientation = System.Windows.Forms.Orientation.Horizontal;
+            // 
+            // splitContainer2.Panel1
+            // 
+            this.splitContainer2.Panel1.Controls.Add(this.storagesTabs);
+            // 
+            // splitContainer2.Panel2
+            // 
+            this.splitContainer2.Panel2.Controls.Add(this.logViewExpanded);
+            this.splitContainer2.Size = new System.Drawing.Size(919, 530);
+            this.splitContainer2.SplitterDistance = 400;
+            this.splitContainer2.TabIndex = 4;
+            // 
+            // storagesTabs
+            // 
+            this.storagesTabs.Controls.Add(this.tabPage15);
+            this.storagesTabs.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.storagesTabs.Location = new System.Drawing.Point(0, 0);
+            this.storagesTabs.Name = "storagesTabs";
+            this.storagesTabs.SelectedIndex = 0;
+            this.storagesTabs.Size = new System.Drawing.Size(919, 400);
+            this.storagesTabs.TabIndex = 2;
+            this.storagesTabs.Visible = false;
+            // 
+            // tabPage15
+            // 
+            this.tabPage15.Location = new System.Drawing.Point(4, 24);
+            this.tabPage15.Name = "tabPage15";
+            this.tabPage15.Size = new System.Drawing.Size(911, 372);
+            this.tabPage15.TabIndex = 0;
+            // 
+            // logViewExpanded
+            // 
+            this.logViewExpanded.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.logViewExpanded.Location = new System.Drawing.Point(0, 0);
+            this.logViewExpanded.Name = "logViewExpanded";
+            this.logViewExpanded.ReadOnly = true;
+            this.logViewExpanded.Size = new System.Drawing.Size(919, 126);
+            this.logViewExpanded.TabIndex = 3;
+            this.logViewExpanded.Text = "";
+            // 
+            // loadWorkspaceButton
+            // 
+            this.loadWorkspaceButton.Dock = System.Windows.Forms.DockStyle.Top;
+            this.loadWorkspaceButton.Location = new System.Drawing.Point(3, 3);
+            this.loadWorkspaceButton.Name = "loadWorkspaceButton";
+            this.loadWorkspaceButton.Size = new System.Drawing.Size(919, 23);
+            this.loadWorkspaceButton.TabIndex = 0;
+            this.loadWorkspaceButton.Text = "Load LogServer LBW Workspace";
+            this.loadWorkspaceButton.UseVisualStyleBackColor = true;
+            this.loadWorkspaceButton.Click += new System.EventHandler(this.loadWorkspaceButton_Click);
+            // 
+            // workspaceGridView
+            // 
+            this.workspaceGridView.Location = new System.Drawing.Point(0, 0);
+            this.workspaceGridView.Name = "workspaceGridView";
+            this.workspaceGridView.Size = new System.Drawing.Size(240, 150);
+            this.workspaceGridView.TabIndex = 0;
+            // 
+            // logLevelColumn
+            // 
+            this.logLevelColumn.Name = "logLevelColumn";
+            // 
+            // messageColumn
+            // 
+            this.messageColumn.Name = "messageColumn";
+            // 
+            // originColumn
+            // 
+            this.originColumn.Name = "originColumn";
             // 
             // saveCaptureDialog
             // 
@@ -967,13 +1075,27 @@
             this.openCacheFileDialog.DefaultExt = "cache";
             this.openCacheFileDialog.Filter = "EVE Online Cache File|*.cache";
             // 
+            // openWorkspaceFileDialog
+            // 
+            this.openWorkspaceFileDialog.DefaultExt = "lbw";
+            this.openWorkspaceFileDialog.Filter = "LogServer Workspace File|*.lbw";
+            // 
+            // panel1
+            // 
+            this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.panel1.Location = new System.Drawing.Point(0, 25);
+            this.panel1.Name = "panel1";
+            this.panel1.Size = new System.Drawing.Size(933, 587);
+            this.panel1.TabIndex = 4;
+            // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(933, 634);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.panel1);
+            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MinimumSize = new System.Drawing.Size(949, 558);
@@ -1009,6 +1131,13 @@
             this.tabPage9.ResumeLayout(false);
             this.tabPage10.ResumeLayout(false);
             this.tabPage13.ResumeLayout(false);
+            this.tabPage14.ResumeLayout(false);
+            this.splitContainer2.Panel1.ResumeLayout(false);
+            this.splitContainer2.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
+            this.splitContainer2.ResumeLayout(false);
+            this.storagesTabs.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.workspaceGridView)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
             this.ResumeLayout(false);
@@ -1017,6 +1146,7 @@
         }
 
         private System.Windows.Forms.OpenFileDialog openCacheFileDialog;
+        private System.Windows.Forms.OpenFileDialog openWorkspaceFileDialog;
 
         private System.Windows.Forms.Button openCacheFileButton;
         private System.Windows.Forms.RichTextBox cacheTextBox;
@@ -1139,5 +1269,16 @@
         private System.Windows.Forms.Integration.ElementHost cacheHexViewHost;
         private System.Windows.Forms.TabPage tabPage12;
         private System.Windows.Forms.TabPage tabPage13;
+        private System.Windows.Forms.TabPage tabPage14;
+        private System.Windows.Forms.Button loadWorkspaceButton;
+        private System.Windows.Forms.DataGridView workspaceGridView;
+        private System.Windows.Forms.DataGridViewImageColumn logLevelColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn messageColumn;
+        private System.Windows.Forms.DataGridViewTextBoxColumn originColumn;
+        private System.Windows.Forms.Panel panel1;
+        private System.Windows.Forms.TabControl storagesTabs;
+        private System.Windows.Forms.TabPage tabPage15;
+        private System.Windows.Forms.RichTextBox logViewExpanded;
+        private System.Windows.Forms.SplitContainer splitContainer2;
     }
 }

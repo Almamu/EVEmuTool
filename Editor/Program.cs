@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Runtime.CompilerServices;
 using System.Threading;
@@ -8,6 +9,7 @@ using System.Windows.Forms;
 using Common.Configuration;
 using Common.Logging;
 using Common.Logging.Streams;
+using Editor.LogServer;
 
 namespace Editor
 {

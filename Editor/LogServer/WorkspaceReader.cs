@@ -85,14 +85,11 @@ namespace Editor.LogServer
         {
             byte[] buffer = this.ReadBytes(length);
             
-            // find the first 0x00 and erase everything else
+            // find the first 0x00 to know string length
             int index = Array.FindIndex(buffer, x => x == 0);
-            
-            // fill the rest of the array with the right value
-            Array.Fill(buffer, (byte) 0x00, index, length - index);
 
             // finally convert it into a string
-            return Encoding.ASCII.GetString(buffer);
+            return Encoding.ASCII.GetString(buffer, 0, index);
         }
 
         public WorkspaceReader(Stream input) : base(input)
