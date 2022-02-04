@@ -679,6 +679,11 @@ namespace Editor
                 MessageBox.Show("Cannot fully parse the marshal stream, the provided data might be incomplete. Exception: " + ex.Message, "Important!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
                 unmarshal = ex.CurrentObject;
             }
+            catch(Exception)
+            {
+                MessageBox.Show("Cannot parse any data, make sure to select from the start of the MarshalStreams' value (~ onwards) till the end", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                return;
+            }
 
             // use the marshal section for this
             this.LoadFileDetails(marshal, unmarshal);
