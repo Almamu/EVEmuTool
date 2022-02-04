@@ -320,11 +320,6 @@ namespace Editor
             }
         }
 
-        private void ClearLogPreview()
-        {
-            logViewExpanded.Text = "";
-        }
-
         private void ClearPacketDetails()
         {
             this.packetTextBox.Text = "";
@@ -633,6 +628,11 @@ namespace Editor
                     // check next value
                     if (selected[indicatorIndex] == 'x')
                     {
+                        int endIndex = indicatorIndex + 1 + 2;
+
+                        if (endIndex >= selected.Length)
+                            break;
+
                         string value = selected.Substring(indicatorIndex + 1, 2);
 
                         // okay, time to handle an hex number

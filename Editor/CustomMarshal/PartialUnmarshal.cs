@@ -100,7 +100,25 @@ namespace Editor.CustomMarshal
             PyTuple result = new PyTuple((int) count);
 
             for (int i = 0; i < count; i++)
-                result[i] = this.ProcessGuard(result, false);
+            {
+                bool exception = false;
+                PyDataType element = null;
+
+                try
+                {
+                    element = this.Process(false);
+                }
+                catch(UnmarshallException ex)
+                {
+                    element = ex.CurrentObject;
+                    exception = true;
+                }
+
+                result[i] = element;
+
+                if (exception)
+                    throw new UnmarshallException("Cannot completely parse tuple", result);
+            }
 
             return result;
         }
@@ -128,7 +146,25 @@ namespace Editor.CustomMarshal
             PyList list = new PyList((int)count);
 
             for (int i = 0; i < count; i++)
-                list[i] = this.ProcessGuard(list, false);
+            {
+                bool exception = false;
+                PyDataType element = null;
+
+                try
+                {
+                    element = this.Process(false);
+                }
+                catch (UnmarshallException ex)
+                {
+                    element = ex.CurrentObject;
+                    exception = true;
+                }
+
+                list[i] = element;
+
+                if (exception)
+                    throw new UnmarshallException("Cannot completely parse list", list);
+            }
 
             return list;
         }

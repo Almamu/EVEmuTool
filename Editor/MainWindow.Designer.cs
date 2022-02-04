@@ -1003,6 +1003,7 @@
             // logViewExpanded
             // 
             this.logViewExpanded.ContextMenuStrip = this.logViewerContext;
+            this.logViewExpanded.AutoWordSelection = false;
             this.logViewExpanded.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logViewExpanded.Location = new System.Drawing.Point(0, 0);
             this.logViewExpanded.Name = "logViewExpanded";
