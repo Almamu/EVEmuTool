@@ -24,7 +24,7 @@ namespace Editor.LogServer
             // as a 0xFF long string, regardless of what it contains
             // 9 or greater uses a prefix with the string length
             int length = reader.ReadInt32();
-            string line = Encoding.ASCII.GetString(reader.ReadBytes(length));
+            string line = Encoding.ASCII.GetString(reader.ReadBytes(length)).TrimEnd('\0');
             // reader.ReadByte();
             int processId = reader.ReadInt32();
             int unk = reader.ReadInt32();

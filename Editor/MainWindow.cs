@@ -278,43 +278,52 @@ namespace Editor
                     gridView.DataSource = binding;
                     // also add listener for index changed so we can show proper, full-length messages
                     gridView.SelectionChanged += LogGrid_SelectionChanged;
-                    gridView.CellClick += LogGrid_CellClick;
 
                     this.storagesTabs.TabPages.Add(tabPage);
                 }
             }
         }
 
+        private string PrepareLogStringForConcatenation(int index, LogLineEntry line)
+        {
+            string text = line;
+
+            if (text.Length < 253)
+                text += "\n";
+
+            if (index > 0 && text.StartsWith("- ") == true)
+                text = text.Substring(2);
+
+            return text;
+        }
+
         private void LogGrid_SelectionChanged(object sender, EventArgs e)
         {
             DataGridView gridView = sender as DataGridView;
             BindingSource dataSource = gridView.DataSource as BindingSource;
+            int index = 0;
 
-            // update the rich text box
-            if (gridView.SelectedRows.Count == 0)
+            // reset the text
+            logViewExpanded.Text = "";
+
+            if (gridView.SelectedRows.Count > 0)
             {
-                this.ClearPacketDetails();
-                return;
+                foreach (DataGridViewRow row in gridView.SelectedRows.Cast<DataGridViewRow>().OrderBy(x => x.Index))
+                    logViewExpanded.Text += this.PrepareLogStringForConcatenation(index++, dataSource[row.Index] as LogLineEntry);
             }
-
-            LogLineEntry line = dataSource[gridView.SelectedRows[0].Index] as LogLineEntry;
-            logViewExpanded.Text = line.GetOriginal().Line;
-        }
-
-        private void LogGrid_CellClick(object sender, EventArgs e)
-        {
-            DataGridView gridView = sender as DataGridView;
-            BindingSource dataSource = gridView.DataSource as BindingSource;
-
-            // update the rich text box
-            if (gridView.SelectedCells.Count == 0)
+            else if (gridView.SelectedCells.Count > 0)
             {
-                this.ClearPacketDetails();
-                return;
-            }
+                Dictionary<int, bool> pairs = new Dictionary<int, bool>();
 
-            LogLineEntry line = dataSource[gridView.SelectedCells[0].RowIndex] as LogLineEntry;
-            logViewExpanded.Text = line.GetOriginal().Line;
+                foreach(DataGridViewCell cell in gridView.SelectedCells.Cast<DataGridViewCell>().OrderBy(x => x.RowIndex))
+                {
+                    if (pairs.ContainsKey(cell.RowIndex) == true)
+                        continue;
+
+                    logViewExpanded.Text += this.PrepareLogStringForConcatenation(index++, dataSource[cell.RowIndex] as LogLineEntry);
+                    pairs[cell.RowIndex] = true;
+                }
+            }
         }
 
         private void ClearLogPreview()

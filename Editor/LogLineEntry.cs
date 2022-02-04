@@ -41,5 +41,12 @@ namespace Editor
         {
             return this.Original;
         }
+
+        public static implicit operator string(LogLineEntry entry) => entry.ToString();
+
+        public override string ToString()
+        {
+            return this.Original.Line;
+        }
     }
 }
