@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using EVESharp.PythonTypes;
+using EVESharp.PythonTypes.Types.Collections;
+using EVESharp.PythonTypes.Types.Network;
+using EVESharp.PythonTypes.Types.Primitives;
 using Google.Protobuf.WellKnownTypes;
-using PythonTypes;
-using PythonTypes.Types.Collections;
-using PythonTypes.Types.Network;
-using PythonTypes.Types.Primitives;
 
 namespace Editor
 {

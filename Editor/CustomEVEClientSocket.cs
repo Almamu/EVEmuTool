@@ -1,10 +1,4 @@
-﻿using Common.Logging;
-using Common.Network;
-using PythonTypes;
-using PythonTypes.Compression;
-using PythonTypes.Marshal;
-using PythonTypes.Types.Primitives;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net;
@@ -12,7 +6,12 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using Common;
+using EVESharp.Common.Logging;
+using EVESharp.Common.Network;
+using EVESharp.PythonTypes;
+using EVESharp.PythonTypes.Compression;
+using EVESharp.PythonTypes.Marshal;
+using EVESharp.PythonTypes.Types.Primitives;
 
 namespace Editor
 {
@@ -182,10 +181,10 @@ namespace Editor
             this.mPacketLog.Trace(PrettyPrinter.FromDataType(packet));
 #endif
             // marshal the packet first
-            byte[] encodedPacket = PythonTypes.Marshal.Marshal.ToByteArray(packet);
+            byte[] encodedPacket = Marshal.ToByteArray(packet);
 
             // compress the packet if it exceeds the maximum size
-            if (encodedPacket.Length > Common.Constants.Network.MAX_PACKET_SIZE)
+            if (encodedPacket.Length > EVESharp.Common.Constants.Network.MAX_PACKET_SIZE)
                 encodedPacket = ZlibHelper.Compress(encodedPacket);
 
             // generate the final buffer

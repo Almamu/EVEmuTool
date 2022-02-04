@@ -1,11 +1,11 @@
-﻿using System;
+﻿using EVESharp.PythonTypes;
+using EVESharp.PythonTypes.Types.Collections;
+using EVESharp.PythonTypes.Types.Database;
+using EVESharp.PythonTypes.Types.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
-using PythonTypes;
-using PythonTypes.Types.Collections;
-using PythonTypes.Types.Database;
-using PythonTypes.Types.Primitives;
 
 namespace Editor
 {

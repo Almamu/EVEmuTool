@@ -1,9 +1,7 @@
-﻿using System;
+﻿using EVESharp.PythonTypes.Types.Primitives;
+using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
-using Common.Network;
-using PythonTypes.Types.Network;
-using PythonTypes.Types.Primitives;
 
 namespace Editor
 {

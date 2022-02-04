@@ -12,9 +12,9 @@
     </ItemGroup>
 
     <ItemGroup>
-      <ProjectReference Include="..\External\EVESharp\Server\Common\Common.csproj" />
-      <ProjectReference Include="..\External\EVESharp\Server\PythonTypes\PythonTypes.csproj" />
-      <ProjectReference Include="..\External\EVESharp\Server\EVE\EVE.csproj" />
+      <ProjectReference Include="..\External\EVESharp\Server\EVESharp.Common\EVESharp.Common.csproj" />
+      <ProjectReference Include="..\External\EVESharp\Server\EVESharp.EVE\EVESharp.EVE.csproj" />
+      <ProjectReference Include="..\External\EVESharp\Server\EVESharp.PythonTypes\EVESharp.PythonTypes.csproj" />
     </ItemGroup>
 
     <ItemGroup>

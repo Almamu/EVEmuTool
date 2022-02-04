@@ -1,8 +1,14 @@
-﻿using System.IO;
+﻿using EVESharp.PythonTypes;
+using EVESharp.PythonTypes.Compression;
+using EVESharp.PythonTypes.Marshal;
+using EVESharp.PythonTypes.Types.Collections;
+using EVESharp.PythonTypes.Types.Database;
+using EVESharp.PythonTypes.Types.Primitives;
+using System.Collections.Generic;
+using System.IO;
+using System.Linq;
+using System.Numerics;
 using System.Text;
-using PythonTypes;
-using PythonTypes.Marshal;
-using PythonTypes.Types.Primitives;
 
 namespace Editor.CustomMarshal
 {

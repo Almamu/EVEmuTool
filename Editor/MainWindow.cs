@@ -6,16 +6,15 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using System.Windows.Forms;
-using Common.Network;
 using Editor.CustomMarshal;
-using PythonTypes;
-using PythonTypes.Marshal;
-using PythonTypes.Types.Collections;
-using PythonTypes.Types.Network;
-using PythonTypes.Types.Primitives;
 using System.ComponentModel.Design;
-using EVE.Packets.Complex;
 using Editor.LogServer;
+using EVESharp.PythonTypes.Types.Network;
+using EVESharp.PythonTypes.Types.Collections;
+using EVESharp.PythonTypes.Types.Primitives;
+using EVESharp.PythonTypes;
+using EVESharp.PythonTypes.Marshal;
+using EVESharp.EVE.Packets.Complex;
 
 namespace Editor
 {

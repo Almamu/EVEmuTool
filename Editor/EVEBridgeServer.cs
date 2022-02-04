@@ -1,6 +1,6 @@
-﻿using Common.Configuration;
-using Common.Logging;
-using Common.Network;
+﻿using EVESharp.Common.Configuration;
+using EVESharp.Common.Logging;
+using EVESharp.Common.Network;
 using System;
 
 namespace Editor

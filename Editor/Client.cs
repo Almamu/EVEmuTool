@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
-using PythonTypes.Types.Collections;
-using PythonTypes.Types.Network;
-using PythonTypes.Types.Primitives;
+﻿using EVESharp.PythonTypes.Types.Collections;
+using EVESharp.PythonTypes.Types.Network;
+using EVESharp.PythonTypes.Types.Primitives;
+using System.Collections.Generic;
 
 namespace Editor
 {
