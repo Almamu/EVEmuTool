@@ -624,7 +624,7 @@ namespace Editor
                 {
                     int indicatorIndex = i + 1;
 
-                    if (indicatorIndex > selected.Length)
+                    if (indicatorIndex >= selected.Length)
                     {
                         bytes.Add(Encoding.ASCII.GetBytes(new char[] { current })[0]);
                         break;
@@ -668,9 +668,20 @@ namespace Editor
             }
 
             byte[] marshal = bytes.ToArray();
+            PyDataType unmarshal = null;
+
+            try
+            {
+                unmarshal = PartialUnmarshal.ReadFromByteArray(marshal);
+            }
+            catch(UnmarshallException ex)
+            {
+                MessageBox.Show("Cannot fully parse the marshal stream, the provided data might be incomplete. Exception: " + ex.Message, "Important!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
+                unmarshal = ex.CurrentObject;
+            }
 
             // use the marshal section for this
-            this.LoadFileDetails(marshal, Unmarshal.ReadFromByteArray(marshal));
+            this.LoadFileDetails(marshal, unmarshal);
             // make sure to focus it too!
             tabControl1.SelectTab(marshalDataTab);
         }
