@@ -29,6 +29,7 @@
         /// </summary>
         private void InitializeComponent()
         {
+            this.components = new System.ComponentModel.Container();
             System.ComponentModel.ComponentResourceManager resources = new System.ComponentModel.ComponentResourceManager(typeof(MainWindow));
             this.toolStrip1 = new System.Windows.Forms.ToolStrip();
             this.toolStripDropDownButton1 = new System.Windows.Forms.ToolStripDropDownButton();
@@ -84,7 +85,7 @@
             this.packetTreeView = new System.Windows.Forms.TreeView();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.hexViewHost = new System.Windows.Forms.Integration.ElementHost();
-            this.tabPage5 = new System.Windows.Forms.TabPage();
+            this.marshalDataTab = new System.Windows.Forms.TabPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
             this.tabPage6 = new System.Windows.Forms.TabPage();
             this.fileTextBox = new System.Windows.Forms.RichTextBox();
@@ -107,6 +108,8 @@
             this.storagesTabs = new System.Windows.Forms.TabControl();
             this.tabPage15 = new System.Windows.Forms.TabPage();
             this.logViewExpanded = new System.Windows.Forms.RichTextBox();
+            this.logViewerContext = new System.Windows.Forms.ContextMenuStrip(this.components);
+            this.parseAsMarshalDataOption = new System.Windows.Forms.ToolStripMenuItem();
             this.loadWorkspaceButton = new System.Windows.Forms.Button();
             this.workspaceGridView = new System.Windows.Forms.DataGridView();
             this.logLevelColumn = new System.Windows.Forms.DataGridViewImageColumn();
@@ -138,7 +141,7 @@
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage11.SuspendLayout();
-            this.tabPage5.SuspendLayout();
+            this.marshalDataTab.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage6.SuspendLayout();
             this.tabPage7.SuspendLayout();
@@ -154,6 +157,7 @@
             this.splitContainer2.Panel2.SuspendLayout();
             this.splitContainer2.SuspendLayout();
             this.storagesTabs.SuspendLayout();
+            this.logViewerContext.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.workspaceGridView)).BeginInit();
             this.statusStrip1.SuspendLayout();
             this.SuspendLayout();
@@ -286,7 +290,7 @@
             // 
             this.tabControl1.Controls.Add(this.tabPage1);
             this.tabControl1.Controls.Add(this.tabPage2);
-            this.tabControl1.Controls.Add(this.tabPage5);
+            this.tabControl1.Controls.Add(this.marshalDataTab);
             this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Controls.Add(this.tabPage14);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -744,18 +748,18 @@
             this.hexViewHost.Size = new System.Drawing.Size(910, 294);
             this.hexViewHost.TabIndex = 2;
             // 
-            // tabPage5
+            // marshalDataTab
             // 
-            this.tabPage5.Controls.Add(this.tabControl3);
-            this.tabPage5.Controls.Add(this.openMarshalFileButton);
-            this.tabPage5.Location = new System.Drawing.Point(4, 24);
-            this.tabPage5.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage5.Name = "tabPage5";
-            this.tabPage5.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage5.Size = new System.Drawing.Size(925, 559);
-            this.tabPage5.TabIndex = 2;
-            this.tabPage5.Text = "Marshal data";
-            this.tabPage5.UseVisualStyleBackColor = true;
+            this.marshalDataTab.Controls.Add(this.tabControl3);
+            this.marshalDataTab.Controls.Add(this.openMarshalFileButton);
+            this.marshalDataTab.Location = new System.Drawing.Point(4, 24);
+            this.marshalDataTab.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.marshalDataTab.Name = "marshalDataTab";
+            this.marshalDataTab.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.marshalDataTab.Size = new System.Drawing.Size(925, 559);
+            this.marshalDataTab.TabIndex = 2;
+            this.marshalDataTab.Text = "Marshal data";
+            this.marshalDataTab.UseVisualStyleBackColor = true;
             // 
             // tabControl3
             // 
@@ -998,13 +1002,28 @@
             // 
             // logViewExpanded
             // 
+            this.logViewExpanded.ContextMenuStrip = this.logViewerContext;
             this.logViewExpanded.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logViewExpanded.Location = new System.Drawing.Point(0, 0);
             this.logViewExpanded.Name = "logViewExpanded";
             this.logViewExpanded.ReadOnly = true;
             this.logViewExpanded.Size = new System.Drawing.Size(919, 126);
             this.logViewExpanded.TabIndex = 3;
-            this.logViewExpanded.Text = "";
+            this.logViewExpanded.Text = "~\\x00\\x00\\x00\\x00\\x17\\x10\\x15objectCaching.CacheOK\\x16\\x01%\\x10\\x07CacheOK\\x10\\x0" +
+    "4args";
+            // 
+            // logViewerContext
+            // 
+            this.logViewerContext.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
+            this.parseAsMarshalDataOption});
+            this.logViewerContext.Name = "contextMenuStrip1";
+            this.logViewerContext.Size = new System.Drawing.Size(188, 26);
+            // 
+            // parseAsMarshalDataOption
+            // 
+            this.parseAsMarshalDataOption.Name = "parseAsMarshalDataOption";
+            this.parseAsMarshalDataOption.Size = new System.Drawing.Size(187, 22);
+            this.parseAsMarshalDataOption.Text = "Parse as marshal data";
             // 
             // loadWorkspaceButton
             // 
@@ -1121,7 +1140,7 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
-            this.tabPage5.ResumeLayout(false);
+            this.marshalDataTab.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
             this.tabPage7.ResumeLayout(false);
@@ -1137,6 +1156,7 @@
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer2)).EndInit();
             this.splitContainer2.ResumeLayout(false);
             this.storagesTabs.ResumeLayout(false);
+            this.logViewerContext.ResumeLayout(false);
             ((System.ComponentModel.ISupportInitialize)(this.workspaceGridView)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
@@ -1165,7 +1185,7 @@
 
         private System.Windows.Forms.Button openMarshalFileButton;
 
-        private System.Windows.Forms.TabPage tabPage5;
+        private System.Windows.Forms.TabPage marshalDataTab;
 
         private System.Windows.Forms.OpenFileDialog openMarshalFileDialog;
 
@@ -1280,5 +1300,7 @@
         private System.Windows.Forms.TabPage tabPage15;
         private System.Windows.Forms.RichTextBox logViewExpanded;
         private System.Windows.Forms.SplitContainer splitContainer2;
+        private System.Windows.Forms.ContextMenuStrip logViewerContext;
+        private System.Windows.Forms.ToolStripMenuItem parseAsMarshalDataOption;
     }
 }

@@ -78,6 +78,8 @@ namespace Editor
             this.hexViewHost.Child = this.hexView;
             this.cacheHexViewHost.Child = this.cacheHexView;
             this.fileHexViewHost.Child = this.fileHexView;
+            // setup the options for log viewer
+            parseAsMarshalDataOption.Click += parseAsMarshalDataOption_Click; 
         }
 
         public void ServerConnectionAccept(IAsyncResult ar)
@@ -614,6 +616,56 @@ namespace Editor
                 this.LoadWorkspaceDetails(WorkspaceFile.BuildFromByteData(reader));
                 Cursor.Current = Cursors.Default;
             }
+        }
+
+        private void parseAsMarshalDataOption_Click(object sender, EventArgs e)
+        {
+            // get the selected string and parse it properly
+            string selected = this.logViewExpanded.SelectedText;
+            List<byte> bytes = new List<byte>();
+
+            for(int i = 0; i < selected.Length; i ++)
+            {
+                char current = selected[i];
+
+                if (current == '\\')
+                {
+                    int indicatorIndex = i + 1;
+
+                    if (indicatorIndex > selected.Length)
+                    {
+                        bytes.Add(Encoding.ASCII.GetBytes(new char[] { current })[0]);
+                        break;
+                    }
+
+                    // check next value
+                    if (selected[indicatorIndex] == 'x')
+                    {
+                        string value = selected.Substring(indicatorIndex + 1, 2);
+
+                        // okay, time to handle an hex number
+                        byte number = byte.Parse(value, System.Globalization.NumberStyles.HexNumber);
+                        bytes.Add(number);
+                        i += 3;
+                    }
+                    else if (selected[indicatorIndex] == '\\')
+                    {
+                        bytes.Add(Encoding.ASCII.GetBytes("\\")[0]);
+                        i++;
+                    }
+                }
+                else
+                {
+                    bytes.Add(Encoding.ASCII.GetBytes(new char[] { current })[0]);
+                }
+            }
+
+            byte[] marshal = bytes.ToArray();
+
+            // use the marshal section for this
+            this.LoadFileDetails(marshal, Unmarshal.ReadFromByteArray(marshal));
+            // make sure to focus it too!
+            marshalDataTab.Show();
         }
     }
 }
