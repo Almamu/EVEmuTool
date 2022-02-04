@@ -269,15 +269,8 @@ namespace Editor
                 {
                     // generate the controls
                     LogViewerHelper.CreateTabPage(storage.Name, out TabPage tabPage, out DataGridView gridView);
-                    // create a new binding for the grid view and add the data to it
-                    BindingSource binding = new BindingSource();
-
-                    // go through every line
-                    foreach (LogLine line in storage.Lines)
-                        binding.Add(new LogLineEntry(line, device));
-
                     // add the data source
-                    gridView.DataSource = binding;
+                    gridView.DataSource = storage.Lines;
                     // also add listener for index changed so we can show proper, full-length messages
                     gridView.SelectionChanged += LogGrid_SelectionChanged;
 
@@ -286,9 +279,9 @@ namespace Editor
             }
         }
 
-        private string PrepareLogStringForConcatenation(int index, LogLineEntry line)
+        private string PrepareLogStringForConcatenation(int index, LogLine line)
         {
-            string text = line;
+            string text = line.Line;
 
             if (text.Length < 253)
                 text += "\n";
@@ -302,7 +295,7 @@ namespace Editor
         private void LogGrid_SelectionChanged(object sender, EventArgs e)
         {
             DataGridView gridView = sender as DataGridView;
-            BindingSource dataSource = gridView.DataSource as BindingSource;
+            LogLine[] dataSource = gridView.DataSource as LogLine[];
             int index = 0;
 
             // reset the text
@@ -311,7 +304,7 @@ namespace Editor
             if (gridView.SelectedRows.Count > 0)
             {
                 foreach (DataGridViewRow row in gridView.SelectedRows.Cast<DataGridViewRow>().OrderBy(x => x.Index))
-                    logViewExpanded.Text += this.PrepareLogStringForConcatenation(index++, dataSource[row.Index] as LogLineEntry);
+                    logViewExpanded.Text += this.PrepareLogStringForConcatenation(index++, dataSource[row.Index]);
             }
             else if (gridView.SelectedCells.Count > 0)
             {
@@ -322,7 +315,7 @@ namespace Editor
                     if (pairs.ContainsKey(cell.RowIndex) == true)
                         continue;
 
-                    logViewExpanded.Text += this.PrepareLogStringForConcatenation(index++, dataSource[cell.RowIndex] as LogLineEntry);
+                    logViewExpanded.Text += this.PrepareLogStringForConcatenation(index++, dataSource[cell.RowIndex]);
                     pairs[cell.RowIndex] = true;
                 }
             }
@@ -653,6 +646,21 @@ namespace Editor
                         bytes.Add(Encoding.ASCII.GetBytes("\\")[0]);
                         i++;
                     }
+                    else if (selected[indicatorIndex] == 'n')
+                    {
+                        bytes.Add(Encoding.ASCII.GetBytes("\n")[0]);
+                        i++;
+                    }
+                    else if (selected[indicatorIndex] == 'r')
+                    {
+                        bytes.Add(Encoding.ASCII.GetBytes("\r")[0]);
+                        i++;
+                    }
+                    else if(selected[indicatorIndex] == 't')
+                    {
+                        bytes.Add(Encoding.ASCII.GetBytes("\t")[0]);
+                        i++;
+                    }
                 }
                 else
                 {
@@ -665,7 +673,7 @@ namespace Editor
             // use the marshal section for this
             this.LoadFileDetails(marshal, Unmarshal.ReadFromByteArray(marshal));
             // make sure to focus it too!
-            marshalDataTab.Show();
+            tabControl1.SelectTab(marshalDataTab);
         }
     }
 }

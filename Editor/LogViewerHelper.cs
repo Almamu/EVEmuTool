@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Editor.UI.DataGridView;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -28,32 +29,25 @@ namespace Editor
             DataGridView workspaceGridView = new DataGridView();
             DataGridViewImageColumn logLevelColumn = new DataGridViewImageColumn();
             DataGridViewTextBoxColumn messageColumn = new DataGridViewTextBoxColumn();
-            DataGridViewTextBoxColumn originColumn = new DataGridViewTextBoxColumn();
             // 
             // logLevelColumn
             // 
             logLevelColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.DisplayedCellsExceptHeader;
-            logLevelColumn.DataPropertyName = "Image";
+            logLevelColumn.DataPropertyName = "LogLevel";
             logLevelColumn.HeaderText = "";
             logLevelColumn.Name = "logLevelColumn";
             logLevelColumn.ReadOnly = true;
             logLevelColumn.Width = 5;
+            logLevelColumn.CellTemplate = new LogLevelCell();
             // 
             // messageColumn
             // 
             messageColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            messageColumn.DataPropertyName = "Message";
-            messageColumn.HeaderText = "Message";
+            messageColumn.DataPropertyName = "Line";
+            messageColumn.HeaderText = "Line";
             messageColumn.Name = "messageColumn";
             messageColumn.ReadOnly = true;
-            // 
-            // originColumn
-            // 
-            originColumn.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCellsExceptHeader;
-            originColumn.DataPropertyName = "Source";
-            originColumn.HeaderText = "Source";
-            originColumn.Name = "originColumn";
-            originColumn.ReadOnly = true;
+            messageColumn.CellTemplate = new LogTextCell();
             // 
             // workspaceGridView
             // 
@@ -63,8 +57,7 @@ namespace Editor
             workspaceGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             workspaceGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             logLevelColumn,
-            messageColumn,
-            originColumn});
+            messageColumn});
             workspaceGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             workspaceGridView.Location = new System.Drawing.Point(3, 3);
             workspaceGridView.Name = "workspaceGridView";
@@ -72,6 +65,7 @@ namespace Editor
             workspaceGridView.RowTemplate.Height = 20;
             workspaceGridView.Size = new System.Drawing.Size(905, 496);
             workspaceGridView.TabIndex = 1;
+            workspaceGridView.AutoGenerateColumns = false;
 
             return workspaceGridView;
         }
