@@ -1,7 +1,7 @@
 ﻿using EVESharp.PythonTypes.Types.Collections;
 using EVESharp.PythonTypes.Types.Network;
 using EVESharp.PythonTypes.Types.Primitives;
-using System.Collections.Generic;
+using System.Collections.Concurrent;
 
 namespace Editor
 {
@@ -11,9 +11,9 @@ namespace Editor
         public int ClientIndex { get; set; } = 0;
         public string Address { get; set; } = "";
         public string Username { get; set; } = "";
-        public Dictionary<long, string> CallIDList = new Dictionary<long, string>();
-        public Dictionary<long, string> ServiceList = new Dictionary<long, string>();
-        public Dictionary<string, string> BoundServices = new Dictionary<string, string>();
+        public ConcurrentDictionary<long, string> CallIDList = new ConcurrentDictionary<long, string>();
+        public ConcurrentDictionary<long, string> ServiceList = new ConcurrentDictionary<long, string>();
+        public ConcurrentDictionary<string, string> BoundServices = new ConcurrentDictionary<string, string>();
         
         public Client(int index)
         {
@@ -61,7 +61,7 @@ namespace Editor
                         ((((subStream.Stream as PyTuple)[0] as PySubStruct)
                             .Definition as PySubStream).Stream as PyTuple)[0] as PyString;
 
-                    this.BoundServices.Add(id, entry.Service + " (bound)");
+                    this.BoundServices.TryAdd(id, entry.Service + " (bound)");
                 }
                 
                 // special case, GetInventory and GetInventoryFromId
@@ -72,7 +72,7 @@ namespace Editor
                         (((subStream.Stream as PySubStruct).Definition as PySubStream)
                             .Stream as PyTuple)[0] as PyString;
 
-                    this.BoundServices.Add(id, "BoundInventory (bound)");
+                    this.BoundServices.TryAdd(id, "BoundInventory (bound)");
                 }
                 
                 // extra special case, SparseRowset are similar to bound services
@@ -86,7 +86,7 @@ namespace Editor
                         PyString id = ((((objectData.Arguments as PyTuple)[1] as PySubStruct).Definition as PySubStream)
                             .Stream as PyTuple)[0] as PyString;
                         
-                        this.BoundServices.Add(id, "SparseRowset (bound) " + id.Value);
+                        this.BoundServices.TryAdd(id, "SparseRowset (bound) " + id.Value);
                     }
                 }
             }

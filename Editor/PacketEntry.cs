@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Runtime.CompilerServices;
+using Editor.CustomMarshal;
 using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Types.Collections;
 using EVESharp.PythonTypes.Types.Network;
@@ -18,13 +19,14 @@ namespace Editor
     {
         private PyDataType mPacket;
         
-        public DateTime Timestamp { get; set; }
-        public Client Client { get; set; }
+        public DateTime Timestamp { get; init; }
+        public Client Client { get; init; }
 
+        public InsightUnmarshal Unmarshal { get; init; }
         public PyDataType RawPacket
         {
             get => this.mPacket;
-            set
+            init
             {
                 this.PacketString = PrettyPrinter.FromDataType(value);
                 this.mPacket = value;
@@ -35,9 +37,9 @@ namespace Editor
 
         public PyPacket Packet;
         public int ClientIndex => Client.ClientIndex;
-        public string PacketString { get; private set; }
-        public PacketDirection Direction { get; set; }
-        public string PacketType => this.Packet == null ? "Undetermined" : this.Packet.TypeString;
+        public string PacketString { get; private init; }
+        public PacketDirection Direction { get; init; }
+        public string PacketType => this.Packet == null ? "LLV" : this.Packet.TypeString;
         public string Origin => this.Packet == null ? Direction.ToString() : this.GetAddressFormat(this.Packet.Source);
         public string Destination => this.Packet == null ? "" : this.GetAddressFormat(this.Packet.Destination);
 

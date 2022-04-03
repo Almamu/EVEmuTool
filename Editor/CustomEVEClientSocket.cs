@@ -6,12 +6,14 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using Editor.CustomMarshal;
 using EVESharp.Common.Logging;
 using EVESharp.Common.Network;
 using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Compression;
 using EVESharp.PythonTypes.Marshal;
 using EVESharp.PythonTypes.Types.Primitives;
+using Serilog;
 
 namespace Editor
 {
@@ -23,19 +25,19 @@ namespace Editor
         private AsyncCallback mReceiveCallback = null;
         private readonly Queue<byte[]> mOutputQueue = new Queue<byte[]>();
         private readonly StreamPacketizer mPacketizer = new StreamPacketizer();
-        private Action<byte[], PyDataType> mPacketReceiveCallback = null;
+        private Action<byte[], InsightUnmarshal> mPacketReceiveCallback = null;
 #if DEBUG
-        private readonly Channel mPacketLog = null;
+        private readonly ILogger mPacketLog = null;
 #endif
-        public Channel Log { get; set; }
+        public ILogger Log { get; set; }
 
-        public CustomEVEClientSocket(Socket socket, Channel logChannel) : base(socket)
+        public CustomEVEClientSocket(Socket socket, ILogger logger) : base(socket)
         {
-            this.Log = logChannel;
+            this.Log = logger;
 
             // take into account network debugging for developers
 #if DEBUG
-            this.mPacketLog = this.Log.Logger.CreateLogChannel("NetworkDebug", true);
+            this.mPacketLog = Log.ForContext<CustomEVEClientSocket>("NetworkDebug", true);
 #endif
 
             // setup async callback handlers
@@ -44,13 +46,13 @@ namespace Editor
             this.BeginReceive(new byte[64 * 1024], this.mReceiveCallback);
         }
 
-        public CustomEVEClientSocket(Channel logChannel) : base(new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
+        public CustomEVEClientSocket(ILogger logger) : base(new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp))
         {
-            this.Log = logChannel;
+            this.Log = logger;
 
             // take into account network debugging for developers
 #if DEBUG
-            this.mPacketLog = this.Log.Logger.CreateLogChannel("NetworkDebug", true);
+            this.mPacketLog = Log.ForContext<CustomEVEClientSocket>("NetworkDebug", true);
 #endif
 
             this.SetupCallbacks();
@@ -85,7 +87,7 @@ namespace Editor
             this.BeginReceive(new byte[64 * 1024], this.mReceiveCallback);
         }
 
-        public void SetReceiveCallback(Action<byte[], PyDataType> callback)
+        public void SetReceiveCallback(Action<byte[], InsightUnmarshal> callback)
         {
             bool shouldFlush = this.mPacketReceiveCallback == null;
 
@@ -107,9 +109,9 @@ namespace Editor
                         byte[] buffer = this.mPacketizer.PopItem();
 
                         // unmarshal the packet
-                        PyDataType packet = Unmarshal.ReadFromByteArray(buffer);
+                        InsightUnmarshal packet = InsightUnmarshal.ReadFromByteArray(buffer);
 #if DEBUG
-                        this.mPacketLog.Trace(PrettyPrinter.FromDataType(packet));
+                        this.mPacketLog.Information(PrettyPrinter.FromDataType(packet.Output));
 #endif
                         // and invoke the callback for the packet handling if it is present
                         this.mPacketReceiveCallback.Invoke(buffer, packet);
@@ -152,6 +154,16 @@ namespace Editor
                     this.FireOnConnectionLostHandler();
                     return;
                 }
+
+                // queue the packets and process them
+                this.mPacketizer.QueuePackets(state.Buffer, state.Received);
+                this.mPacketizer.ProcessPackets();
+
+                // if there is any pending to be processed pop it and call the receive callback
+                this.FlushReceivingQueue();
+
+                // begin receiving again
+                this.BeginReceive(state.Buffer, this.mReceiveCallback);
             }
             catch (Exception e)
             {
@@ -159,16 +171,6 @@ namespace Editor
                 this.HandleException(e);
                 return;
             }
-
-            // queue the packets and process them
-            this.mPacketizer.QueuePackets(state.Buffer, state.Received);
-            this.mPacketizer.ProcessPackets();
-
-            // if there is any pending to be processed pop it and call the receive callback
-            this.FlushReceivingQueue();
-
-            // begin receiving again
-            this.BeginReceive(state.Buffer, this.mReceiveCallback);
         }
 
         /// <summary>
@@ -178,7 +180,7 @@ namespace Editor
         public void Send(PyDataType packet)
         {
 #if DEBUG
-            this.mPacketLog.Trace(PrettyPrinter.FromDataType(packet));
+            this.mPacketLog.Information(PrettyPrinter.FromDataType(packet));
 #endif
             // marshal the packet first
             byte[] encodedPacket = Marshal.ToByteArray(packet);

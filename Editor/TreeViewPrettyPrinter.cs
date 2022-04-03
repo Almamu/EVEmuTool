@@ -135,7 +135,7 @@ namespace Editor
 
         private static TreeNode ProcessObjectData(PyObjectData data, TreeNode node)
         {
-            TreeNode child = node.Nodes.Add($"[PyObjectData {data.Name.Value}]");
+            TreeNode child = node.Nodes.Add($"[PyObjectData {data.Name.Token}]");
 
             ProcessPythonType(data.Arguments, child);
 

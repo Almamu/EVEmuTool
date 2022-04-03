@@ -15,6 +15,8 @@ using EVESharp.PythonTypes.Types.Primitives;
 using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Marshal;
 using EVESharp.EVE.Packets.Complex;
+using System.Diagnostics;
+using WpfHexaEditor.Core.EventArguments;
 
 namespace Editor
 {
@@ -78,7 +80,38 @@ namespace Editor
             this.cacheHexViewHost.Child = this.cacheHexView;
             this.fileHexViewHost.Child = this.fileHexView;
             // setup the options for log viewer
-            parseAsMarshalDataOption.Click += parseAsMarshalDataOption_Click; 
+            parseAsMarshalDataOption.Click += parseAsMarshalDataOption_Click;
+            // setup events for the hex view
+            this.hexView.ByteClick += OnHexViewByteClick;
+        }
+
+        private void OnHexViewByteClick(object? sender, ByteEventArgs args)
+        {
+            int index = 0;
+
+            if(this.packetGridView.SelectedRows.Count > 0)
+            {
+                index = this.packetGridView.SelectedRows[0].Index;
+            }
+            else if(this.packetGridView.SelectedCells.Count > 0)
+            {
+                index = this.packetGridView.SelectedCells[0].RowIndex;
+            }
+
+            PacketEntry packet = this.packetGridView.Rows[index].DataBoundItem as PacketEntry;
+
+            long point = args.BytePositionInStream;
+
+            foreach(InsightEntry entry in packet.Unmarshal.Insight)
+            {
+                if (entry.StartPosition <= point && entry.EndPosition >= point)
+                {
+                    this.insightTreeView.SelectedNode = entry.TreeNode;
+                    entry.TreeNode.EnsureVisible();
+                    entry.TreeNode.Expand();
+                    break;
+                }
+            }
         }
 
         public void ServerConnectionAccept(IAsyncResult ar)
@@ -94,11 +127,11 @@ namespace Editor
                 LiveClient newLiveClient = new LiveClient(this.mClients.Count, client, serverSocket, this);
 
                 this.Invoke(this.mClientAdd, newLiveClient);
-
-                clientCountLabel.Text = $"{this.mClients.Count} clients connected";
             }
-            catch (Exception)
+            catch (Exception e)
             {
+                MessageBox.Show(e.Message + Environment.NewLine + "Stack trace: " + Environment.NewLine + e.StackTrace, "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+
                 try
                 {
                     // connection to the server failed, force connection closing for the client
@@ -118,7 +151,9 @@ namespace Editor
         {
             if(this.mIgnoreIncomingPackets == true)
                 return;
-                
+
+            clientCountLabel.Text = $"{this.mClients.Count} clients connected";
+
             // add the client to the list and data source
             int index = this.mClientBinding.Add(newLiveClient);
 
@@ -188,11 +223,71 @@ namespace Editor
 
             this.packetTreeView.Nodes[0].EnsureVisible();
             this.packetTreeView.EndUpdate();
+
+            this.insightTreeView.BeginUpdate();
+            this.insightTreeView.Nodes.Clear();
+
+            this.insightTreeView.Nodes.Add("Data length: " + packet.PacketBytes.Length.ToString());
+            this.insightTreeView.Nodes.Add("Save list entries: " + packet.Unmarshal.SaveListCount);
+
+            TreeNode insightListParent = this.insightTreeView.Nodes.Add("Marshal Data");
+
+            // add elements to the insight view in the order they were unmarshaled
+            foreach(InsightEntry entry in packet.Unmarshal.Insight)
+            {
+                string extra = "";
+
+                if (entry.HasSaveFlag == true)
+                    extra += " (Saved)";
+
+                string line = entry.Opcode.ToString() + extra + ": " + entry.StartPosition.ToString() + " to " + entry.EndPosition.ToString();
+
+                entry.TreeNode = insightListParent.Nodes.Add(line);
+
+                TreeViewPrettyPrinter.Process(entry.Value, entry.TreeNode);
+            }
+
+            TreeNode savedObjectsParent = this.insightTreeView.Nodes.Add("Saved list");
+            
+            if (packet.Unmarshal.SaveList is not null)
+            {
+                int i = 0;
+
+                // add saved list elements to the insight viewer
+                foreach (PyDataType entry in packet.Unmarshal.SaveList)
+                {
+                    TreeNode savedObject = savedObjectsParent.Nodes.Add(i.ToString());
+                    i++;
+
+                    TreeViewPrettyPrinter.Process(entry, savedObject);
+                }
+            }
+
+            TreeNode savedIndexesParent = this.insightTreeView.Nodes.Add("Saved list indexes");
+
+            if (packet.Unmarshal.SaveListIndexes is not null)
+            {
+                int i = 0;
+
+                foreach (int entry in packet.Unmarshal.SaveListIndexes)
+                {
+                    TreeNode node = savedIndexesParent.Nodes.Add(i.ToString() + " => " + entry.ToString());
+                    i++;
+                }
+            }
+
+            savedObjectsParent.Expand();
+            insightListParent.Expand();
+
+            this.insightTreeView.EndUpdate();
+
             Cursor.Current = Cursors.Default;
         }
 
-        private void LoadFileDetails(byte[] contents, PyDataType packet)
+        private void LoadFileDetails(byte[] contents, InsightUnmarshal unmarshal)
         {
+            PyDataType packet = unmarshal.Output;
+            
             if (this.fileHexView.Stream != null)
                 this.fileHexView.Stream.Close();
             this.fileHexView.Stream = new MemoryStream(contents);
@@ -281,12 +376,16 @@ namespace Editor
         private string PrepareLogStringForConcatenation(int index, LogLine line)
         {
             string text = line.Line;
+            int minimumLength = 253;
 
-            if (text.Length < 253)
+            if (text.Length < minimumLength)
                 text += "\n";
-
             if (index > 0 && text.StartsWith("- ") == true)
                 text = text.Substring(2);
+            if (index > 0 && text.StartsWith("    ") == true)
+                text = text.Substring(4);
+            if (text.Length == 254 && text.EndsWith("-") == true)
+                text = text.Substring(0, text.Length - 1);
 
             return text;
         }
@@ -567,7 +666,7 @@ namespace Editor
             {
                 Cursor.Current = Cursors.WaitCursor;
                 byte[] fileContents = File.ReadAllBytes(this.openMarshalFileDialog.FileName);
-                LoadFileDetails(fileContents, Unmarshal.ReadFromByteArray(fileContents));
+                LoadFileDetails(fileContents, InsightUnmarshal.ReadFromByteArray(fileContents));
                 Cursor.Current = Cursors.Default;
             }
         }
@@ -610,6 +709,20 @@ namespace Editor
             // get the selected string and parse it properly
             string selected = this.logViewExpanded.SelectedText;
             List<byte> bytes = new List<byte>();
+            
+            // if the selected area starts with something that's not ~ find it in the string
+            if (selected.StartsWith((char) Specification.MARSHAL_HEADER) == false)
+            {
+                int index = selected.IndexOf((char) Specification.MARSHAL_HEADER);
+
+                if (index == -1)
+                {
+                    MessageBox.Show("Cannot find the beginning of the marshal data. Are you sure you've selected a MarshalStream?", "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                    return;
+                }
+
+                selected = selected.Substring(index);
+            }
 
             for(int i = 0; i < selected.Length; i ++)
             {
@@ -668,7 +781,7 @@ namespace Editor
             }
 
             byte[] marshal = bytes.ToArray();
-            PyDataType unmarshal = null;
+            InsightUnmarshal unmarshal = null;
 
             try
             {
@@ -677,7 +790,7 @@ namespace Editor
             catch(UnmarshallException ex)
             {
                 MessageBox.Show("Cannot fully parse the marshal stream, the provided data might be incomplete. Exception: " + ex.Message, "Important!", MessageBoxButtons.OK, MessageBoxIcon.Warning);
-                unmarshal = ex.CurrentObject;
+                unmarshal = ex.Unmarshal;
             }
             catch(Exception)
             {
@@ -689,6 +802,33 @@ namespace Editor
             this.LoadFileDetails(marshal, unmarshal);
             // make sure to focus it too!
             tabControl1.SelectTab(marshalDataTab);
+        }
+
+        private void insightTreeView_NodeMouseClick(object sender, TreeNodeMouseClickEventArgs e)
+        {
+            // search for the selected node and highlight the area it covers
+            int index = 0;
+
+            if (this.packetGridView.SelectedRows.Count > 0)
+            {
+                index = this.packetGridView.SelectedRows[0].Index;
+            }
+            else if (this.packetGridView.SelectedCells.Count > 0)
+            {
+                index = this.packetGridView.SelectedCells[0].RowIndex;
+            }
+
+            PacketEntry packet = this.packetGridView.Rows[index].DataBoundItem as PacketEntry;
+
+            foreach(InsightEntry entry in packet.Unmarshal.Insight)
+            {
+                if (entry.TreeNode == e.Node)
+                {
+                    this.hexView.SelectionStart = entry.StartPosition;
+                    this.hexView.SelectionStop = entry.EndPosition;
+                    break;
+                }
+            }
         }
     }
 }

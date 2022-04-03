@@ -84,6 +84,8 @@
             this.tabPage4 = new System.Windows.Forms.TabPage();
             this.packetTreeView = new System.Windows.Forms.TreeView();
             this.tabPage11 = new System.Windows.Forms.TabPage();
+            this.splitContainer3 = new System.Windows.Forms.SplitContainer();
+            this.insightTreeView = new System.Windows.Forms.TreeView();
             this.hexViewHost = new System.Windows.Forms.Integration.ElementHost();
             this.marshalDataTab = new System.Windows.Forms.TabPage();
             this.tabControl3 = new System.Windows.Forms.TabControl();
@@ -124,6 +126,7 @@
             this.openCacheFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.openWorkspaceFileDialog = new System.Windows.Forms.OpenFileDialog();
             this.panel1 = new System.Windows.Forms.Panel();
+            this.toolStripContainer1 = new System.Windows.Forms.ToolStripContainer();
             this.toolStrip1.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.clientListGridView)).BeginInit();
             this.tabControl1.SuspendLayout();
@@ -141,6 +144,10 @@
             this.tabPage3.SuspendLayout();
             this.tabPage4.SuspendLayout();
             this.tabPage11.SuspendLayout();
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).BeginInit();
+            this.splitContainer3.Panel1.SuspendLayout();
+            this.splitContainer3.Panel2.SuspendLayout();
+            this.splitContainer3.SuspendLayout();
             this.marshalDataTab.SuspendLayout();
             this.tabControl3.SuspendLayout();
             this.tabPage6.SuspendLayout();
@@ -160,6 +167,9 @@
             this.logViewerContext.SuspendLayout();
             ((System.ComponentModel.ISupportInitialize)(this.workspaceGridView)).BeginInit();
             this.statusStrip1.SuspendLayout();
+            this.toolStripContainer1.BottomToolStripPanel.SuspendLayout();
+            this.toolStripContainer1.ContentPanel.SuspendLayout();
+            this.toolStripContainer1.SuspendLayout();
             this.SuspendLayout();
             // 
             // toolStrip1
@@ -294,8 +304,8 @@
             this.tabControl1.Controls.Add(this.tabPage8);
             this.tabControl1.Controls.Add(this.tabPage14);
             this.tabControl1.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.tabControl1.Location = new System.Drawing.Point(0, 25);
-            this.tabControl1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 30);
+            this.tabControl1.Location = new System.Drawing.Point(0, 0);
+            this.tabControl1.Margin = new System.Windows.Forms.Padding(0);
             this.tabControl1.Name = "tabControl1";
             this.tabControl1.SelectedIndex = 0;
             this.tabControl1.Size = new System.Drawing.Size(933, 587);
@@ -561,10 +571,8 @@
             // 
             // splitContainer1
             // 
-            this.splitContainer1.Anchor = ((System.Windows.Forms.AnchorStyles)((((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Bottom) 
-            | System.Windows.Forms.AnchorStyles.Left) 
-            | System.Windows.Forms.AnchorStyles.Right)));
-            this.splitContainer1.Location = new System.Drawing.Point(0, 0);
+            this.splitContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer1.Location = new System.Drawing.Point(4, 3);
             this.splitContainer1.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.splitContainer1.Name = "splitContainer1";
             this.splitContainer1.Orientation = System.Windows.Forms.Orientation.Horizontal;
@@ -576,8 +584,8 @@
             // splitContainer1.Panel2
             // 
             this.splitContainer1.Panel2.Controls.Add(this.tabControl2);
-            this.splitContainer1.Size = new System.Drawing.Size(924, 579);
-            this.splitContainer1.SplitterDistance = 246;
+            this.splitContainer1.Size = new System.Drawing.Size(917, 553);
+            this.splitContainer1.SplitterDistance = 234;
             this.splitContainer1.SplitterWidth = 5;
             this.splitContainer1.TabIndex = 2;
             // 
@@ -601,7 +609,7 @@
             this.packetGridView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.packetGridView.Name = "packetGridView";
             this.packetGridView.ReadOnly = true;
-            this.packetGridView.Size = new System.Drawing.Size(924, 246);
+            this.packetGridView.Size = new System.Drawing.Size(917, 234);
             this.packetGridView.TabIndex = 0;
             this.packetGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.packetGridView_CellClick);
             this.packetGridView.CellEnter += new System.Windows.Forms.DataGridViewCellEventHandler(this.packetGridView_CellEnter);
@@ -680,7 +688,7 @@
             this.tabControl2.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabControl2.Name = "tabControl2";
             this.tabControl2.SelectedIndex = 0;
-            this.tabControl2.Size = new System.Drawing.Size(924, 328);
+            this.tabControl2.Size = new System.Drawing.Size(917, 314);
             this.tabControl2.TabIndex = 2;
             // 
             // tabPage3
@@ -690,7 +698,7 @@
             this.tabPage3.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage3.Name = "tabPage3";
             this.tabPage3.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage3.Size = new System.Drawing.Size(916, 300);
+            this.tabPage3.Size = new System.Drawing.Size(909, 286);
             this.tabPage3.TabIndex = 0;
             this.tabPage3.Text = "Text View";
             this.tabPage3.UseVisualStyleBackColor = true;
@@ -703,7 +711,7 @@
             this.packetTextBox.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.packetTextBox.Name = "packetTextBox";
             this.packetTextBox.ReadOnly = true;
-            this.packetTextBox.Size = new System.Drawing.Size(908, 294);
+            this.packetTextBox.Size = new System.Drawing.Size(901, 280);
             this.packetTextBox.TabIndex = 1;
             this.packetTextBox.Text = "";
             // 
@@ -714,7 +722,7 @@
             this.tabPage4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage4.Name = "tabPage4";
             this.tabPage4.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage4.Size = new System.Drawing.Size(916, 300);
+            this.tabPage4.Size = new System.Drawing.Size(909, 286);
             this.tabPage4.TabIndex = 1;
             this.tabPage4.Text = "Tree View";
             this.tabPage4.UseVisualStyleBackColor = true;
@@ -725,27 +733,53 @@
             this.packetTreeView.Location = new System.Drawing.Point(4, 3);
             this.packetTreeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.packetTreeView.Name = "packetTreeView";
-            this.packetTreeView.Size = new System.Drawing.Size(908, 294);
+            this.packetTreeView.Size = new System.Drawing.Size(901, 280);
             this.packetTreeView.TabIndex = 0;
             // 
             // tabPage11
             // 
-            this.tabPage11.Controls.Add(this.hexViewHost);
+            this.tabPage11.Controls.Add(this.splitContainer3);
             this.tabPage11.Location = new System.Drawing.Point(4, 24);
             this.tabPage11.Name = "tabPage11";
             this.tabPage11.Padding = new System.Windows.Forms.Padding(3);
-            this.tabPage11.Size = new System.Drawing.Size(916, 300);
+            this.tabPage11.Size = new System.Drawing.Size(909, 286);
             this.tabPage11.TabIndex = 2;
             this.tabPage11.Text = "Hex View";
             this.tabPage11.UseVisualStyleBackColor = true;
             // 
+            // splitContainer3
+            // 
+            this.splitContainer3.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.splitContainer3.Location = new System.Drawing.Point(3, 3);
+            this.splitContainer3.Name = "splitContainer3";
+            // 
+            // splitContainer3.Panel1
+            // 
+            this.splitContainer3.Panel1.Controls.Add(this.insightTreeView);
+            // 
+            // splitContainer3.Panel2
+            // 
+            this.splitContainer3.Panel2.Controls.Add(this.hexViewHost);
+            this.splitContainer3.Size = new System.Drawing.Size(903, 280);
+            this.splitContainer3.SplitterDistance = 300;
+            this.splitContainer3.TabIndex = 3;
+            // 
+            // insightTreeView
+            // 
+            this.insightTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.insightTreeView.Location = new System.Drawing.Point(0, 0);
+            this.insightTreeView.Name = "insightTreeView";
+            this.insightTreeView.Size = new System.Drawing.Size(300, 280);
+            this.insightTreeView.TabIndex = 0;
+            this.insightTreeView.NodeMouseClick += new System.Windows.Forms.TreeNodeMouseClickEventHandler(this.insightTreeView_NodeMouseClick);
+            // 
             // hexViewHost
             // 
             this.hexViewHost.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.hexViewHost.Location = new System.Drawing.Point(3, 3);
+            this.hexViewHost.Location = new System.Drawing.Point(0, 0);
             this.hexViewHost.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.hexViewHost.Name = "hexViewHost";
-            this.hexViewHost.Size = new System.Drawing.Size(910, 294);
+            this.hexViewHost.Size = new System.Drawing.Size(599, 280);
             this.hexViewHost.TabIndex = 2;
             // 
             // marshalDataTab
@@ -805,7 +839,7 @@
             this.tabPage7.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage7.Name = "tabPage7";
             this.tabPage7.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage7.Size = new System.Drawing.Size(909, 498);
+            this.tabPage7.Size = new System.Drawing.Size(909, 520);
             this.tabPage7.TabIndex = 1;
             this.tabPage7.Text = "Tree View";
             this.tabPage7.UseVisualStyleBackColor = true;
@@ -816,7 +850,7 @@
             this.fileTreeView.Location = new System.Drawing.Point(4, 3);
             this.fileTreeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.fileTreeView.Name = "fileTreeView";
-            this.fileTreeView.Size = new System.Drawing.Size(901, 492);
+            this.fileTreeView.Size = new System.Drawing.Size(901, 514);
             this.fileTreeView.TabIndex = 0;
             // 
             // tabPage12
@@ -824,7 +858,7 @@
             this.tabPage12.Controls.Add(this.fileHexViewHost);
             this.tabPage12.Location = new System.Drawing.Point(4, 24);
             this.tabPage12.Name = "tabPage12";
-            this.tabPage12.Size = new System.Drawing.Size(909, 498);
+            this.tabPage12.Size = new System.Drawing.Size(909, 520);
             this.tabPage12.TabIndex = 2;
             this.tabPage12.Text = "Hex View";
             this.tabPage12.UseVisualStyleBackColor = true;
@@ -835,7 +869,7 @@
             this.fileHexViewHost.Location = new System.Drawing.Point(0, 0);
             this.fileHexViewHost.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.fileHexViewHost.Name = "fileTextBox";
-            this.fileHexViewHost.Size = new System.Drawing.Size(909, 498);
+            this.fileHexViewHost.Size = new System.Drawing.Size(909, 520);
             this.fileHexViewHost.TabIndex = 1;
             // 
             // openMarshalFileButton
@@ -907,7 +941,7 @@
             this.tabPage10.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage10.Name = "tabPage10";
             this.tabPage10.Padding = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.tabPage10.Size = new System.Drawing.Size(909, 498);
+            this.tabPage10.Size = new System.Drawing.Size(909, 520);
             this.tabPage10.TabIndex = 1;
             this.tabPage10.Text = "Tree View";
             this.tabPage10.UseVisualStyleBackColor = true;
@@ -918,7 +952,7 @@
             this.cacheTreeView.Location = new System.Drawing.Point(4, 3);
             this.cacheTreeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cacheTreeView.Name = "cacheTreeView";
-            this.cacheTreeView.Size = new System.Drawing.Size(901, 492);
+            this.cacheTreeView.Size = new System.Drawing.Size(901, 514);
             this.cacheTreeView.TabIndex = 0;
             // 
             // tabPage13
@@ -926,7 +960,7 @@
             this.tabPage13.Controls.Add(this.cacheHexViewHost);
             this.tabPage13.Location = new System.Drawing.Point(4, 24);
             this.tabPage13.Name = "tabPage13";
-            this.tabPage13.Size = new System.Drawing.Size(909, 498);
+            this.tabPage13.Size = new System.Drawing.Size(909, 520);
             this.tabPage13.TabIndex = 2;
             this.tabPage13.Text = "Hex View";
             this.tabPage13.UseVisualStyleBackColor = true;
@@ -937,7 +971,7 @@
             this.cacheHexViewHost.Location = new System.Drawing.Point(0, 0);
             this.cacheHexViewHost.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.cacheHexViewHost.Name = "fileTextBox";
-            this.cacheHexViewHost.Size = new System.Drawing.Size(909, 498);
+            this.cacheHexViewHost.Size = new System.Drawing.Size(909, 520);
             this.cacheHexViewHost.TabIndex = 1;
             // 
             // openCacheFileButton
@@ -979,7 +1013,7 @@
             // 
             this.splitContainer2.Panel2.Controls.Add(this.logViewExpanded);
             this.splitContainer2.Size = new System.Drawing.Size(919, 530);
-            this.splitContainer2.SplitterDistance = 400;
+            this.splitContainer2.SplitterDistance = 399;
             this.splitContainer2.TabIndex = 4;
             // 
             // storagesTabs
@@ -989,7 +1023,7 @@
             this.storagesTabs.Location = new System.Drawing.Point(0, 0);
             this.storagesTabs.Name = "storagesTabs";
             this.storagesTabs.SelectedIndex = 0;
-            this.storagesTabs.Size = new System.Drawing.Size(919, 400);
+            this.storagesTabs.Size = new System.Drawing.Size(919, 399);
             this.storagesTabs.TabIndex = 2;
             this.storagesTabs.Visible = false;
             // 
@@ -997,18 +1031,17 @@
             // 
             this.tabPage15.Location = new System.Drawing.Point(4, 24);
             this.tabPage15.Name = "tabPage15";
-            this.tabPage15.Size = new System.Drawing.Size(911, 372);
+            this.tabPage15.Size = new System.Drawing.Size(911, 371);
             this.tabPage15.TabIndex = 0;
             // 
             // logViewExpanded
             // 
             this.logViewExpanded.ContextMenuStrip = this.logViewerContext;
-            this.logViewExpanded.AutoWordSelection = false;
             this.logViewExpanded.Dock = System.Windows.Forms.DockStyle.Fill;
             this.logViewExpanded.Location = new System.Drawing.Point(0, 0);
             this.logViewExpanded.Name = "logViewExpanded";
             this.logViewExpanded.ReadOnly = true;
-            this.logViewExpanded.Size = new System.Drawing.Size(919, 126);
+            this.logViewExpanded.Size = new System.Drawing.Size(919, 127);
             this.logViewExpanded.TabIndex = 3;
             this.logViewExpanded.Text = "~\\x00\\x00\\x00\\x00\\x17\\x10\\x15objectCaching.CacheOK\\x16\\x01%\\x10\\x07CacheOK\\x10\\x0" +
     "4args";
@@ -1068,10 +1101,12 @@
             // 
             // statusStrip1
             // 
+            this.statusStrip1.Dock = System.Windows.Forms.DockStyle.None;
+            this.statusStrip1.GripMargin = new System.Windows.Forms.Padding(0);
             this.statusStrip1.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.listenStatusLabel,
             this.clientCountLabel});
-            this.statusStrip1.Location = new System.Drawing.Point(0, 612);
+            this.statusStrip1.Location = new System.Drawing.Point(0, 0);
             this.statusStrip1.Name = "statusStrip1";
             this.statusStrip1.Padding = new System.Windows.Forms.Padding(1, 0, 16, 0);
             this.statusStrip1.Size = new System.Drawing.Size(933, 22);
@@ -1105,17 +1140,37 @@
             this.panel1.Dock = System.Windows.Forms.DockStyle.Fill;
             this.panel1.Location = new System.Drawing.Point(0, 25);
             this.panel1.Name = "panel1";
-            this.panel1.Size = new System.Drawing.Size(933, 587);
+            this.panel1.Size = new System.Drawing.Size(933, 609);
             this.panel1.TabIndex = 4;
+            // 
+            // toolStripContainer1
+            // 
+            // 
+            // toolStripContainer1.BottomToolStripPanel
+            // 
+            this.toolStripContainer1.BottomToolStripPanel.Controls.Add(this.statusStrip1);
+            // 
+            // toolStripContainer1.ContentPanel
+            // 
+            this.toolStripContainer1.ContentPanel.Controls.Add(this.tabControl1);
+            this.toolStripContainer1.ContentPanel.Size = new System.Drawing.Size(933, 587);
+            this.toolStripContainer1.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.toolStripContainer1.LeftToolStripPanelVisible = false;
+            this.toolStripContainer1.Location = new System.Drawing.Point(0, 25);
+            this.toolStripContainer1.Name = "toolStripContainer1";
+            this.toolStripContainer1.RightToolStripPanelVisible = false;
+            this.toolStripContainer1.Size = new System.Drawing.Size(933, 609);
+            this.toolStripContainer1.TabIndex = 5;
+            this.toolStripContainer1.Text = "toolStripContainer1";
+            this.toolStripContainer1.TopToolStripPanelVisible = false;
             // 
             // MainWindow
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(7F, 15F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.ClientSize = new System.Drawing.Size(933, 634);
-            this.Controls.Add(this.tabControl1);
+            this.Controls.Add(this.toolStripContainer1);
             this.Controls.Add(this.panel1);
-            this.Controls.Add(this.statusStrip1);
             this.Controls.Add(this.toolStrip1);
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.MinimumSize = new System.Drawing.Size(949, 558);
@@ -1141,6 +1196,10 @@
             this.tabPage3.ResumeLayout(false);
             this.tabPage4.ResumeLayout(false);
             this.tabPage11.ResumeLayout(false);
+            this.splitContainer3.Panel1.ResumeLayout(false);
+            this.splitContainer3.Panel2.ResumeLayout(false);
+            ((System.ComponentModel.ISupportInitialize)(this.splitContainer3)).EndInit();
+            this.splitContainer3.ResumeLayout(false);
             this.marshalDataTab.ResumeLayout(false);
             this.tabControl3.ResumeLayout(false);
             this.tabPage6.ResumeLayout(false);
@@ -1161,6 +1220,11 @@
             ((System.ComponentModel.ISupportInitialize)(this.workspaceGridView)).EndInit();
             this.statusStrip1.ResumeLayout(false);
             this.statusStrip1.PerformLayout();
+            this.toolStripContainer1.BottomToolStripPanel.ResumeLayout(false);
+            this.toolStripContainer1.BottomToolStripPanel.PerformLayout();
+            this.toolStripContainer1.ContentPanel.ResumeLayout(false);
+            this.toolStripContainer1.ResumeLayout(false);
+            this.toolStripContainer1.PerformLayout();
             this.ResumeLayout(false);
             this.PerformLayout();
 
@@ -1285,7 +1349,6 @@
         private WpfHexaEditor.HexEditor hexView;
         private WpfHexaEditor.HexEditor fileHexView;
         private WpfHexaEditor.HexEditor cacheHexView;
-        private System.Windows.Forms.Integration.ElementHost hexViewHost;
         private System.Windows.Forms.Integration.ElementHost fileHexViewHost;
         private System.Windows.Forms.Integration.ElementHost cacheHexViewHost;
         private System.Windows.Forms.TabPage tabPage12;
@@ -1303,5 +1366,9 @@
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.ContextMenuStrip logViewerContext;
         private System.Windows.Forms.ToolStripMenuItem parseAsMarshalDataOption;
+        private System.Windows.Forms.SplitContainer splitContainer3;
+        private System.Windows.Forms.Integration.ElementHost hexViewHost;
+        private System.Windows.Forms.TreeView insightTreeView;
+        private System.Windows.Forms.ToolStripContainer toolStripContainer1;
     }
 }

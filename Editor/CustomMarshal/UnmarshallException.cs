@@ -10,10 +10,12 @@ namespace Editor.CustomMarshal
     class UnmarshallException : Exception
     {
         public PyDataType CurrentObject { get; init; }
+        public InsightUnmarshal Unmarshal { get; init; }
 
-        public UnmarshallException(string message, PyDataType currentObject) : base(message)
+        public UnmarshallException(string message, PyDataType currentObject, InsightUnmarshal unmarshal) : base(message)
         {
             this.CurrentObject = currentObject;
+            this.Unmarshal = unmarshal;
         }
     }
 }

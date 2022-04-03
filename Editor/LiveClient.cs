@@ -2,6 +2,7 @@
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using Editor.CustomMarshal;
 
 namespace Editor
 {
@@ -26,8 +27,9 @@ namespace Editor
             this.mClientSocket.SetOnConnectionLostHandler(Stop);
         }
 
-        private void ServerReceive(byte[] byteData, PyDataType data)
+        private void ServerReceive(byte[] byteData, InsightUnmarshal unmarshal)
         {
+            PyDataType data = unmarshal.Output;
             // relay packet to client
             this.mClientSocket.Send(data);
 
@@ -37,9 +39,9 @@ namespace Editor
                 Client = this,
                 Direction = PacketDirection.ServerToClient,
                 Timestamp = DateTime.UtcNow,
-                PacketBytes = byteData
+                PacketBytes = byteData,
+                Unmarshal = unmarshal
             };
-
 
             // try to parse a PyPacket, if it fails just store the raw data
             try
@@ -55,8 +57,9 @@ namespace Editor
             this.mMainWindow.OnPacketReceived(entry);
         }
 
-        private void ClientReceive(byte[] byteData, PyDataType data)
+        private void ClientReceive(byte[] byteData, InsightUnmarshal unmarshal)
         {
+            PyDataType data = unmarshal.Output;
             // relay packet to server
             this.mServerSocket.Send(data);
 
@@ -66,7 +69,8 @@ namespace Editor
                 Client = this,
                 Direction = PacketDirection.ClientToServer,
                 Timestamp = DateTime.UtcNow,
-                PacketBytes = byteData
+                PacketBytes = byteData,
+                Unmarshal = unmarshal
             };
 
             // try to parse a PyPacket, if it fails just store the raw data
