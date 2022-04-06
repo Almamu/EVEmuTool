@@ -3,11 +3,15 @@
         <OutputType>WinExe</OutputType>
         <UseWindowsForms>true</UseWindowsForms>
         <UseWPF>true</UseWPF>
-        <LangVersion>9</LangVersion>
-        <TargetFramework>net5.0-windows</TargetFramework>
+        <LangVersion>10</LangVersion>
+        <TargetFramework>net6.0-windows</TargetFramework>
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="Serilog" Version="2.11.0-dev-01380" />
+      <PackageReference Include="Serilog.Expressions" Version="3.3.0" />
+      <PackageReference Include="Serilog.Sinks.Console" Version="4.0.2-dev-00890" />
+      <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
       <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
     </ItemGroup>
 

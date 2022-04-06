@@ -1,0 +1,30 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="Current" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup />
+  <ItemGroup>
+    <Compile Update="Forms\CacheViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\Components\MarshalDataViewerComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\Components\MarshalTreeViewComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
+    <Compile Update="Forms\LogViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\PacketCaptureForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\RawViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\SettingsWindow.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\WorkspaceForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+  </ItemGroup>
+</Project>

@@ -1,4 +1,5 @@
-﻿using EVESharp.PythonTypes;
+﻿using Editor.CustomMarshal.CustomTypes;
+using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Compression;
 using EVESharp.PythonTypes.Marshal;
 using EVESharp.PythonTypes.Types.Collections;
@@ -14,7 +15,7 @@ using System.Text;
 namespace Editor.CustomMarshal
 {
     // TODO: THIS IMPLEMENTATION SHOULD BE BETTER HANDLED BECAUSE RIGHT NOW THERE'S CODE DUPLICATED FOR UNMARSHALLING
-    class PartialUnmarshal : Unmarshal
+    class PartialUnmarshal : InsightUnmarshal
     {
         /// <summary>
         /// Extracts the PyDataType off the given byte array
@@ -22,7 +23,7 @@ namespace Editor.CustomMarshal
         /// <param name="data">Byte array to extract the PyDataType from</param>
         /// <param name="expectHeader">Whether a marshal header is expected or not</param>
         /// <returns>The unmarshaled PyDataType</returns>
-        public new static PyDataType ReadFromByteArray(byte[] data, bool expectHeader = true)
+        public static new InsightUnmarshal ReadFromByteArray(byte[] data, bool expectHeader = true)
         {
             MemoryStream stream = new MemoryStream(data);
 
@@ -35,15 +36,64 @@ namespace Editor.CustomMarshal
         /// <param name="stream">Stream to extract the PyDataType from</param>
         /// <param name="expectHeader">Whether a marshal header is expected or not</param>
         /// <returns>The unmarshaled PyDataType</returns>
-        public new static PyDataType ReadFromStream(Stream stream, bool expectHeader = true)
+        public static new InsightUnmarshal ReadFromStream(Stream stream, bool expectHeader = true)
         {
             PartialUnmarshal processor = new PartialUnmarshal(stream);
 
-            return processor.Process(expectHeader);
+            PyDataType parent = processor.Process(expectHeader);
+
+            processor.Output = parent;
+
+            return processor;
         }
 
         protected PartialUnmarshal(Stream stream) : base(stream)
         {
+        }
+
+        protected override PyDataType Process(bool expectHeader = true)
+        {
+            long start = 0;
+            bool save = false;
+            PyDataType result = null;
+            Opcode opcode = Opcode.Error;
+
+            try
+            {
+                if (expectHeader)
+                    this.ProcessPacketHeader();
+
+                start = this.mReader.BaseStream.Position;
+                // read the type's opcode from the stream
+                byte header = this.mReader.ReadByte();
+                opcode = (Opcode)(header & Specification.OPCODE_MASK);
+                save = (header & Specification.SAVE_MASK) == Specification.SAVE_MASK;
+
+                result = this.ProcessOpcode(opcode);
+            }
+            catch (UnmarshallException e)
+            {
+                result = e.CurrentObject;
+            }
+
+            // check if the element has to be saved
+            if (save == true)
+                this.mSavedList[this.mSavedElementsMap[this.mCurrentSavedIndex++] - 1] = result;
+
+            long end = this.mReader.BaseStream.Position;
+
+            InsightEntry entry = new InsightEntry()
+            {
+                StartPosition = start,
+                EndPosition = end - 1,
+                Opcode = opcode,
+                Value = result,
+                HasSaveFlag = save
+            };
+
+            this.Insight.Add(entry);
+
+            return result;
         }
 
         private PyDataType ProcessGuard(PyDataType partial, bool expectHeader = true)
@@ -54,7 +104,7 @@ namespace Editor.CustomMarshal
             }
             catch(Exception ex) // catch all for situations like not enough buffer data, etc
             {
-                throw new UnmarshallException(ex.Message, partial);
+                throw new UnmarshallException(ex.Message, partial, this);
             }
         }
 
@@ -64,13 +114,13 @@ namespace Editor.CustomMarshal
             {
                 return base.ProcessOpcode(opcode);
             }
-            catch(UnmarshallException ex)
+            catch(UnmarshallException)
             {
                 throw;
             }
             catch(Exception ex)
             {
-                throw new UnmarshallException(ex.Message, null);
+                throw new UnmarshallException(ex.Message, null, this);
             }
         }
 
@@ -117,7 +167,7 @@ namespace Editor.CustomMarshal
                 result[i] = element;
 
                 if (exception)
-                    throw new UnmarshallException("Cannot completely parse tuple", result);
+                    throw new UnmarshallException("Cannot completely parse tuple", result, this);
             }
 
             return result;
@@ -163,7 +213,7 @@ namespace Editor.CustomMarshal
                 list[i] = element;
 
                 if (exception)
-                    throw new UnmarshallException("Cannot completely parse list", list);
+                    throw new UnmarshallException("Cannot completely parse list", list, this);
             }
 
             return list;
@@ -211,7 +261,7 @@ namespace Editor.CustomMarshal
                     exception = true;
                     key = ex.CurrentObject ?? new PyNone();
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                     exception = true;
                     key = new PyNone();
@@ -220,7 +270,7 @@ namespace Editor.CustomMarshal
                 dictionary[key] = value;
 
                 if (exception)
-                    throw new UnmarshallException("One of the dictionary elements cannot be parsed", dictionary);
+                    throw new UnmarshallException("One of the dictionary elements cannot be parsed", dictionary, this);
             }
 
             return dictionary;
@@ -352,7 +402,7 @@ namespace Editor.CustomMarshal
             }
             catch(UnmarshallException ex)
             {
-                throw new UnmarshallException($"Error parsing object data information", new PyObjectData(name, ex.CurrentObject));
+                throw new UnmarshallException($"Error parsing object data information", new PyObjectData(name, ex.CurrentObject), this);
             }
 
             return new PyObjectData(
@@ -411,35 +461,6 @@ namespace Editor.CustomMarshal
             return new PySubStruct(
                 this.ProcessGuard(new PySubStruct(null), false)
             );
-        }
-
-        /// <summary>
-        /// <seealso cref="Marshal.ProcessSubStream"/>
-        /// 
-        /// Opcodes supported:
-        /// <seealso cref="Opcode.SubStream"/>
-        /// </summary>
-        /// <returns>The decoded python type</returns>
-        /// <exception cref="InvalidDataException">If any error was found in the data</exception>
-        protected override PyDataType ProcessSubStream()
-        {
-            uint length = this.mReader.ReadSizeEx();
-            byte[] buffer = new byte[length];
-
-            this.mReader.Read(buffer, 0, buffer.Length);
-
-            PyDataType result = null;
-
-            try
-            {
-                result = ReadFromByteArray(buffer);
-            }
-            catch(UnmarshallException ex)
-            {
-                throw new UnmarshallException("Cannot parse sub stream", new PySubStream(ex.CurrentObject));
-            }
-
-            return new PySubStream(result);
         }
 
         /// <summary>
