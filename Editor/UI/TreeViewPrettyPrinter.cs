@@ -1,4 +1,5 @@
-﻿using EVESharp.PythonTypes;
+﻿using Editor.CustomMarshal.CustomTypes;
+using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Types.Collections;
 using EVESharp.PythonTypes.Types.Database;
 using EVESharp.PythonTypes.Types.Primitives;
@@ -41,7 +42,7 @@ namespace Editor
                 case PyChecksumedStream pyChecksumedStream: ProcessChecksumedStream(pyChecksumedStream, node); break;
                 case PyObject pyObject: ProcessObject(pyObject, node); break;
                 case PyObjectData pyObjectData: ProcessObjectData(pyObjectData, node); break;
-                case PySubStream pySubStream: ProcessSubStream(pySubStream, node); break;
+                case PyInsightSubStream pySubStream: ProcessSubStream(pySubStream, node); break;
                 case PySubStruct pySubStruct: ProcessSubStruct(pySubStruct, node); break;
                 case PyPackedRow pyPackedRow: ProcessPackedRow(pyPackedRow, node); break;
                 default: node.Text = "[PyUnknown]"; break;
@@ -155,7 +156,7 @@ namespace Editor
             node.Nodes.Add(child);
         }
 
-        private static void ProcessSubStream(PySubStream stream, TreeNode node)
+        private static void ProcessSubStream(PyInsightSubStream stream, TreeNode node)
         {
             node.Text = "[PySubStream]";
 

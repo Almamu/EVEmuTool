@@ -1,5 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.IO;
+using Editor.CustomMarshal.CustomTypes;
+using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Marshal;
 using EVESharp.PythonTypes.Types.Primitives;
 
@@ -84,5 +86,29 @@ public class InsightUnmarshal : Unmarshal
         this.Insight.Add(entry);
 
         return data;
+    }
+
+    /// <summary>
+    /// <seealso cref="Marshal.ProcessSubStream"/>
+    /// 
+    /// Opcodes supported:
+    /// <seealso cref="Opcode.SubStream"/>
+    /// </summary>
+    /// <returns>The decoded python type</returns>
+    /// <exception cref="InvalidDataException">If any error was found in the data</exception>
+    protected override PyDataType ProcessSubStream()
+    {
+        uint length = this.mReader.ReadSizeEx();
+        byte[] buffer = new byte[length];
+
+        this.mReader.Read(buffer, 0, buffer.Length);
+
+        PyInsightSubStream substream = new PyInsightSubStream(buffer);
+
+        // run the child substream and add the insights to this one too
+        foreach (InsightEntry entry in substream.UnmarshalStream.Insight)
+            this.Insight.Add(entry);
+
+        return substream;
     }
 }

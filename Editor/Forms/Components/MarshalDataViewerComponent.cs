@@ -122,7 +122,7 @@ namespace Editor.Forms.Components
             }
 
             // generate the pretty-printed versions of the data
-            this.mPretty = PrettyPrinter.FromDataType(this.mUnmarshaller.Output);
+            this.mPretty = CustomPrettyPrinter.FromDataType(this.mUnmarshaller.Output);
             TreeViewPrettyPrinter.Process(this.mUnmarshaller.Output, out this.mPacketNode);
             InsightPrettyPrinter.Process(this.mByteData, this.mUnmarshaller, out this.mInsightsNode);
         }

@@ -463,24 +463,6 @@ namespace Editor.CustomMarshal
         }
 
         /// <summary>
-        /// <seealso cref="Marshal.ProcessSubStream"/>
-        /// 
-        /// Opcodes supported:
-        /// <seealso cref="Opcode.SubStream"/>
-        /// </summary>
-        /// <returns>The decoded python type</returns>
-        /// <exception cref="InvalidDataException">If any error was found in the data</exception>
-        protected override PyDataType ProcessSubStream()
-        {
-            uint length = this.mReader.ReadSizeEx();
-            byte[] buffer = new byte[length];
-
-            this.mReader.Read(buffer, 0, buffer.Length);
-            
-            return new PySubStream(buffer);
-        }
-
-        /// <summary>
         /// <seealso cref="Marshal.ProcessChecksumedStream"/>
         /// 
         /// Opcodes supported:
