@@ -1,5 +1,6 @@
 ﻿using Editor.Capture;
 using Editor.CustomMarshal;
+using EVESharp.PythonTypes.Types.Network;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -77,6 +78,55 @@ namespace Editor.Forms
             this.packetGridView.AutoGenerateColumns = false;
             this.packetGridView.DataSource = this.mDataSource;
             this.packetGridView.MultiSelect = false;
+            this.packetGridView.RowPrePaint += OnRowPrePaint;
+        }
+
+        private void OnRowPrePaint(object sender, DataGridViewRowPrePaintEventArgs e)
+        {
+            CaptureEntry entry = this.mDataSource[e.RowIndex] as CaptureEntry;
+
+            switch(entry.Type)
+            {
+                case PyPacket.PacketType.CALL_REQ:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Aquamarine;
+                    break;
+
+                case PyPacket.PacketType.CALL_RSP:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.IndianRed;
+                    break;
+
+                case PyPacket.PacketType.SESSIONCHANGENOTIFICATION:
+                case PyPacket.PacketType.SESSIONINITIALSTATENOTIFICATION:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Green;
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.White;
+                    break;
+
+                case PyPacket.PacketType.ERRORRESPONSE:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.DarkRed;
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.White;
+                    break;
+
+                case PyPacket.PacketType.NOTIFICATION:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.DodgerBlue;
+                    break;
+
+                case PyPacket.PacketType.PING_REQ:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.MediumSlateBlue;
+                    break;
+
+                case PyPacket.PacketType.PING_RSP:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.SeaGreen;
+                    break;
+
+                case PyPacket.PacketType.__Fake_Invalid_Type:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Cyan;
+                    break;
+
+                default:
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.BackColor = Color.Black;
+                    this.packetGridView.Rows[e.RowIndex].DefaultCellStyle.ForeColor = Color.White;
+                    break;
+            }
         }
 
         private void OnPacketCaptured(object sender, CaptureEntry packet)
@@ -142,6 +192,10 @@ namespace Editor.Forms
 
         private void GridSelectionChanged(object sender, EventArgs e)
         {
+            // if the worker is busy do not do anything
+            if (this.mWorker.IsBusy == true)
+                return;
+
             // get the current selected packet entry
             CaptureEntry entry = GetSelectedEntry();
 

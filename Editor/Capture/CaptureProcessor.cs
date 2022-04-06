@@ -45,14 +45,14 @@ namespace Editor.Capture
 
                     source = ConvertAddress(parsed.Source);
                     destination = ConvertAddress(parsed.Destination);
+                    type = parsed.Type;
+                    packetType = ExtractPacketType(parsed);
 
                     if (parsed.Type == PyPacket.PacketType.CALL_REQ ||
                         parsed.Type == PyPacket.PacketType.CALL_RSP)
                     {
                         callID = ExtractCallID(parsed);
                         service = ExtractService(parsed.Source) + ExtractService(parsed.Destination);
-                        packetType = ExtractPacketType(parsed);
-                        type = parsed.Type;
 
                         if (parsed.Type == PyPacket.PacketType.CALL_REQ)
                         {
@@ -141,6 +141,7 @@ namespace Editor.Capture
                     Timestamp = DateTime.Now,
                     PacketType = packetType,
                     Destination = destination,
+                    Type = type,
                     Source = source
                 };
 
