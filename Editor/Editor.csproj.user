@@ -23,8 +23,5 @@
     <Compile Update="Forms\WorkspaceForm.cs">
       <SubType>Form</SubType>
     </Compile>
-    <Compile Update="MainWindow.cs">
-      <SubType>Form</SubType>
-    </Compile>
   </ItemGroup>
 </Project>

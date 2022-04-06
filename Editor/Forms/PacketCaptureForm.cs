@@ -79,7 +79,7 @@ namespace Editor.Forms
         private void FilterPacketsProgressed(object sender, ProgressChangedEventArgs e)
         {
             // update the window title with the progress...
-            this.Text = $"Filtering in progress... {e.ProgressPercentage} items left";
+            this.Text = $"Packet Capture Viewer - Filtering in progress... {e.ProgressPercentage} items left";
         }
 
         private void FilterPacketsCompleted(object sender, RunWorkerCompletedEventArgs e)

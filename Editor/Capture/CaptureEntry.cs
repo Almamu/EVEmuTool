@@ -8,7 +8,13 @@ using System.Threading.Tasks;
 
 namespace Editor.Capture
 {
-    public class CaptureEntry
+    public enum PacketDirection
+    {
+        ClientToServer,
+        ServerToClient
+    }
+
+public class CaptureEntry
     {
         public DateTime Timestamp { get; init; }
         public byte[] RawData { get; init; }
