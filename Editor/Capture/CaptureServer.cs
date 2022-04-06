@@ -16,6 +16,7 @@ namespace Editor.Capture
 {
     internal class CaptureServer : IDisposable
     {
+        private int mClientCount = 0;
         public int Port { get; }
         private ILogger Log { get; }
         private Socket Socket { get; }
@@ -66,7 +67,7 @@ namespace Editor.Capture
                 // do some logging so the user can get a better overview of what's happening
 
                 // connection established, setup reading/receiving and continue the work
-                CaptureSocket socket = new CaptureSocket(this.Processor, server, client);
+                CaptureSocket socket = new CaptureSocket(++this.mClientCount, this.Processor, server, client);
 
                 this.OnStatusChange?.Invoke(this, "Accepted new connection on " + client.GetRemoteAddress());
             }

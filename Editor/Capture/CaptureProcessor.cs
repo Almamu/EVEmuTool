@@ -134,7 +134,7 @@ namespace Editor.Capture
                 {
                     Call = method,
                     CallID = callID,
-                    ClientID = 0,
+                    ClientID = message.Capturer.ClientID,
                     Direction = message.Origin == message.Capturer.Server ? PacketDirection.ServerToClient : PacketDirection.ClientToServer,
                     RawData = data,
                     Service = service,

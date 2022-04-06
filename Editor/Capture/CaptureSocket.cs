@@ -21,6 +21,7 @@ namespace Editor.Capture
     {
         public Socket Server { get; init; } = null;
         public Socket Client { get; init; } = null;
+        public int ClientID { get; init; }
         private StreamPacketizer mServerPacketizer = null;
         private StreamPacketizer mClientPacketizer = null;
         private CaptureProcessor mProcessor = null;
@@ -28,8 +29,9 @@ namespace Editor.Capture
         private ConcurrentDictionary<long, string> CallIDToService = new ConcurrentDictionary<long, string>();
         private ConcurrentDictionary<long, string> CallIDToMethod = new ConcurrentDictionary<long, string>();
 
-        public CaptureSocket(CaptureProcessor processor, Socket server, Socket client)
+        public CaptureSocket(int clientIndex, CaptureProcessor processor, Socket server, Socket client)
         {
+            this.ClientID = clientIndex;
             this.mProcessor = processor;
             this.Server = server;
             this.Client = client;
@@ -116,11 +118,21 @@ namespace Editor.Capture
             }
         }
 
+        /// <summary>
+        /// Registers a new bound service in this socket
+        /// </summary>
+        /// <param name="boundID">The boundID string that identifies the bound service</param>
+        /// <param name="name">The name of the service</param>
         public void RegisterBoundService(string boundID, string name)
         {
             this.mBoundServices.TryAdd(boundID, name);
         }
 
+        /// <summary>
+        /// Searches for the given bound service ID in the list and returns the name if found
+        /// </summary>
+        /// <param name="boundID"></param>
+        /// <returns></returns>
         public string ResolveBoundService(string boundID)
         {
             if (this.mBoundServices.TryGetValue(boundID, out string result) == false)
@@ -129,12 +141,24 @@ namespace Editor.Capture
             return result;
         }
 
+        /// <summary>
+        /// Registers a new service call so the packet response can be resolved to the right service and call
+        /// </summary>
+        /// <param name="callID">The call identifier</param>
+        /// <param name="service">The service it calls</param>
+        /// <param name="method">The method it calls</param>
         public void RegisterServiceCall(long callID, string service, string method)
         {
             this.CallIDToService.TryAdd(callID, service);
             this.CallIDToMethod.TryAdd(callID, method);
         }
 
+        /// <summary>
+        /// Resolves the given service call to a specific service and method
+        /// </summary>
+        /// <param name="callID">The call identifier</param>
+        /// <param name="service">Where to put the service name</param>
+        /// <param name="method">Where to put the service method</param>
         public void FinishServiceCall(long callID, out string service, out string method)
         {
             this.CallIDToService.TryRemove(callID, out service);
