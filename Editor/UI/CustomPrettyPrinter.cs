@@ -20,7 +20,7 @@ namespace Editor.UI
         /// </summary>
         /// <param name="obj">The Python type to dump</param>
         /// <returns></returns>
-        public static string FromDataType(PyDataType obj)
+        public static new string FromDataType(PyDataType obj)
         {
             CustomPrettyPrinter printer = new CustomPrettyPrinter();
 

@@ -1,6 +1,9 @@
 ﻿using Editor.CustomMarshal;
 using Editor.UI;
 using EVESharp.PythonTypes;
+using EVESharp.PythonTypes.Compression;
+using EVESharp.PythonTypes.Marshal;
+using Org.BouncyCastle.Utilities.Zlib;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -19,7 +22,7 @@ namespace Editor.Forms.Components
     {
         private WpfHexaEditor.HexEditor hexView = null;
         private BackgroundWorker mWorker;
-        private InsightUnmarshal mUnmarshaller = null;
+        public InsightUnmarshal Unmarshaler { get; private set; } = null;
         public EventHandler OnLoadCompleted;
         public EventHandler<string> OnUnmarshalError;
         private byte[] mByteData = null;
@@ -27,6 +30,8 @@ namespace Editor.Forms.Components
         private string mPretty = "";
         private TreeNode mPacketNode = null;
         private TreeNode mInsightsNode = null;
+        private bool mWasCompressed = false;
+
         private MarshalDataViewerComponent()
         {
             InitializeComponent();
@@ -78,6 +83,8 @@ namespace Editor.Forms.Components
 
             // ensure the treeViews are empty before starting
             this.insightTreeView.Nodes.Clear();
+            // add the compression indicator
+            this.insightTreeView.Nodes.Add("Compression: " + this.mWasCompressed);
 
             // setup the corresponding boxes with the right data
             this.packetTextBox.Text = this.mPretty;
@@ -110,21 +117,34 @@ namespace Editor.Forms.Components
                     this.mOrigin.Read(this.mByteData, 0, (int) length);
                 }
                     
+            // if first byte is an x that means we have a compressed stream
+            // this has costed me ONE hour of wondering why the fuck my data was not long enough, turns out I don't even remember the specification of what i'm working on...
+            if (this.mByteData[0] == Specification.ZLIB_HEADER)
+            {
+                // decompress the stream and mark it as compressed so it can be reflected in the treelist
+                this.mWasCompressed = true;
+                MemoryStream memoryStream = new MemoryStream(this.mByteData);
+                MemoryStream outputStream = new MemoryStream();
+                ZInputStream stream = ZlibHelper.DecompressStream(memoryStream);
+                stream.CopyTo(outputStream);
+                // now convert the outputStream to a byte array and use it instead
+                this.mByteData = outputStream.ToArray();
+            }
             try
             {
-                this.mUnmarshaller = PartialUnmarshal.ReadFromByteArray(this.mByteData);
+                this.Unmarshaler = InsightUnmarshal.ReadFromByteArray(this.mByteData);
             }
             catch (UnmarshallException ex)
             {
-                this.mUnmarshaller = ex.Unmarshal;
+                this.Unmarshaler = ex.Unmarshal;
                 // signal some processso the ui can reflect that the packet might be incomplete
                 this.mWorker.ReportProgress(50);
             }
 
             // generate the pretty-printed versions of the data
-            this.mPretty = CustomPrettyPrinter.FromDataType(this.mUnmarshaller.Output);
-            TreeViewPrettyPrinter.Process(this.mUnmarshaller.Output, out this.mPacketNode);
-            InsightPrettyPrinter.Process(this.mByteData, this.mUnmarshaller, out this.mInsightsNode);
+            this.mPretty = CustomPrettyPrinter.FromDataType(this.Unmarshaler.Output);
+            TreeViewPrettyPrinter.Process(this.Unmarshaler.Output, out this.mPacketNode);
+            InsightPrettyPrinter.Process(this.mByteData, this.Unmarshaler, out this.mInsightsNode);
         }
 
         public void PrepareDataAsync()
@@ -136,7 +156,7 @@ namespace Editor.Forms.Components
         {
             long point = e.BytePositionInStream;
 
-            foreach (InsightEntry entry in this.mUnmarshaller.Insight)
+            foreach (InsightEntry entry in this.Unmarshaler.Insight)
             {
                 if (entry.StartPosition <= point && entry.EndPosition >= point)
                 {
@@ -150,7 +170,7 @@ namespace Editor.Forms.Components
 
         private void SelectInsightElement(object sender, TreeNodeMouseClickEventArgs e)
         {
-            foreach (InsightEntry entry in this.mUnmarshaller.Insight)
+            foreach (InsightEntry entry in this.Unmarshaler.Insight)
             {
                 if (entry.TreeNode == e.Node)
                 {
@@ -163,7 +183,7 @@ namespace Editor.Forms.Components
 
         private void SelectInsightNode(object sender, TreeNodeMouseClickEventArgs e)
         {
-            foreach (InsightEntry entry in this.mUnmarshaller.Insight)
+            foreach (InsightEntry entry in this.Unmarshaler.Insight)
             {
                 if (entry.TreeNode == e.Node)
                 {

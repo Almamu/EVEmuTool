@@ -196,5 +196,20 @@ namespace Editor.Forms
         {
             this.ShowChildForm(this.mPacketCaptureForm);
         }
+
+        private void OpenCacheFile(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog()
+            {
+                DefaultExt = "cache",
+                Filter = "EVE Online Cache File|*.cache"
+            };
+
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                // create a workspace reader and show the proper form
+                this.ShowChildForm(new CacheViewerForm(dialog.OpenFile(), dialog.FileName));
+            }
+        }
     }
 }

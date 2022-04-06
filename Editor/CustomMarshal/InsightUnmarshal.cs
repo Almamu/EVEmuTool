@@ -89,6 +89,24 @@ public class InsightUnmarshal : Unmarshal
     }
 
     /// <summary>
+    /// Custom implementation of string parsing to ensure the byte data is kept as sometimes this is required and useful
+    /// </summary>
+    /// <param name="opcode"></param>
+    /// <returns></returns>
+    protected override PyDataType ProcessString(Opcode opcode)
+    {
+        switch (opcode)
+        {
+            case Opcode.StringShort:
+                return new PyByteString(this.mReader.ReadBytes(this.mReader.ReadByte()));
+            case Opcode.StringLong:
+                return new PyByteString(this.mReader.ReadBytes((int)this.mReader.ReadSizeEx()));
+            default:
+                return base.ProcessString(opcode);
+        }
+    }
+
+    /// <summary>
     /// <seealso cref="Marshal.ProcessSubStream"/>
     /// 
     /// Opcodes supported:

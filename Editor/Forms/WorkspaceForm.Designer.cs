@@ -34,6 +34,7 @@
             this.openSavedWorkspace = new System.Windows.Forms.ToolStripMenuItem();
             this.openLogServerWorkspace = new System.Windows.Forms.ToolStripMenuItem();
             this.openRawMarshalData = new System.Windows.Forms.ToolStripMenuItem();
+            this.openCacheFile = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
             this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
@@ -54,6 +55,7 @@
             this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openLogServerButton = new System.Windows.Forms.ToolStripButton();
             this.openRawMarshalButton = new System.Windows.Forms.ToolStripButton();
+            this.openCacheFileButton = new System.Windows.Forms.ToolStripButton();
             this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.startPacketCaptureButton = new System.Windows.Forms.ToolStripButton();
@@ -89,6 +91,7 @@
             this.openSavedWorkspace,
             this.openLogServerWorkspace,
             this.openRawMarshalData,
+            this.openCacheFile,
             this.toolStripSeparator3,
             this.saveToolStripMenuItem,
             this.toolStripSeparator5,
@@ -123,6 +126,14 @@
             this.openRawMarshalData.Size = new System.Drawing.Size(241, 22);
             this.openRawMarshalData.Text = "Open Raw &Marshal Data";
             this.openRawMarshalData.Click += new System.EventHandler(this.OpenRawMarshalData);
+            // 
+            // openCacheFile
+            // 
+            this.openCacheFile.Image = global::Editor.Properties.Resources.CacheFile;
+            this.openCacheFile.Name = "openCacheFile";
+            this.openCacheFile.Size = new System.Drawing.Size(241, 22);
+            this.openCacheFile.Text = "Open Cache File";
+            this.openCacheFile.Click += new System.EventHandler(this.OpenCacheFile);
             // 
             // toolStripSeparator3
             // 
@@ -252,6 +263,7 @@
             this.openToolStripButton,
             this.openLogServerButton,
             this.openRawMarshalButton,
+            this.openCacheFileButton,
             this.saveToolStripButton,
             this.toolStripSeparator1,
             this.startPacketCaptureButton,
@@ -293,6 +305,16 @@
             this.openRawMarshalButton.Size = new System.Drawing.Size(23, 22);
             this.openRawMarshalButton.Text = "toolStripButton2";
             this.openRawMarshalButton.Click += new System.EventHandler(this.OpenRawMarshalData);
+            // 
+            // openCacheFileButton
+            // 
+            this.openCacheFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openCacheFileButton.Image = global::Editor.Properties.Resources.CacheFile;
+            this.openCacheFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openCacheFileButton.Name = "openCacheFileButton";
+            this.openCacheFileButton.Size = new System.Drawing.Size(23, 22);
+            this.openCacheFileButton.Text = "Open Cache File";
+            this.openCacheFileButton.Click += new System.EventHandler(this.OpenCacheFile);
             // 
             // saveToolStripButton
             // 
@@ -420,6 +442,8 @@
         private System.Windows.Forms.ToolStripButton openPacketCaptureViewerButton;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
         private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
+        private System.Windows.Forms.ToolStripMenuItem openCacheFile;
+        private System.Windows.Forms.ToolStripButton openCacheFileButton;
     }
 }
 

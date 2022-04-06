@@ -1,4 +1,5 @@
-﻿using EVESharp.PythonTypes;
+﻿using Editor.CustomMarshal.CustomTypes;
+using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Compression;
 using EVESharp.PythonTypes.Marshal;
 using EVESharp.PythonTypes.Types.Collections;
