@@ -31,12 +31,9 @@
             this.components = new System.ComponentModel.Container();
             this.menuStrip = new System.Windows.Forms.MenuStrip();
             this.fileMenu = new System.Windows.Forms.ToolStripMenuItem();
-            this.openSavedWorkspace = new System.Windows.Forms.ToolStripMenuItem();
             this.openLogServerWorkspace = new System.Windows.Forms.ToolStripMenuItem();
             this.openRawMarshalData = new System.Windows.Forms.ToolStripMenuItem();
             this.openCacheFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.toolStripSeparator3 = new System.Windows.Forms.ToolStripSeparator();
-            this.saveToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serverMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -52,11 +49,9 @@
             this.tileHorizontalToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.closeAllToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStrip = new System.Windows.Forms.ToolStrip();
-            this.openToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.openLogServerButton = new System.Windows.Forms.ToolStripButton();
             this.openRawMarshalButton = new System.Windows.Forms.ToolStripButton();
             this.openCacheFileButton = new System.Windows.Forms.ToolStripButton();
-            this.saveToolStripButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.startPacketCaptureButton = new System.Windows.Forms.ToolStripButton();
             this.stopPacketCaptureButton = new System.Windows.Forms.ToolStripButton();
@@ -88,12 +83,9 @@
             // fileMenu
             // 
             this.fileMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openSavedWorkspace,
             this.openLogServerWorkspace,
             this.openRawMarshalData,
             this.openCacheFile,
-            this.toolStripSeparator3,
-            this.saveToolStripMenuItem,
             this.toolStripSeparator5,
             this.exitToolStripMenuItem});
             this.fileMenu.ImageTransparentColor = System.Drawing.SystemColors.ActiveBorder;
@@ -101,21 +93,11 @@
             this.fileMenu.Size = new System.Drawing.Size(37, 20);
             this.fileMenu.Text = "&File";
             // 
-            // openSavedWorkspace
-            // 
-            this.openSavedWorkspace.Image = global::Editor.Properties.Resources.OpenFolder;
-            this.openSavedWorkspace.ImageTransparentColor = System.Drawing.Color.Black;
-            this.openSavedWorkspace.Name = "openSavedWorkspace";
-            this.openSavedWorkspace.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.O)));
-            this.openSavedWorkspace.Size = new System.Drawing.Size(241, 22);
-            this.openSavedWorkspace.Text = "&Open Saved Workspace";
-            this.openSavedWorkspace.Click += new System.EventHandler(this.OpenFile);
-            // 
             // openLogServerWorkspace
             // 
             this.openLogServerWorkspace.Image = global::Editor.Properties.Resources._1;
             this.openLogServerWorkspace.Name = "openLogServerWorkspace";
-            this.openLogServerWorkspace.Size = new System.Drawing.Size(241, 22);
+            this.openLogServerWorkspace.Size = new System.Drawing.Size(219, 22);
             this.openLogServerWorkspace.Text = "Open LogServer Workspace";
             this.openLogServerWorkspace.Click += new System.EventHandler(this.OpenLogServerWorkspace);
             // 
@@ -123,7 +105,7 @@
             // 
             this.openRawMarshalData.Image = global::Editor.Properties.Resources.Marshal;
             this.openRawMarshalData.Name = "openRawMarshalData";
-            this.openRawMarshalData.Size = new System.Drawing.Size(241, 22);
+            this.openRawMarshalData.Size = new System.Drawing.Size(219, 22);
             this.openRawMarshalData.Text = "Open Raw &Marshal Data";
             this.openRawMarshalData.Click += new System.EventHandler(this.OpenRawMarshalData);
             // 
@@ -131,33 +113,19 @@
             // 
             this.openCacheFile.Image = global::Editor.Properties.Resources.CacheFile;
             this.openCacheFile.Name = "openCacheFile";
-            this.openCacheFile.Size = new System.Drawing.Size(241, 22);
+            this.openCacheFile.Size = new System.Drawing.Size(219, 22);
             this.openCacheFile.Text = "Open Cache File";
             this.openCacheFile.Click += new System.EventHandler(this.OpenCacheFile);
-            // 
-            // toolStripSeparator3
-            // 
-            this.toolStripSeparator3.Name = "toolStripSeparator3";
-            this.toolStripSeparator3.Size = new System.Drawing.Size(238, 6);
-            // 
-            // saveToolStripMenuItem
-            // 
-            this.saveToolStripMenuItem.Image = global::Editor.Properties.Resources.Save;
-            this.saveToolStripMenuItem.ImageTransparentColor = System.Drawing.Color.Black;
-            this.saveToolStripMenuItem.Name = "saveToolStripMenuItem";
-            this.saveToolStripMenuItem.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.S)));
-            this.saveToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
-            this.saveToolStripMenuItem.Text = "&Save As...";
             // 
             // toolStripSeparator5
             // 
             this.toolStripSeparator5.Name = "toolStripSeparator5";
-            this.toolStripSeparator5.Size = new System.Drawing.Size(238, 6);
+            this.toolStripSeparator5.Size = new System.Drawing.Size(216, 6);
             // 
             // exitToolStripMenuItem
             // 
             this.exitToolStripMenuItem.Name = "exitToolStripMenuItem";
-            this.exitToolStripMenuItem.Size = new System.Drawing.Size(241, 22);
+            this.exitToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
             this.exitToolStripMenuItem.Text = "&Exit";
             this.exitToolStripMenuItem.Click += new System.EventHandler(this.CloseForm);
             // 
@@ -260,11 +228,9 @@
             // toolStrip
             // 
             this.toolStrip.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openToolStripButton,
             this.openLogServerButton,
             this.openRawMarshalButton,
             this.openCacheFileButton,
-            this.saveToolStripButton,
             this.toolStripSeparator1,
             this.startPacketCaptureButton,
             this.stopPacketCaptureButton,
@@ -275,16 +241,6 @@
             this.toolStrip.Size = new System.Drawing.Size(737, 25);
             this.toolStrip.TabIndex = 1;
             this.toolStrip.Text = "ToolStrip";
-            // 
-            // openToolStripButton
-            // 
-            this.openToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openToolStripButton.Image = global::Editor.Properties.Resources.OpenFolder;
-            this.openToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
-            this.openToolStripButton.Name = "openToolStripButton";
-            this.openToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.openToolStripButton.Text = "Abrir";
-            this.openToolStripButton.Click += new System.EventHandler(this.OpenFile);
             // 
             // openLogServerButton
             // 
@@ -315,15 +271,6 @@
             this.openCacheFileButton.Size = new System.Drawing.Size(23, 22);
             this.openCacheFileButton.Text = "Open Cache File";
             this.openCacheFileButton.Click += new System.EventHandler(this.OpenCacheFile);
-            // 
-            // saveToolStripButton
-            // 
-            this.saveToolStripButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.saveToolStripButton.Image = global::Editor.Properties.Resources.Save;
-            this.saveToolStripButton.ImageTransparentColor = System.Drawing.Color.Black;
-            this.saveToolStripButton.Name = "saveToolStripButton";
-            this.saveToolStripButton.Size = new System.Drawing.Size(23, 22);
-            this.saveToolStripButton.Text = "Guardar";
             // 
             // toolStripSeparator1
             // 
@@ -411,13 +358,10 @@
         private System.Windows.Forms.MenuStrip menuStrip;
         private System.Windows.Forms.ToolStrip toolStrip;
         private System.Windows.Forms.StatusStrip statusStrip;
-        private System.Windows.Forms.ToolStripSeparator toolStripSeparator3;
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator5;
         private System.Windows.Forms.ToolStripStatusLabel toolStripStatusLabel;
         private System.Windows.Forms.ToolStripMenuItem tileHorizontalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem fileMenu;
-        private System.Windows.Forms.ToolStripMenuItem openSavedWorkspace;
-        private System.Windows.Forms.ToolStripMenuItem saveToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem exitToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem serverMenu;
         private System.Windows.Forms.ToolStripMenuItem startPacketCapture;
@@ -427,8 +371,6 @@
         private System.Windows.Forms.ToolStripMenuItem cascadeToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem tileVerticalToolStripMenuItem;
         private System.Windows.Forms.ToolStripMenuItem closeAllToolStripMenuItem;
-        private System.Windows.Forms.ToolStripButton openToolStripButton;
-        private System.Windows.Forms.ToolStripButton saveToolStripButton;
         private System.Windows.Forms.ToolTip toolTip;
         private System.Windows.Forms.ToolStripMenuItem stopPacketCapture;
         private System.Windows.Forms.ToolStripMenuItem openLogServerWorkspace;
