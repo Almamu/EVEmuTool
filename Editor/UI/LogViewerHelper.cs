@@ -1,6 +1,7 @@
 ﻿using Editor.UI.DataGridView;
 using System;
 using System.Collections.Generic;
+using System.Drawing;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -53,7 +54,7 @@ namespace Editor
             // 
             workspaceGridView.AllowUserToAddRows = false;
             workspaceGridView.AllowUserToDeleteRows = false;
-            workspaceGridView.AllowUserToOrderColumns = true;
+            workspaceGridView.AllowUserToOrderColumns = false;
             workspaceGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             workspaceGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             logLevelColumn,
@@ -66,6 +67,20 @@ namespace Editor
             workspaceGridView.Size = new System.Drawing.Size(905, 496);
             workspaceGridView.TabIndex = 1;
             workspaceGridView.AutoGenerateColumns = false;
+            workspaceGridView.RowPostPaint += (object sender, DataGridViewRowPostPaintEventArgs e) =>
+            {
+                DataGridView grid = sender as DataGridView;
+                string rowId = (e.RowIndex + 1).ToString();
+
+                StringFormat format = new StringFormat()
+                {
+                    Alignment = StringAlignment.Far,
+                    LineAlignment = StringAlignment.Center
+                };
+
+                Rectangle bounds = new Rectangle(e.RowBounds.Left, e.RowBounds.Top, grid.RowHeadersWidth, e.RowBounds.Height);
+                e.Graphics.DrawString(rowId, grid.Font, SystemBrushes.ControlText, bounds, format);
+            };
 
             return workspaceGridView;
         }

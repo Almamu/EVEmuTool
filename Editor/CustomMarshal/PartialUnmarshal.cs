@@ -16,23 +16,84 @@ namespace Editor.CustomMarshal
     // TODO: THIS IMPLEMENTATION SHOULD BE BETTER HANDLED BECAUSE RIGHT NOW THERE'S CODE DUPLICATED FOR UNMARSHALLING
     class PartialUnmarshal : InsightUnmarshal
     {
+        /// <summary>
+        /// Extracts the PyDataType off the given byte array
+        /// </summary>
+        /// <param name="data">Byte array to extract the PyDataType from</param>
+        /// <param name="expectHeader">Whether a marshal header is expected or not</param>
+        /// <returns>The unmarshaled PyDataType</returns>
+        public static InsightUnmarshal ReadFromByteArray(byte[] data, bool expectHeader = true)
+        {
+            MemoryStream stream = new MemoryStream(data);
+
+            return ReadFromStream(stream, expectHeader);
+        }
+
+        /// <summary>
+        /// Extracts the PyDataType off the given stream
+        /// </summary>
+        /// <param name="stream">Stream to extract the PyDataType from</param>
+        /// <param name="expectHeader">Whether a marshal header is expected or not</param>
+        /// <returns>The unmarshaled PyDataType</returns>
+        public static InsightUnmarshal ReadFromStream(Stream stream, bool expectHeader = true)
+        {
+            PartialUnmarshal processor = new PartialUnmarshal(stream);
+
+            PyDataType parent = processor.Process(expectHeader);
+
+            processor.Output = parent;
+
+            return processor;
+        }
+
         protected PartialUnmarshal(Stream stream) : base(stream)
         {
         }
 
         protected override PyDataType Process(bool expectHeader = true)
         {
+            long start = 0;
+            bool wasParsed = true;
+            bool save = false;
+            PyDataType result = null;
+            Opcode opcode = Opcode.Error;
+
             try
             {
-                return base.Process(expectHeader);
+                if (expectHeader)
+                    this.ProcessPacketHeader();
+
+                start = this.mReader.BaseStream.Position;
+                // read the type's opcode from the stream
+                byte header = this.mReader.ReadByte();
+                opcode = (Opcode)(header & Specification.OPCODE_MASK);
+                save = (header & Specification.SAVE_MASK) == Specification.SAVE_MASK;
+
+                result = this.ProcessOpcode(opcode);
             }
             catch (UnmarshallException e)
             {
-                if (expectHeader)
-                    this.Output = e.CurrentObject;
-
-                throw;
+                result = e.CurrentObject;
             }
+
+            // check if the element has to be saved
+            if (save == true)
+                this.mSavedList[this.mSavedElementsMap[this.mCurrentSavedIndex++] - 1] = result;
+
+            long end = this.mReader.BaseStream.Position;
+
+            InsightEntry entry = new InsightEntry()
+            {
+                StartPosition = start,
+                EndPosition = end - 1,
+                Opcode = opcode,
+                Value = result,
+                HasSaveFlag = save
+            };
+
+            this.Insight.Add(entry);
+
+            return result;
         }
 
         private PyDataType ProcessGuard(PyDataType partial, bool expectHeader = true)
@@ -332,7 +393,7 @@ namespace Editor.CustomMarshal
         /// <exception cref="InvalidDataException">If any error was found in the data</exception>
         protected override PyDataType ProcessObjectData()
         {
-            PyToken name = this.ProcessGuard(new PyObjectData(null, null), false) as PyToken;
+            PyString name = this.ProcessGuard(new PyObjectData(null, null), false) as PyString;
             PyDataType data = null;
 
             try

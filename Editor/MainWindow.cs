@@ -198,6 +198,10 @@ namespace Editor
 
             if (packet.Packet != null)
             {
+                TreeViewPrettyPrinter.Process(packet.Packet.Source, packetTreeView.Nodes.Add("Source"));
+                TreeViewPrettyPrinter.Process(packet.Packet.Destination, packetTreeView.Nodes.Add("Destination"));
+                packetTreeView.Nodes.Add("UserID: " + packet.Packet.UserID.ToString());
+
                 if (packet.Packet.Type == PyPacket.PacketType.CALL_REQ)
                 {
                     PyTuple callInfo = ((packet.Packet.Payload[0] as PyTuple)[1] as PySubStream).Stream as PyTuple;

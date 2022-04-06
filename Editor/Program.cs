@@ -6,6 +6,7 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using Editor.Forms;
 using Editor.LogServer;
 using EVESharp.Common.Logging;
 using Serilog;
@@ -18,7 +19,7 @@ namespace Editor
     static class Program
     {
         public static ILogger logger = SetupLogger();
-        private static Logger SetupLogger()
+        private static ILogger SetupLogger()
         {
             LoggerConfiguration loggerConfiguration = new LoggerConfiguration().MinimumLevel.Verbose();
 
@@ -51,7 +52,9 @@ namespace Editor
             loggerConfiguration.WriteTo.Console(template);
             loggerConfiguration.WriteTo.File("output.log");
 
-            return loggerConfiguration.CreateLogger();
+            Serilog.Log.Logger = loggerConfiguration.CreateLogger();
+
+            return Serilog.Log.Logger;
         }
         
         /// <summary>
@@ -63,7 +66,7 @@ namespace Editor
             Application.SetHighDpiMode(HighDpiMode.SystemAware);
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new MainWindow());
+            Application.Run(new WorkspaceForm());
         }
     }
 }

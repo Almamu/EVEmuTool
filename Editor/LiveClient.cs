@@ -30,8 +30,15 @@ namespace Editor
         private void ServerReceive(byte[] byteData, InsightUnmarshal unmarshal)
         {
             PyDataType data = unmarshal.Output;
+
+            // generate the final buffer
+            byte[] packetBuffer = new byte[byteData.Length + sizeof(int)];
+
+            // write the packet size and the buffer to the new buffer
+            Buffer.BlockCopy(BitConverter.GetBytes(byteData.Length), 0, packetBuffer, 0, sizeof(int));
+            Buffer.BlockCopy(byteData, 0, packetBuffer, sizeof(int), byteData.Length);
             // relay packet to client
-            this.mClientSocket.Send(data);
+            this.mClientSocket.Send(packetBuffer);
 
             PacketEntry entry = new PacketEntry
             {
@@ -60,8 +67,15 @@ namespace Editor
         private void ClientReceive(byte[] byteData, InsightUnmarshal unmarshal)
         {
             PyDataType data = unmarshal.Output;
+
+            // generate the final buffer
+            byte[] packetBuffer = new byte[byteData.Length + sizeof(int)];
+
+            // write the packet size and the buffer to the new buffer
+            Buffer.BlockCopy(BitConverter.GetBytes(byteData.Length), 0, packetBuffer, 0, sizeof(int));
+            Buffer.BlockCopy(byteData, 0, packetBuffer, sizeof(int), byteData.Length);
             // relay packet to server
-            this.mServerSocket.Send(data);
+            this.mServerSocket.Send(packetBuffer);
 
             PacketEntry entry = new PacketEntry
             {
