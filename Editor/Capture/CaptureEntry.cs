@@ -8,7 +8,7 @@ using System.Threading.Tasks;
 
 namespace Editor.Capture
 {
-    internal class CaptureEntry
+    public class CaptureEntry
     {
         public DateTime Timestamp { get; init; }
         public byte[] RawData { get; init; }

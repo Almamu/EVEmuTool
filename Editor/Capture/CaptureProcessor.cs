@@ -13,15 +13,15 @@ using System.Threading.Tasks;
 
 namespace Editor.Capture
 {
-    internal class CaptureProcessor : MessageProcessor<CaptureMessage>
+    public class CaptureProcessor
     {
-        public EventHandler<CaptureEntry> OnPacketCaptured;
+        public event EventHandler<CaptureEntry> OnPacketCaptured;
 
-        public CaptureProcessor() : base(Serilog.Log.ForContext<CaptureProcessor>(), 10)
+        public CaptureProcessor()
         {
         }
 
-        protected override void HandleMessage(CaptureMessage message)
+        public void HandleMessage(CaptureMessage message)
         {
             // process the packetizer
             int packets = message.Packetizer.ProcessPackets();
@@ -54,36 +54,36 @@ namespace Editor.Capture
                         packetType = ExtractPacketType(parsed);
                         type = parsed.Type;
 
-                        PyTuple callInformation = ((parsed.Payload[0] as PyTuple)[1] as PySubStream).Stream as PyTuple;
-
-                        // there was no name, try to infer it from bound services
-                        if (service.Length == 0 && parsed.Type == PyPacket.PacketType.CALL_REQ)
-                        {
-                            PyString id = callInformation[0] as PyString;
-
-                            try
-                            {
-                                // resolve the bound service with the id
-                                service = message.Capturer.ResolveBoundService(id);
-                            }
-                            catch(Exception ex)
-                            {
-
-                            }
-                        }
-
-                        if (service.Length == 0 || parsed.Type == PyPacket.PacketType.CALL_RSP)
-                            message.Capturer.FinishServiceCall(callID, out service, out method);
-
-                        service ??= "Unknown";
-
                         if (parsed.Type == PyPacket.PacketType.CALL_REQ)
                         {
-                            method = ExtractMethod(message.Capturer, callInformation);
+                            PyTuple callInformation = ((parsed.Payload[0] as PyTuple)[1] as PySubStream).Stream as PyTuple;
 
-                            // register the service call
-                            message.Capturer.RegisterServiceCall(callID, service, method);
+                            // there was no name, try to infer it from bound services
+                            if (service.Length == 0 && parsed.Type == PyPacket.PacketType.CALL_REQ)
+                            {
+                                PyString id = callInformation[0] as PyString;
+
+                                try
+                                {
+                                    // resolve the bound service with the id
+                                    service = message.Capturer.ResolveBoundService(id);
+                                }
+                                catch (Exception ex)
+                                {
+
+                                }
+                            }
+
+                            service ??= "Unknown";
+
+                            method = ExtractMethod(message.Capturer, callInformation);
                         }
+
+                        if (parsed.Type == PyPacket.PacketType.CALL_REQ)
+                            message.Capturer.RegisterServiceCall(callID, service, method);
+
+                        if (parsed.Type == PyPacket.PacketType.CALL_RSP)
+                            message.Capturer.FinishServiceCall(callID, out service, out method);
 
                         if (parsed.Type == PyPacket.PacketType.CALL_RSP)
                         {
@@ -143,6 +143,8 @@ namespace Editor.Capture
                     Destination = destination,
                     Source = source
                 };
+
+                this.OnPacketCaptured?.Invoke(this, entry);
             }
         }
 

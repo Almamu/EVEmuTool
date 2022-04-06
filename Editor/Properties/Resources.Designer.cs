@@ -73,6 +73,16 @@ namespace Editor.Properties {
         /// <summary>
         ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
         /// </summary>
+        internal static System.Drawing.Bitmap AnalyzeTrace {
+            get {
+                object obj = ResourceManager.GetObject("AnalyzeTrace", resourceCulture);
+                return ((System.Drawing.Bitmap)(obj));
+            }
+        }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Drawing.Bitmap.
+        /// </summary>
         internal static System.Drawing.Bitmap Counter {
             get {
                 object obj = ResourceManager.GetObject("Counter", resourceCulture);

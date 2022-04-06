@@ -33,7 +33,7 @@ namespace Editor.Capture
             this.Processor = processor;
         }
 
-        public new void Listen()
+        public void Listen()
         {
             Log.Information("Starting listener...");
             this.OnStatusChange?.Invoke(this, "Starting listener...");
@@ -57,6 +57,8 @@ namespace Editor.Capture
                 Log.Information("Received new connection from " + client.GetRemoteAddress() + ". Connecting to the server");
                 // create a socket to communicate with the server
                 Socket server = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+                // ensure we support both ipv4 and ipv6
+                server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
                 // connect to the server
                 server.Connect(CaptureSettings.ServerAddress, ushort.Parse(CaptureSettings.ServerPort));
                 Log.Information("Connection to EVE Server established on " + server.GetRemoteAddress());
@@ -68,7 +70,7 @@ namespace Editor.Capture
 
                 this.OnStatusChange?.Invoke(this, "Accepted new connection on " + client.GetRemoteAddress());
             }
-            catch(ObjectDisposedException ex)
+            catch(ObjectDisposedException)
             {
                 // ignored, object already disposed usually means the socket got disposed
             }

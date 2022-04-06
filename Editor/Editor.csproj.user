@@ -5,7 +5,13 @@
     <Compile Update="Forms\Components\MarshalDataViewerComponent.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\Components\MarshalTreeViewComponent.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\LogViewerForm.cs">
+      <SubType>Form</SubType>
+    </Compile>
+    <Compile Update="Forms\PacketCaptureForm.cs">
       <SubType>Form</SubType>
     </Compile>
     <Compile Update="Forms\RawViewerForm.cs">

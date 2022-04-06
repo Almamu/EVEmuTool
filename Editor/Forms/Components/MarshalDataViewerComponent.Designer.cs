@@ -32,7 +32,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.packetTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.packetTreeView = new System.Windows.Forms.TreeView();
+            this.marshalTreeView = new Editor.Forms.Components.MarshalTreeViewComponent();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.insightTreeView = new System.Windows.Forms.TreeView();
@@ -89,7 +89,7 @@
             // 
             // tabPage4
             // 
-            this.tabPage4.Controls.Add(this.packetTreeView);
+            this.tabPage4.Controls.Add(this.marshalTreeView);
             this.tabPage4.Location = new System.Drawing.Point(4, 24);
             this.tabPage4.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.tabPage4.Name = "tabPage4";
@@ -99,14 +99,13 @@
             this.tabPage4.Text = "Tree View";
             this.tabPage4.UseVisualStyleBackColor = true;
             // 
-            // packetTreeView
+            // marshalTreeView
             // 
-            this.packetTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.packetTreeView.Location = new System.Drawing.Point(4, 3);
-            this.packetTreeView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
-            this.packetTreeView.Name = "packetTreeView";
-            this.packetTreeView.Size = new System.Drawing.Size(694, 407);
-            this.packetTreeView.TabIndex = 0;
+            this.marshalTreeView.Dock = System.Windows.Forms.DockStyle.Fill;
+            this.marshalTreeView.Location = new System.Drawing.Point(4, 3);
+            this.marshalTreeView.Name = "marshalTreeView";
+            this.marshalTreeView.Size = new System.Drawing.Size(694, 407);
+            this.marshalTreeView.TabIndex = 0;
             // 
             // tabPage11
             // 
@@ -201,12 +200,12 @@
         private System.Windows.Forms.TabPage tabPage3;
         private System.Windows.Forms.RichTextBox packetTextBox;
         private System.Windows.Forms.TabPage tabPage4;
-        private System.Windows.Forms.TreeView packetTreeView;
         private System.Windows.Forms.TabPage tabPage11;
         private System.Windows.Forms.SplitContainer splitContainer3;
         private System.Windows.Forms.TreeView insightTreeView;
         private System.Windows.Forms.Button applyChangesAndReload;
         private System.Windows.Forms.Integration.ElementHost hexViewHost;
         private System.Windows.Forms.Panel panel1;
+        private MarshalTreeViewComponent marshalTreeView;
     }
 }

@@ -17,6 +17,7 @@ namespace Editor.Forms
     {
         private CaptureServer mCaptureServer = null;
         private CaptureProcessor mProcessor = null;
+        private PacketCaptureForm mPacketCaptureForm = null;
 
         public WorkspaceForm()
         {
@@ -24,6 +25,8 @@ namespace Editor.Forms
 
             // load settings from the registry
             CaptureSettings.LoadSettingsFromRegistry();
+            // register the packet capture form so it can listen to packets from the server
+            this.mPacketCaptureForm = new PacketCaptureForm();
             // check if the server has to be run and start it
             if (CaptureSettings.ServerAutoStart == "True")
                 this.StartServer(this, null);
@@ -40,7 +43,9 @@ namespace Editor.Forms
             if (this.mProcessor is null)
                 this.mProcessor = new CaptureProcessor();
 
-            this.mCaptureServer = new CaptureServer(ushort.Parse(CaptureSettings.ServerPort), this.mProcessor);
+            this.mPacketCaptureForm.Processor = this.mProcessor;
+
+            this.mCaptureServer = new CaptureServer(26000, this.mProcessor);
             this.mCaptureServer.OnStatusChange += OnCaptureStatusChange;
             this.mCaptureServer.Listen();
 
@@ -52,10 +57,6 @@ namespace Editor.Forms
             // ensure the server is up and running and dispose of it
             if (this.mCaptureServer is not null)
                 this.mCaptureServer.Dispose();
-
-            // stop the processor too
-            if (this.mProcessor is not null)
-                this.mProcessor.Stop();
 
             this.mCaptureServer = null;
             this.mProcessor = null;
@@ -189,6 +190,11 @@ namespace Editor.Forms
         {
             // form closing event will take care of freeing stuff
             this.Close();
+        }
+
+        private void OpenPacketCaptureWindow(object sender, EventArgs e)
+        {
+            this.ShowChildForm(this.mPacketCaptureForm);
         }
     }
 }

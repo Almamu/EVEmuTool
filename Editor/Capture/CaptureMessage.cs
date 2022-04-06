@@ -9,7 +9,7 @@ using System.Threading.Tasks;
 
 namespace Editor.Capture
 {
-    internal class CaptureMessage : IMessage
+    public class CaptureMessage : IMessage
     {
         public CaptureSocket Capturer { get; init; }
         public StreamPacketizer Packetizer { get; init; }

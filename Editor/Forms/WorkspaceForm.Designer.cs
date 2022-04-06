@@ -41,6 +41,8 @@
             this.serverMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.startPacketCapture = new System.Windows.Forms.ToolStripMenuItem();
             this.stopPacketCapture = new System.Windows.Forms.ToolStripMenuItem();
+            this.toolStripSeparator4 = new System.Windows.Forms.ToolStripSeparator();
+            this.toolStripMenuItem1 = new System.Windows.Forms.ToolStripMenuItem();
             this.toolsMenu = new System.Windows.Forms.ToolStripMenuItem();
             this.optionsToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.windowsMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -56,6 +58,8 @@
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.startPacketCaptureButton = new System.Windows.Forms.ToolStripButton();
             this.stopPacketCaptureButton = new System.Windows.Forms.ToolStripButton();
+            this.toolStripSeparator2 = new System.Windows.Forms.ToolStripSeparator();
+            this.openPacketCaptureViewerButton = new System.Windows.Forms.ToolStripButton();
             this.statusStrip = new System.Windows.Forms.StatusStrip();
             this.toolStripStatusLabel = new System.Windows.Forms.ToolStripStatusLabel();
             this.toolTip = new System.Windows.Forms.ToolTip(this.components);
@@ -150,7 +154,9 @@
             // 
             this.serverMenu.DropDownItems.AddRange(new System.Windows.Forms.ToolStripItem[] {
             this.startPacketCapture,
-            this.stopPacketCapture});
+            this.stopPacketCapture,
+            this.toolStripSeparator4,
+            this.toolStripMenuItem1});
             this.serverMenu.Name = "serverMenu";
             this.serverMenu.Size = new System.Drawing.Size(51, 20);
             this.serverMenu.Text = "&Server";
@@ -160,7 +166,7 @@
             this.startPacketCapture.Image = global::Editor.Properties.Resources.Play;
             this.startPacketCapture.Name = "startPacketCapture";
             this.startPacketCapture.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
-            this.startPacketCapture.Size = new System.Drawing.Size(223, 22);
+            this.startPacketCapture.Size = new System.Drawing.Size(224, 22);
             this.startPacketCapture.Text = "Start Packet Capture";
             this.startPacketCapture.Click += new System.EventHandler(this.StartServer);
             // 
@@ -169,9 +175,22 @@
             this.stopPacketCapture.Enabled = false;
             this.stopPacketCapture.Image = global::Editor.Properties.Resources.Stop;
             this.stopPacketCapture.Name = "stopPacketCapture";
-            this.stopPacketCapture.Size = new System.Drawing.Size(223, 22);
+            this.stopPacketCapture.Size = new System.Drawing.Size(224, 22);
             this.stopPacketCapture.Text = "Stop Packet Capture";
             this.stopPacketCapture.Click += new System.EventHandler(this.StopServer);
+            // 
+            // toolStripSeparator4
+            // 
+            this.toolStripSeparator4.Name = "toolStripSeparator4";
+            this.toolStripSeparator4.Size = new System.Drawing.Size(221, 6);
+            // 
+            // toolStripMenuItem1
+            // 
+            this.toolStripMenuItem1.Image = global::Editor.Properties.Resources.AnalyzeTrace;
+            this.toolStripMenuItem1.Name = "toolStripMenuItem1";
+            this.toolStripMenuItem1.Size = new System.Drawing.Size(224, 22);
+            this.toolStripMenuItem1.Text = "Open Packet Capture Viewer";
+            this.toolStripMenuItem1.Click += new System.EventHandler(this.OpenPacketCaptureWindow);
             // 
             // toolsMenu
             // 
@@ -236,7 +255,9 @@
             this.saveToolStripButton,
             this.toolStripSeparator1,
             this.startPacketCaptureButton,
-            this.stopPacketCaptureButton});
+            this.stopPacketCaptureButton,
+            this.toolStripSeparator2,
+            this.openPacketCaptureViewerButton});
             this.toolStrip.Location = new System.Drawing.Point(0, 24);
             this.toolStrip.Name = "toolStrip";
             this.toolStrip.Size = new System.Drawing.Size(737, 25);
@@ -306,6 +327,21 @@
             this.stopPacketCaptureButton.Size = new System.Drawing.Size(23, 22);
             this.stopPacketCaptureButton.Text = "Stop Packet Capture";
             this.stopPacketCaptureButton.Click += new System.EventHandler(this.StopServer);
+            // 
+            // toolStripSeparator2
+            // 
+            this.toolStripSeparator2.Name = "toolStripSeparator2";
+            this.toolStripSeparator2.Size = new System.Drawing.Size(6, 25);
+            // 
+            // openPacketCaptureViewerButton
+            // 
+            this.openPacketCaptureViewerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openPacketCaptureViewerButton.Image = global::Editor.Properties.Resources.AnalyzeTrace;
+            this.openPacketCaptureViewerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openPacketCaptureViewerButton.Name = "openPacketCaptureViewerButton";
+            this.openPacketCaptureViewerButton.Size = new System.Drawing.Size(23, 22);
+            this.openPacketCaptureViewerButton.Text = "Open Packet Capture Viewer Window";
+            this.openPacketCaptureViewerButton.Click += new System.EventHandler(this.OpenPacketCaptureWindow);
             // 
             // statusStrip
             // 
@@ -380,6 +416,10 @@
         private System.Windows.Forms.ToolStripSeparator toolStripSeparator1;
         private System.Windows.Forms.ToolStripButton startPacketCaptureButton;
         private System.Windows.Forms.ToolStripButton stopPacketCaptureButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator2;
+        private System.Windows.Forms.ToolStripButton openPacketCaptureViewerButton;
+        private System.Windows.Forms.ToolStripSeparator toolStripSeparator4;
+        private System.Windows.Forms.ToolStripMenuItem toolStripMenuItem1;
     }
 }
 

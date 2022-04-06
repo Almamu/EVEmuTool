@@ -72,18 +72,17 @@ namespace Editor.Forms.Components
 
         private void UnmarshalCompleted(object sender, RunWorkerCompletedEventArgs e)
         {
+            // update the tree view
             // disable painting while this works
-            this.packetTreeView.BeginUpdate();
             this.insightTreeView.BeginUpdate();
 
             // ensure the treeViews are empty before starting
-            this.packetTreeView.Nodes.Clear();
             this.insightTreeView.Nodes.Clear();
 
             // setup the corresponding boxes with the right data
             this.packetTextBox.Text = this.mPretty;
-            this.packetTreeView.Nodes.Add(this.mPacketNode);
-            
+            this.marshalTreeView.SetPacketData(this.mPacketNode);
+
             // insight is a bit more complex and requires some manual work on it
             foreach (TreeNode entry in this.mInsightsNode.Nodes)
                 this.insightTreeView.Nodes.Add(entry);
@@ -92,10 +91,7 @@ namespace Editor.Forms.Components
             this.hexView.RefreshView();
             this.OnLoadCompleted?.Invoke(this, null);
 
-            // expand the full tree view
-            this.packetTreeView.ExpandAll();
             // re-enable painting
-            this.packetTreeView.EndUpdate();
             this.insightTreeView.EndUpdate();
             // re-enable the form too
             this.Enabled = true;

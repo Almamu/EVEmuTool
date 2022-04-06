@@ -17,7 +17,7 @@ namespace Editor.Capture
         public Socket Destination { get; init; }
     }
 
-    internal class CaptureSocket
+    public class CaptureSocket
     {
         public Socket Server { get; init; } = null;
         public Socket Client { get; init; } = null;
@@ -83,11 +83,22 @@ namespace Editor.Capture
                     return;
                 }
 
-                // send the same data to the destination
-                state.Destination.Send(state.Buffer, 0, bytes, SocketFlags.None);
-
                 // enqueue the packet into the packetizer
                 state.Packetizer.QueuePackets(state.Buffer, bytes);
+
+                // enqueue the data to the processor, this will lock the socket until the data is processed
+                // this way we prevent packets being read out of order, as it matters
+                this.mProcessor.HandleMessage(
+                    new CaptureMessage
+                    {
+                        Capturer = this,
+                        Origin = state.Socket,
+                        Packetizer = state.Packetizer
+                    }
+                );
+
+                // send the same data to the destination
+                state.Destination.Send(state.Buffer, 0, bytes, SocketFlags.None);
 
                 // start receiving from the same socket again
                 state.Socket.BeginReceive(
@@ -96,18 +107,8 @@ namespace Editor.Capture
                     ReceiveData,
                     state
                 );
-
-                // enqueue the data to the processor
-                this.mProcessor.Enqueue(
-                    new CaptureMessage
-                    {
-                        Capturer = this,
-                        Origin = state.Socket,
-                        Packetizer = state.Packetizer
-                    }
-                );
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 // something happened, go nuclear on the socket
                 this.Client?.Dispose();
