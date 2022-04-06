@@ -22,7 +22,7 @@ namespace Editor.Configuration
             {
                 key = Registry.CurrentUser.OpenSubKey("SOFTWARE", true)?.CreateSubKey("EVEmu")?.CreateSubKey("LivePacketEditor");
             }
-            catch(Exception ex)
+            catch(Exception)
             {
 
             }
@@ -55,7 +55,7 @@ namespace Editor.Configuration
             {
                 key = Registry.CurrentUser.OpenSubKey("SOFTWARE", true)?.CreateSubKey("EVEmu")?.CreateSubKey("LivePacketEditor");
             }
-            catch (Exception ex)
+            catch (Exception)
             {
 
             }

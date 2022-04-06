@@ -13,7 +13,7 @@ public class InsightUnmarshal : Unmarshal
     /// <param name="data">Byte array to extract the PyDataType from</param>
     /// <param name="expectHeader">Whether a marshal header is expected or not</param>
     /// <returns>The unmarshaled PyDataType</returns>
-    public static InsightUnmarshal ReadFromByteArray(byte[] data, bool expectHeader = true)
+    public static new InsightUnmarshal ReadFromByteArray(byte[] data, bool expectHeader = true)
     {
         MemoryStream stream = new MemoryStream(data);
 
@@ -26,7 +26,7 @@ public class InsightUnmarshal : Unmarshal
     /// <param name="stream">Stream to extract the PyDataType from</param>
     /// <param name="expectHeader">Whether a marshal header is expected or not</param>
     /// <returns>The unmarshaled PyDataType</returns>
-    public static InsightUnmarshal ReadFromStream(Stream stream, bool expectHeader = true)
+    public static new InsightUnmarshal ReadFromStream(Stream stream, bool expectHeader = true)
     {
         InsightUnmarshal processor = new InsightUnmarshal(stream);
 

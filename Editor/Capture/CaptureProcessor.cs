@@ -68,7 +68,7 @@ namespace Editor.Capture
                                     // resolve the bound service with the id
                                     service = message.Capturer.ResolveBoundService(id);
                                 }
-                                catch (Exception ex)
+                                catch (Exception)
                                 {
 
                                 }

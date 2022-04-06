@@ -22,7 +22,7 @@ namespace Editor.CustomMarshal
         /// <param name="data">Byte array to extract the PyDataType from</param>
         /// <param name="expectHeader">Whether a marshal header is expected or not</param>
         /// <returns>The unmarshaled PyDataType</returns>
-        public static InsightUnmarshal ReadFromByteArray(byte[] data, bool expectHeader = true)
+        public static new InsightUnmarshal ReadFromByteArray(byte[] data, bool expectHeader = true)
         {
             MemoryStream stream = new MemoryStream(data);
 
@@ -35,7 +35,7 @@ namespace Editor.CustomMarshal
         /// <param name="stream">Stream to extract the PyDataType from</param>
         /// <param name="expectHeader">Whether a marshal header is expected or not</param>
         /// <returns>The unmarshaled PyDataType</returns>
-        public static InsightUnmarshal ReadFromStream(Stream stream, bool expectHeader = true)
+        public static new InsightUnmarshal ReadFromStream(Stream stream, bool expectHeader = true)
         {
             PartialUnmarshal processor = new PartialUnmarshal(stream);
 
@@ -53,7 +53,6 @@ namespace Editor.CustomMarshal
         protected override PyDataType Process(bool expectHeader = true)
         {
             long start = 0;
-            bool wasParsed = true;
             bool save = false;
             PyDataType result = null;
             Opcode opcode = Opcode.Error;
@@ -114,7 +113,7 @@ namespace Editor.CustomMarshal
             {
                 return base.ProcessOpcode(opcode);
             }
-            catch(UnmarshallException ex)
+            catch(UnmarshallException)
             {
                 throw;
             }
@@ -261,7 +260,7 @@ namespace Editor.CustomMarshal
                     exception = true;
                     key = ex.CurrentObject ?? new PyNone();
                 }
-                catch(Exception ex)
+                catch(Exception)
                 {
                     exception = true;
                     key = new PyNone();

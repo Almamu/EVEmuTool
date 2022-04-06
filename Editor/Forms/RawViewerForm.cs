@@ -35,13 +35,13 @@ namespace Editor.Forms
             InitializeComponent();
         }
 
-        private void OnLoadCompleted(object? sender, EventArgs e)
+        private void OnLoadCompleted(object sender, EventArgs e)
         {
             // things finished loading, update the corresponding text
             this.toolStripStatusLabel1.Text = "Unmarshalled data ready! " + this.mExtraMessage;
         }
 
-        private void OnUnmarshalError(object? sender, string e)
+        private void OnUnmarshalError(object sender, string e)
         {
             this.mExtraMessage = e;
         }
