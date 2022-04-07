@@ -49,6 +49,14 @@ namespace Editor.Capture
                     type = parsed.Type;
                     packetType = ExtractPacketType(parsed);
 
+                    if (parsed.Type == PyPacket.PacketType.ERRORRESPONSE)
+                    {
+                        callID = ExtractCallID(parsed);
+
+                        if (parsed.Type == PyPacket.PacketType.CALL_RSP)
+                            message.Capturer.FinishServiceCall(callID, out service, out method);
+                    }
+
                     if (parsed.Type == PyPacket.PacketType.CALL_REQ ||
                         parsed.Type == PyPacket.PacketType.CALL_RSP)
                     {
