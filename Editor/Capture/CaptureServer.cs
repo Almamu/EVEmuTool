@@ -49,15 +49,17 @@ namespace Editor.Capture
 
         private void ServerConnectionAccept(IAsyncResult ar)
         {
+            Socket client = null;
+            Socket server = null;
             try
             {
-                Socket client = this.Socket.EndAccept(ar);
+                client = this.Socket.EndAccept(ar);
                 // begin accepting again as quickly as possible
                 this.Socket.BeginAccept(ServerConnectionAccept, null);
                 // do some logging to get a better overview of what's happening
                 Log.Information("Received new connection from " + client.GetRemoteAddress() + ". Connecting to the server");
                 // create a socket to communicate with the server
-                Socket server = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
+                server = new Socket(AddressFamily.InterNetworkV6, SocketType.Stream, ProtocolType.Tcp);
                 // ensure we support both ipv4 and ipv6
                 server.SetSocketOption(SocketOptionLevel.IPv6, SocketOptionName.IPv6Only, false);
                 // connect to the server
@@ -70,16 +72,53 @@ namespace Editor.Capture
                 CaptureSocket socket = new CaptureSocket(++this.mClientCount, this.Processor, server, client);
 
                 this.OnStatusChange?.Invoke(this, "Accepted new connection on " + client.GetRemoteAddress());
+                return;
             }
             catch(ObjectDisposedException)
             {
                 // ignored, object already disposed usually means the socket got disposed
             }
+            catch(SocketException ex)
+            {
+                if (ex.SocketErrorCode == SocketError.ConnectionRefused)
+                {
+                    Log.Warning("Cannot establish connection to the EVEmu server on {CaptureSettings.ServerAddress} {CaptureSettings.ServerPort}", CaptureSettings.ServerAddress, CaptureSettings.ServerPort);
+                    this.OnStatusChange?.Invoke(this, $"Cannot establish connection to the EVEmu server on {CaptureSettings.ServerAddress} {CaptureSettings.ServerPort}");
+                }
+                else
+                {
+                    this.ReportError(ex);
+                }
+            }
             catch (Exception ex)
             {
-                Log.Error($"Exception detected:{Environment.NewLine}{ex.Message}{Environment.NewLine}Stack trace: {Environment.NewLine}{ex.StackTrace}");
-                MessageBox.Show($"{ex.Message}{Environment.NewLine}Stack trace: {Environment.NewLine}{ex.StackTrace}", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                this.ReportError(ex);
             }
+
+            // dispose of the sockets so they're closed
+            try
+            {
+                server?.Dispose();
+            }
+            catch(ObjectDisposedException)
+            {
+
+            }
+
+            try
+            {
+                client?.Dispose();
+            }
+            catch (ObjectDisposedException)
+            {
+
+            }
+        }
+
+        private void ReportError(Exception ex)
+        {
+            Log.Error($"Exception detected:{Environment.NewLine}{ex.Message}{Environment.NewLine}Stack trace: {Environment.NewLine}{ex.StackTrace}");
+            MessageBox.Show($"{ex.Message}{Environment.NewLine}Stack trace: {Environment.NewLine}{ex.StackTrace}", "Exception", MessageBoxButtons.OK, MessageBoxIcon.Error);
         }
 
         public void Dispose()
