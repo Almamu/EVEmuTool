@@ -32,10 +32,11 @@ namespace Editor.Capture
                 PyDataType processed = Unmarshal.ReadFromByteArray(data);
                 PyPacket parsed = null;
                 long callID = 0;
+                PacketDirection direction = message.Origin == message.Capturer.Server ? PacketDirection.ServerToClient : PacketDirection.ClientToServer;
                 string service = "";
                 string method = "";
-                string source = "";
-                string destination = "";
+                string source = ConvertSourceAddress(message.Capturer.ClientID, direction);
+                string destination = ConvertDestinationAddress(message.Capturer.ClientID, direction);
                 string packetType = "LLV";
                 PyPacket.PacketType type = PyPacket.PacketType.__Fake_Invalid_Type;
 
@@ -154,8 +155,31 @@ namespace Editor.Capture
             return packet.TypeString;
         }
 
+        private static string ConvertSourceAddress(int clientID, PacketDirection direction)
+        {
+            return direction switch
+            {
+                PacketDirection.ServerToClient => "Server",
+                PacketDirection.ClientToServer => $"Client={clientID}",
+                _ => "Unknown"
+            };
+        }
+
+        private static string ConvertDestinationAddress(int clientID, PacketDirection direction)
+        {
+            return direction switch
+            {
+                PacketDirection.ClientToServer => "Server",
+                PacketDirection.ServerToClient => $"Client={clientID}",
+                _ => "Unknown"
+            };
+        }
+
         private static string ConvertAddress(PyAddress address)
         {
+            if (address is null)
+                return null;
+
             switch (address)
             {
                 case PyAddressAny any:
@@ -168,7 +192,7 @@ namespace Editor.Capture
                     return $"Broadcast {broadcast.IDType}";
             }
 
-            return "Unknown";
+            return null;
         }
 
         private static string ExtractService(PyAddress address)

@@ -27,5 +27,6 @@ public class CaptureEntry
         public string Source { get; init; }
         public string Destination { get; init; }
         public PyPacket.PacketType Type { get; init; }
+        public int Length => this.RawData.Length;
     }
 }

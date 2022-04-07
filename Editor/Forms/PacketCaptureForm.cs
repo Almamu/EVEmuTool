@@ -6,6 +6,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
@@ -251,6 +252,10 @@ namespace Editor.Forms
 
         private void OpenInPacketViewer(object sender, DataGridViewCellEventArgs e)
         {
+            // ensure we only look into the rows that have the actual information
+            if (e.RowIndex == -1)
+                return;
+
             this.OpenInPacketViewer(this.mDataSource[e.RowIndex] as CaptureEntry);
         }
 
@@ -261,11 +266,9 @@ namespace Editor.Forms
 
         private CaptureEntry GetSelectedEntry()
         {
-            // detect it from the selected row index
-            if (this.packetGridView.SelectedCells.Count > 0)
-                return this.mDataSource[this.packetGridView.SelectedCells[0].RowIndex] as CaptureEntry;
-            else if (this.packetGridView.SelectedRows.Count > 0)
-                return this.mDataSource[this.packetGridView.SelectedRows[0].Index] as CaptureEntry;
+            if (this.packetGridView.CurrentRow is not null)
+                // detect it from the selected row index
+                return this.mDataSource[this.packetGridView.CurrentRow.Index] as CaptureEntry;
 
             return null;
         }
@@ -285,6 +288,10 @@ namespace Editor.Forms
 
         private void GridSelectionChanged(object sender, EventArgs e)
         {
+            // update the context menu to ensure things reflect the current status
+            this.openInMarshalViewer.Enabled = this.packetGridView.SelectedCells.Count > 0;
+            this.saveToFile.Enabled = this.packetGridView.SelectedCells.Count > 0;
+
             // if the worker is busy do not do anything
             if (this.mWorker.IsBusy == true)
                 return;
@@ -324,6 +331,41 @@ namespace Editor.Forms
 
             // start the background work
             this.mFilterWorker.RunWorkerAsync();
+        }
+
+        private void CellClick(object sender, DataGridViewCellMouseEventArgs e)
+        {
+            if (e.RowIndex == -1)
+                return;
+
+            // user clicked one cell, mark it as selected
+            this.packetGridView.CurrentCell = this.packetGridView.Rows[e.RowIndex].Cells[e.ColumnIndex < 0 ? 0 : e.ColumnIndex];
+        }
+
+        private void SaveToFile(object sender, EventArgs e)
+        {
+            if (this.packetGridView.CurrentRow is null)
+                return;
+
+            SaveFileDialog saveFileDialog = new SaveFileDialog()
+            {
+                DefaultExt = "marshal",
+                Filter = "EVE Online Marshal Data|*.marshal"
+            };
+
+            if (saveFileDialog.ShowDialog() == DialogResult.OK)
+            {
+                try
+                {
+                    // write the file
+                    File.WriteAllBytes(saveFileDialog.FileName, GetSelectedEntry().RawData);
+                    MessageBox.Show($"Saved marshal data into {saveFileDialog.FileName} succesfully", "Success", MessageBoxButtons.OK, MessageBoxIcon.Information);
+                }
+                catch(Exception ex)
+                {
+                    MessageBox.Show(ex.Message, "Error", MessageBoxButtons.OK, MessageBoxIcon.Error);
+                }
+            }
         }
     }
 }

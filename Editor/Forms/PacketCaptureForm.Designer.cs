@@ -29,6 +29,8 @@
         private void InitializeComponent()
         {
             this.components = new System.ComponentModel.Container();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle1 = new System.Windows.Forms.DataGridViewCellStyle();
+            System.Windows.Forms.DataGridViewCellStyle dataGridViewCellStyle2 = new System.Windows.Forms.DataGridViewCellStyle();
             this.splitContainer1 = new System.Windows.Forms.SplitContainer();
             this.tableLayoutPanel1 = new System.Windows.Forms.TableLayoutPanel();
             this.groupBox2 = new System.Windows.Forms.GroupBox();
@@ -49,15 +51,16 @@
             this.splitContainer2 = new System.Windows.Forms.SplitContainer();
             this.packetGridView = new System.Windows.Forms.DataGridView();
             this.packetTimestamp = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.packetClientID = new System.Windows.Forms.DataGridViewTextBoxColumn();
-            this.packetCallID = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.Length = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.packetType = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.packetSource = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.packetDestination = new System.Windows.Forms.DataGridViewTextBoxColumn();
+            this.packetCallID = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.packetService = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.packetCall = new System.Windows.Forms.DataGridViewTextBoxColumn();
             this.packetListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openInMarshalViewer = new System.Windows.Forms.ToolStripMenuItem();
+            this.saveToFile = new System.Windows.Forms.ToolStripMenuItem();
             this.marshalTreeView = new Editor.Forms.Components.MarshalTreeViewComponent();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
@@ -308,26 +311,28 @@
             // 
             this.packetGridView.AllowUserToAddRows = false;
             this.packetGridView.AllowUserToDeleteRows = false;
-            this.packetGridView.AllowUserToOrderColumns = true;
+            this.packetGridView.AllowUserToResizeRows = false;
             this.packetGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.packetGridView.Columns.AddRange(new System.Windows.Forms.DataGridViewColumn[] {
             this.packetTimestamp,
-            this.packetClientID,
-            this.packetCallID,
+            this.Length,
             this.packetType,
             this.packetSource,
             this.packetDestination,
+            this.packetCallID,
             this.packetService,
             this.packetCall});
             this.packetGridView.ContextMenuStrip = this.packetListContextMenu;
             this.packetGridView.Dock = System.Windows.Forms.DockStyle.Fill;
             this.packetGridView.Location = new System.Drawing.Point(0, 0);
             this.packetGridView.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
+            this.packetGridView.MultiSelect = false;
             this.packetGridView.Name = "packetGridView";
             this.packetGridView.ReadOnly = true;
             this.packetGridView.Size = new System.Drawing.Size(765, 407);
             this.packetGridView.TabIndex = 1;
             this.packetGridView.CellDoubleClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.OpenInPacketViewer);
+            this.packetGridView.CellMouseDown += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.CellClick);
             this.packetGridView.RowHeaderMouseDoubleClick += new System.Windows.Forms.DataGridViewCellMouseEventHandler(this.OpenInPacketViewer);
             this.packetGridView.SelectionChanged += new System.EventHandler(this.GridSelectionChanged);
             // 
@@ -338,19 +343,16 @@
             this.packetTimestamp.Name = "packetTimestamp";
             this.packetTimestamp.ReadOnly = true;
             // 
-            // packetClientID
+            // Length
             // 
-            this.packetClientID.DataPropertyName = "ClientID";
-            this.packetClientID.HeaderText = "Client";
-            this.packetClientID.Name = "packetClientID";
-            this.packetClientID.ReadOnly = true;
-            // 
-            // packetCallID
-            // 
-            this.packetCallID.DataPropertyName = "CallID";
-            this.packetCallID.HeaderText = "CallID";
-            this.packetCallID.Name = "packetCallID";
-            this.packetCallID.ReadOnly = true;
+            this.Length.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
+            this.Length.DataPropertyName = "Length";
+            dataGridViewCellStyle1.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.Length.DefaultCellStyle = dataGridViewCellStyle1;
+            this.Length.HeaderText = "Length";
+            this.Length.Name = "Length";
+            this.Length.ReadOnly = true;
+            this.Length.Width = 69;
             // 
             // packetType
             // 
@@ -375,6 +377,15 @@
             this.packetDestination.Name = "packetDestination";
             this.packetDestination.ReadOnly = true;
             // 
+            // packetCallID
+            // 
+            this.packetCallID.DataPropertyName = "CallID";
+            dataGridViewCellStyle2.Alignment = System.Windows.Forms.DataGridViewContentAlignment.MiddleRight;
+            this.packetCallID.DefaultCellStyle = dataGridViewCellStyle2;
+            this.packetCallID.HeaderText = "CallID";
+            this.packetCallID.Name = "packetCallID";
+            this.packetCallID.ReadOnly = true;
+            // 
             // packetService
             // 
             this.packetService.AutoSizeMode = System.Windows.Forms.DataGridViewAutoSizeColumnMode.AllCells;
@@ -396,16 +407,26 @@
             // packetListContextMenu
             // 
             this.packetListContextMenu.Items.AddRange(new System.Windows.Forms.ToolStripItem[] {
-            this.openInMarshalViewer});
+            this.openInMarshalViewer,
+            this.saveToFile});
             this.packetListContextMenu.Name = "packetListContextMenu";
-            this.packetListContextMenu.Size = new System.Drawing.Size(252, 26);
+            this.packetListContextMenu.Size = new System.Drawing.Size(252, 70);
             // 
             // openInMarshalViewer
             // 
+            this.openInMarshalViewer.Enabled = false;
             this.openInMarshalViewer.Name = "openInMarshalViewer";
             this.openInMarshalViewer.Size = new System.Drawing.Size(251, 22);
             this.openInMarshalViewer.Text = "Open in Raw Marshal Data Viewer";
             this.openInMarshalViewer.Click += new System.EventHandler(this.OpenInPacketViewer);
+            // 
+            // saveToFile
+            // 
+            this.saveToFile.Enabled = false;
+            this.saveToFile.Name = "saveToFile";
+            this.saveToFile.Size = new System.Drawing.Size(251, 22);
+            this.saveToFile.Text = "Save to file";
+            this.saveToFile.Click += new System.EventHandler(this.SaveToFile);
             // 
             // marshalTreeView
             // 
@@ -447,14 +468,6 @@
         private System.Windows.Forms.SplitContainer splitContainer1;
         private System.Windows.Forms.SplitContainer splitContainer2;
         private System.Windows.Forms.DataGridView packetGridView;
-        private System.Windows.Forms.DataGridViewTextBoxColumn packetTimestamp;
-        private System.Windows.Forms.DataGridViewTextBoxColumn packetClientID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn packetCallID;
-        private System.Windows.Forms.DataGridViewTextBoxColumn packetType;
-        private System.Windows.Forms.DataGridViewTextBoxColumn packetSource;
-        private System.Windows.Forms.DataGridViewTextBoxColumn packetDestination;
-        private System.Windows.Forms.DataGridViewTextBoxColumn packetService;
-        private System.Windows.Forms.DataGridViewTextBoxColumn packetCall;
         private System.Windows.Forms.ContextMenuStrip packetListContextMenu;
         private System.Windows.Forms.ToolStripMenuItem openInMarshalViewer;
         private Components.MarshalTreeViewComponent marshalTreeView;
@@ -474,5 +487,14 @@
         private System.Windows.Forms.CheckBox callRspCheckbox;
         private System.Windows.Forms.CheckBox callReqCheckbox;
         private System.Windows.Forms.Button applyFiltersButton;
+        private System.Windows.Forms.DataGridViewTextBoxColumn packetTimestamp;
+        private System.Windows.Forms.DataGridViewTextBoxColumn Length;
+        private System.Windows.Forms.DataGridViewTextBoxColumn packetType;
+        private System.Windows.Forms.DataGridViewTextBoxColumn packetSource;
+        private System.Windows.Forms.DataGridViewTextBoxColumn packetDestination;
+        private System.Windows.Forms.DataGridViewTextBoxColumn packetCallID;
+        private System.Windows.Forms.DataGridViewTextBoxColumn packetService;
+        private System.Windows.Forms.DataGridViewTextBoxColumn packetCall;
+        private System.Windows.Forms.ToolStripMenuItem saveToFile;
     }
 }
