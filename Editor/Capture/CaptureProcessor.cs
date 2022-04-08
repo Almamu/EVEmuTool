@@ -112,8 +112,8 @@ namespace Editor.Capture
                             {
                                 // store the information for resolving this bound
                                 PyString id =
-                                    ((((subStream.Stream as PyTuple)[0] as PySubStruct)
-                                        .Definition as PySubStream).Stream as PyTuple)[0] as PyString;
+                                    (((subStream.Stream as PySubStruct).Definition as PySubStream)
+                                        .Stream as PyTuple)[0] as PyString;
 
                                 message.Capturer.RegisterBoundService(id, "BoundInventory (bound)");
                             }
