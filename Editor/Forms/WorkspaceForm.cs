@@ -79,44 +79,10 @@ namespace Editor.Forms
             this.stopPacketCapture.Enabled = false;
             this.stopPacketCaptureButton.Enabled = false;
         }
-
-        private void OpenFile(object sender, EventArgs e)
-        {
-            OpenFileDialog openFileDialog = new OpenFileDialog();
-            openFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            openFileDialog.Filter = "Archivos de texto (*.txt)|*.txt|Todos los archivos (*.*)|*.*";
-            if (openFileDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                string FileName = openFileDialog.FileName;
-            }
-        }
-
-        private void SaveAsToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-            SaveFileDialog saveFileDialog = new SaveFileDialog();
-            saveFileDialog.InitialDirectory = Environment.GetFolderPath(Environment.SpecialFolder.Personal);
-            saveFileDialog.Filter = "Archivos de texto (*.txt)|*.txt|Todos los archivos (*.*)|*.*";
-            if (saveFileDialog.ShowDialog(this) == DialogResult.OK)
-            {
-                string FileName = saveFileDialog.FileName;
-            }
-        }
-
+        
         private void ClosingForm(object sender, EventArgs e)
         {
             this.StopServer(this, e);
-        }
-
-        private void CutToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void CopyToolStripMenuItem_Click(object sender, EventArgs e)
-        {
-        }
-
-        private void PasteToolStripMenuItem_Click(object sender, EventArgs e)
-        {
         }
 
         private void CascadeToolStripMenuItem_Click(object sender, EventArgs e)
@@ -210,6 +176,26 @@ namespace Editor.Forms
                 // create a workspace reader and show the proper form
                 this.ShowChildForm(new CacheViewerForm(dialog.OpenFile(), dialog.FileName));
             }
+        }
+
+        private void OpenStuffFile(object sender, EventArgs e)
+        {
+            OpenFileDialog dialog = new OpenFileDialog()
+            {
+                DefaultExt = "stuff",
+                Filter = "EVE Online EmbedFS|*.stuff"
+            };
+
+            if (dialog.ShowDialog(this) == DialogResult.OK)
+            {
+                // create a file list form
+                this.ShowChildForm(new StuffExplorer(dialog.OpenFile(), dialog.FileName));
+            }
+        }
+
+        private void toolStripButton1_Click(object sender, EventArgs e)
+        {
+
         }
     }
 }
