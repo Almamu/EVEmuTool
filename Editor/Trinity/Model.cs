@@ -15,6 +15,11 @@ namespace Editor.Trinity
         public float x;
         public float y;
         public float z;
+
+        public override string ToString()
+        {
+            return $"{{{x}, {y}, {z}}}";
+        }
     }
 
     /// <summary>
@@ -239,6 +244,7 @@ namespace Editor.Trinity
         public Surface[] Surfaces { get; private set; }
         public Vertex[] Vertices { get; private set; }
         public Box BoundingBox => this.mHeader.boundingBox;
+        public int VertexSize => this.mHeader.vertexSize;
 
         public Model (Stream input)
         {

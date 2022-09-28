@@ -1,6 +1,6 @@
 ﻿namespace Editor.Forms.Components
 {
-    partial class TriViewerComponent
+    partial class TriRenderComponent
     {
         /// <summary> 
         /// Variable del diseñador necesaria.

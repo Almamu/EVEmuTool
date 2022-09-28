@@ -14,7 +14,7 @@ using System.Windows.Forms;
 
 namespace Editor.Forms.Components
 {
-    public partial class TriViewerComponent : GLControl
+    public partial class TriRenderComponent : GLControl
     {
         private Trinity.Model mModel;
         private float[] mVertices;
@@ -32,8 +32,10 @@ namespace Editor.Forms.Components
         private bool mMouseClicked;
         private bool mStopAutoRotation = false;
         private Vector2 mMousePos;
+        private float mZoomIncrements = 1.0f;
+        private float mDistance;
 
-        public TriViewerComponent(Trinity.Model model)
+        public TriRenderComponent(Trinity.Model model)
         {
             InitializeComponent();
 
@@ -71,7 +73,9 @@ namespace Editor.Forms.Components
             
             // get the center of the object
             this.mCenter = (max + min) / 2.0f;
-            this.mCamera.Position = this.mCenter + new Vector3(this.mCenter.Length, this.mCenter.Length, this.mCenter.Length);
+            this.mDistance = (max + min).Length / 2.0f;
+            this.mCamera.Position = this.mCenter + new Vector3(this.mDistance);
+            this.mZoomIncrements = 0.05f;
         }
 
         protected override void OnLoad(EventArgs e)
@@ -206,7 +210,10 @@ void main()
         {
             base.OnResize(e);
 
-            // update camera's viewport
+            // update camera's viewport (sometimes this gets called before OnLoad)
+            if (this.mCamera is null)
+                return;
+
             this.mCamera.AspectRatio = Size.Width / (float)Size.Height;
 
             // setup viewport
@@ -224,8 +231,9 @@ void main()
         {
             base.OnMouseWheel(e);
 
-            this.mZoom += -e.Delta;
-            this.mCamera.Position = this.mCenter + new Vector3(this.mCenter.Length + this.mZoom, this.mCenter.Length + this.mZoom, this.mCenter.Length + this.mZoom);
+            // zoom increments should depend on the model's size to prevent smaller models from zooming in too fast
+            this.mZoom += -e.Delta * this.mZoomIncrements;
+            this.mCamera.Position = this.mCenter + new Vector3(this.mDistance + this.mZoom);
         }
 
         protected override void OnMouseDown(MouseEventArgs e)

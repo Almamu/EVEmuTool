@@ -333,7 +333,7 @@ namespace Editor.Forms
                     MemoryStream stream = this.LoadToMemory(entry);
                     Model model = new Model(stream);
 
-                    TriViewerComponent viewer = new TriViewerComponent(model);
+                    ModelViewerComponent viewer = new ModelViewerComponent(model);
 
                     stream.Close();
 
