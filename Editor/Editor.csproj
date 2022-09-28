@@ -10,6 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
+      <PackageReference Include="NAudio.WinForms" Version="2.1.0" />
       <PackageReference Include="OpenTK" Version="4.7.5" />
       <PackageReference Include="OpenTK.WinForms" Version="4.0.0-pre.6" />
       <PackageReference Include="Pfim" Version="0.11.1" />

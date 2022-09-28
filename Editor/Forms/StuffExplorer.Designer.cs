@@ -125,6 +125,8 @@
             this.fileIconImages.Images.SetKeyName(9, "Sound.png");
             this.fileIconImages.Images.SetKeyName(10, "Shader.png");
             this.fileIconImages.Images.SetKeyName(11, "Pink.png");
+            this.fileIconImages.Images.SetKeyName(12, "Database.png");
+            this.fileIconImages.Images.SetKeyName(13, "Property.png");
             // 
             // tabPage2
             // 

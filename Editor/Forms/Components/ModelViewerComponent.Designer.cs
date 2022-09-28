@@ -73,7 +73,7 @@
             this.groupBox4.Controls.Add(this.label8);
             this.groupBox4.Location = new System.Drawing.Point(3, 3);
             this.groupBox4.Name = "groupBox4";
-            this.groupBox4.Size = new System.Drawing.Size(183, 57);
+            this.groupBox4.Size = new System.Drawing.Size(117, 57);
             this.groupBox4.TabIndex = 14;
             this.groupBox4.TabStop = false;
             this.groupBox4.Text = "Surfaces";
@@ -82,7 +82,7 @@
             // 
             this.surfaceTypeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.surfaceTypeLabel.AutoSize = true;
-            this.surfaceTypeLabel.Location = new System.Drawing.Point(72, 34);
+            this.surfaceTypeLabel.Location = new System.Drawing.Point(74, 34);
             this.surfaceTypeLabel.Name = "surfaceTypeLabel";
             this.surfaceTypeLabel.Size = new System.Drawing.Size(37, 15);
             this.surfaceTypeLabel.TabIndex = 7;
@@ -93,7 +93,7 @@
             // 
             this.surfaceCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.surfaceCountLabel.AutoSize = true;
-            this.surfaceCountLabel.Location = new System.Drawing.Point(72, 19);
+            this.surfaceCountLabel.Location = new System.Drawing.Point(74, 19);
             this.surfaceCountLabel.Name = "surfaceCountLabel";
             this.surfaceCountLabel.Size = new System.Drawing.Size(37, 15);
             this.surfaceCountLabel.TabIndex = 6;
@@ -121,7 +121,7 @@
             // groupBox3
             // 
             this.groupBox3.Controls.Add(this.flowLayoutPanel2);
-            this.groupBox3.Location = new System.Drawing.Point(192, 3);
+            this.groupBox3.Location = new System.Drawing.Point(126, 3);
             this.groupBox3.Name = "groupBox3";
             this.groupBox3.Size = new System.Drawing.Size(242, 57);
             this.groupBox3.TabIndex = 13;
@@ -184,7 +184,7 @@
             this.groupBox2.Controls.Add(this.vertexCountLabel);
             this.groupBox2.Controls.Add(this.label2);
             this.groupBox2.Controls.Add(this.label1);
-            this.groupBox2.Location = new System.Drawing.Point(440, 3);
+            this.groupBox2.Location = new System.Drawing.Point(374, 3);
             this.groupBox2.Name = "groupBox2";
             this.groupBox2.Size = new System.Drawing.Size(122, 57);
             this.groupBox2.TabIndex = 12;
@@ -195,7 +195,7 @@
             // 
             this.vertexSizeLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.vertexSizeLabel.AutoSize = true;
-            this.vertexSizeLabel.Location = new System.Drawing.Point(-77, 34);
+            this.vertexSizeLabel.Location = new System.Drawing.Point(79, 34);
             this.vertexSizeLabel.Name = "vertexSizeLabel";
             this.vertexSizeLabel.Size = new System.Drawing.Size(37, 15);
             this.vertexSizeLabel.TabIndex = 3;
@@ -206,7 +206,7 @@
             // 
             this.vertexCountLabel.Anchor = ((System.Windows.Forms.AnchorStyles)((System.Windows.Forms.AnchorStyles.Top | System.Windows.Forms.AnchorStyles.Right)));
             this.vertexCountLabel.AutoSize = true;
-            this.vertexCountLabel.Location = new System.Drawing.Point(-77, 19);
+            this.vertexCountLabel.Location = new System.Drawing.Point(79, 19);
             this.vertexCountLabel.Name = "vertexCountLabel";
             this.vertexCountLabel.Size = new System.Drawing.Size(37, 15);
             this.vertexCountLabel.TabIndex = 2;

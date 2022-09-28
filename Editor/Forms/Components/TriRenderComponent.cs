@@ -42,7 +42,7 @@ namespace Editor.Forms.Components
             this.mModel = model;
             this.mRefreshTimer = new Timer
             {
-                Interval = 33,
+                Interval = 16,
                 Enabled = true
             };
 

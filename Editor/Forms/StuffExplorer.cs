@@ -91,13 +91,32 @@ namespace Editor.Forms
                 part.EndsWith (".sm_3_0_hi") == true ||
                 part.EndsWith (".sm_2_0_lo") == true ||
                 part.EndsWith (".sm_2_0_hi") == true ||
-                part.EndsWith (".sm_1_1") == true)
+                part.EndsWith (".sm_1_1") == true ||
+                part.EndsWith (".fxp") == true ||
+                part.EndsWith (".fx") == true ||
+                part.EndsWith (".fxh") == true)
             {
                 node.SelectedImageIndex = node.ImageIndex = 10;
             }
             else if (part.EndsWith (".pink") == true)
             {
                 node.SelectedImageIndex = node.ImageIndex = 11;
+            }
+            else if(part.EndsWith (".yaml") == true)
+            {
+                node.SelectedImageIndex = node.ImageIndex = 12;
+            }
+            else if(
+                part.EndsWith (".color") == true ||
+                part.EndsWith(".type") == true ||
+                part.EndsWith(".prs") == true ||
+                part.EndsWith(".face") == true ||
+                part.EndsWith(".info") == true ||
+                part.EndsWith(".trif") == true ||
+                part.EndsWith(".proj") == true ||
+                part.EndsWith(".base") == true)
+            {
+                node.SelectedImageIndex = node.ImageIndex = 13;
             }
             else
             {
@@ -212,7 +231,12 @@ namespace Editor.Forms
                 return;
 
             // create a temporal file
-            string outputFilename = System.IO.Path.GetTempFileName() + "." + entry.FileName.Split(".")[^1];
+            string extension = "";
+            string filename = entry.FileName.Split("/")[^1];
+            if (filename.IndexOf(".") != -1)
+                extension = entry.FileName.Split(".")[^1];
+
+            string outputFilename = Path.GetTempFileName() + ((extension != "") ? ("." + extension) : "");
             Stream output = File.OpenWrite(outputFilename);
             this.mFile.Export(output, entry);
             output.Flush();
@@ -260,7 +284,11 @@ namespace Editor.Forms
         {
             // remove the old component (if any)
             if (this.mPreviewComponent is not null)
+            {
                 this.splitContainer1.Panel2.Controls.Remove(this.mPreviewComponent);
+                this.mPreviewComponent.Dispose();
+                this.mPreviewComponent = null;
+            }
 
             StuffEntry entry = this.FindSelectedEntry();
 
@@ -280,12 +308,14 @@ namespace Editor.Forms
 
             try
             {
+                string filename = entry.FileName.ToLower();
+
                 // decide what to do based on extension
                 if (
-                    entry.FileName.EndsWith(".png") == true ||
-                    entry.FileName.EndsWith(".bmp") == true ||
-                    entry.FileName.EndsWith(".jpg") == true ||
-                    entry.FileName.EndsWith(".jpeg") == true)
+                    filename.EndsWith(".png") == true ||
+                    filename.EndsWith(".bmp") == true ||
+                    filename.EndsWith(".jpg") == true ||
+                    filename.EndsWith(".jpeg") == true)
                 {
                     MemoryStream stream = this.LoadToMemory(entry);
                     PictureBox pictureBox = new PictureBox
@@ -298,7 +328,7 @@ namespace Editor.Forms
 
                     this.mPreviewComponent = pictureBox;
                 }
-                else if (entry.FileName.EndsWith(".dds") == true)
+                else if (filename.EndsWith(".dds") == true)
                 {
                     MemoryStream stream = this.LoadToMemory(entry);
                     PictureBox pictureBox = new PictureBox
@@ -312,10 +342,22 @@ namespace Editor.Forms
                     this.mPreviewComponent = pictureBox;
                 }
                 else if (
-                    entry.FileName.EndsWith(".txt") == true ||
-                    entry.FileName.EndsWith(".css") == true ||
-                    entry.FileName.EndsWith(".pink") == true ||
-                    entry.FileName.EndsWith(".red") == true)
+                    filename.EndsWith(".txt") == true ||
+                    filename.EndsWith(".css") == true ||
+                    filename.EndsWith(".pink") == true ||
+                    filename.EndsWith(".red") == true ||
+                    filename.EndsWith(".yaml") == true ||
+                    filename.EndsWith(".color") == true ||
+                    filename.EndsWith(".type") == true ||
+                    filename.EndsWith(".prs") == true ||
+                    filename.EndsWith(".face") == true ||
+                    filename.EndsWith(".info") == true ||
+                    filename.EndsWith(".trif") == true ||
+                    filename.EndsWith(".proj") == true ||
+                    filename.EndsWith(".base") == true ||
+                    filename.EndsWith(".fx") == true ||
+                    filename.EndsWith(".fxh") == true ||
+                    filename.EndsWith(".fxp") == true)
                 {
                     MemoryStream stream = this.LoadToMemory(entry);
                     RichTextBox textBox = new RichTextBox
@@ -328,7 +370,7 @@ namespace Editor.Forms
 
                     this.mPreviewComponent = textBox;
                 }
-                else if(entry.FileName.EndsWith(".tri") == true)
+                else if(filename.EndsWith(".tri") == true)
                 {
                     MemoryStream stream = this.LoadToMemory(entry);
                     Model model = new Model(stream);
@@ -338,6 +380,34 @@ namespace Editor.Forms
                     stream.Close();
 
                     this.mPreviewComponent = viewer;
+                }
+                else if(filename.EndsWith(".ogg") == true)
+                {
+                    MemoryStream stream = this.LoadToMemory(entry);
+                    this.mPreviewComponent = new AudioPlayer(stream, "ogg");
+                }
+                else if (filename.EndsWith(".mp3") == true)
+                {
+                    MemoryStream stream = this.LoadToMemory(entry);
+                    this.mPreviewComponent = new AudioPlayer(stream, "mp3");
+                }
+                else if (filename.EndsWith(".wav") == true)
+                {
+                    MemoryStream stream = this.LoadToMemory(entry);
+                    this.mPreviewComponent = new AudioPlayer(stream, "wav");
+                }
+                else if (filename.EndsWith(".blue") == true)
+                {
+                    MemoryStream stream = this.LoadToMemory(entry);
+                    WpfHexaEditor.HexEditor editor = new WpfHexaEditor.HexEditor()
+                    {
+                        Stream = stream,
+                    };
+
+                    this.mPreviewComponent = new System.Windows.Forms.Integration.ElementHost()
+                    {
+                        Child = editor
+                    };
                 }
                 else
                 {

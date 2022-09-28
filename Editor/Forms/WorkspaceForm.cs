@@ -47,9 +47,18 @@ namespace Editor.Forms
 
             this.mCaptureServer = new CaptureServer(26000, this.mProcessor);
             this.mCaptureServer.OnStatusChange += OnCaptureStatusChange;
-            this.mCaptureServer.Listen();
 
-            ServerStarted();
+            try
+            {
+                this.mCaptureServer.Listen();
+                ServerStarted();
+            }
+            catch (Exception ex)
+            {
+                // server didn't start up, mark it as stopped and show a warning
+                this.StopServer(this, null);
+                this.OnCaptureStatusChange(this, $"Cannot listen: {ex.Message}");
+            }
         }
 
         private void StopServer(object sender, EventArgs e)
