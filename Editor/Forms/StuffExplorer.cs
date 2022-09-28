@@ -9,6 +9,8 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 using Editor.EmbedFS;
+using Editor.Trinity;
+using Editor.Forms.Components;
 
 namespace Editor.Forms
 {
@@ -286,10 +288,11 @@ namespace Editor.Forms
                     entry.FileName.EndsWith(".jpeg") == true)
                 {
                     MemoryStream stream = this.LoadToMemory(entry);
-                    PictureBox pictureBox = new PictureBox();
-
-                    pictureBox.Image = Image.FromStream(stream);
-                    pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+                    PictureBox pictureBox = new PictureBox
+                    {
+                        Image = Image.FromStream(stream),
+                        SizeMode = PictureBoxSizeMode.CenterImage
+                    };
 
                     stream.Close();
 
@@ -298,10 +301,11 @@ namespace Editor.Forms
                 else if (entry.FileName.EndsWith(".dds") == true)
                 {
                     MemoryStream stream = this.LoadToMemory(entry);
-                    PictureBox pictureBox = new PictureBox();
-
-                    pictureBox.Image = DDSReader.DDSImage.ConvertDDSToPng(stream.ToArray());
-                    pictureBox.SizeMode = PictureBoxSizeMode.CenterImage;
+                    PictureBox pictureBox = new PictureBox
+                    {
+                        Image = DDSReader.DDSImage.ConvertDDSToPng(stream.ToArray()),
+                        SizeMode = PictureBoxSizeMode.CenterImage
+                    };
 
                     stream.Close();
 
@@ -314,14 +318,26 @@ namespace Editor.Forms
                     entry.FileName.EndsWith(".red") == true)
                 {
                     MemoryStream stream = this.LoadToMemory(entry);
-                    RichTextBox textBox = new RichTextBox();
-
-                    textBox.Text = Encoding.ASCII.GetString(stream.ToArray());
-                    textBox.ReadOnly = true;
+                    RichTextBox textBox = new RichTextBox
+                    {
+                        Text = Encoding.ASCII.GetString(stream.ToArray()),
+                        ReadOnly = true
+                    };
 
                     stream.Close();
 
                     this.mPreviewComponent = textBox;
+                }
+                else if(entry.FileName.EndsWith(".tri") == true)
+                {
+                    MemoryStream stream = this.LoadToMemory(entry);
+                    Model model = new Model(stream);
+
+                    TriViewerComponent viewer = new TriViewerComponent(model);
+
+                    stream.Close();
+
+                    this.mPreviewComponent = viewer;
                 }
                 else
                 {

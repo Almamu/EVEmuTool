@@ -7,6 +7,9 @@ using System.IO;
 
 namespace Editor.EmbedFS
 {
+    /// <summary>
+    /// Simple class that allows working on .stuff files from EVE Online
+    /// </summary>
     public class EmbedFSFile
     {
         private BinaryReader mInput;

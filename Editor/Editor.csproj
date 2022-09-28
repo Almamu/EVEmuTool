@@ -10,6 +10,8 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="OpenTK" Version="4.7.5" />
+      <PackageReference Include="OpenTK.WinForms" Version="4.0.0-pre.6" />
       <PackageReference Include="Pfim" Version="0.11.1" />
       <PackageReference Include="Serilog" Version="2.11.0-dev-01380" />
       <PackageReference Include="Serilog.Expressions" Version="3.3.0" />
