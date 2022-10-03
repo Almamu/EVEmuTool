@@ -6,15 +6,15 @@ using System.Runtime.CompilerServices;
 using System.Threading;
 using System.Threading.Tasks;
 using System.Windows.Forms;
-using Editor.Forms;
-using Editor.LogServer;
+using EVEmuTool.Forms;
+using EVEmuTool.LogServer;
 using EVESharp.Common.Logging;
 using Serilog;
 using Serilog.Core;
 using Serilog.Events;
 using Serilog.Templates;
 
-namespace Editor
+namespace EVEmuTool
 {
     static class Program
     {

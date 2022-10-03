@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.CustomMarshal
+namespace EVEmuTool.CustomMarshal
 {
     class UnmarshallException : Exception
     {

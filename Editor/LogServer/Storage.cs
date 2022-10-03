@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Editor.LogServer
+namespace EVEmuTool.LogServer
 {
     public class Storage
     {

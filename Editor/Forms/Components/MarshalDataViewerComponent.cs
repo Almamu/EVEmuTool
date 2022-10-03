@@ -1,5 +1,5 @@
-﻿using Editor.CustomMarshal;
-using Editor.UI;
+﻿using EVEmuTool.CustomMarshal;
+using EVEmuTool.UI;
 using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Compression;
 using EVESharp.PythonTypes.Marshal;
@@ -16,7 +16,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using WpfHexaEditor.Core.EventArguments;
 
-namespace Editor.Forms.Components
+namespace EVEmuTool.Forms.Components
 {
     public partial class MarshalDataViewerComponent : UserControl
     {

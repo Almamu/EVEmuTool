@@ -1,5 +1,5 @@
-﻿using Editor.CustomMarshal.CustomTypes;
-using Editor.CustomMarshal.CustomTypes.Complex;
+﻿using EVEmuTool.CustomMarshal.CustomTypes;
+using EVEmuTool.CustomMarshal.CustomTypes.Complex;
 using EVESharp.EVE.Packets.Complex;
 using EVESharp.PythonTypes.Types.Collections;
 using EVESharp.PythonTypes.Types.Primitives;
@@ -14,7 +14,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.Forms
+namespace EVEmuTool.Forms
 {
     public partial class CacheViewerForm : Form
     {

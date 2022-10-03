@@ -5,7 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.IO;
 
-namespace Editor.EmbedFS
+namespace EVEmuTool.EmbedFS
 {
     /// <summary>
     /// Simple class that allows working on .stuff files from EVE Online
@@ -57,6 +57,7 @@ namespace Editor.EmbedFS
                 this.Files.Add(
                     new StuffEntry
                     {
+                        Origin = this,
                         FileName = filename.Replace ('\\', '/'),
                         Length = length
                     }

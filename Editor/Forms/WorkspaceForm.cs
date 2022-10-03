@@ -1,17 +1,18 @@
-﻿using Editor.Capture;
-using Editor.Configuration;
-using Editor.LogServer;
+﻿using EVEmuTool.Capture;
+using EVEmuTool.Configuration;
+using EVEmuTool.LogServer;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Data;
 using System.Drawing;
+using System.IO;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.Forms
+namespace EVEmuTool.Forms
 {
     public partial class WorkspaceForm : Form
     {
@@ -202,9 +203,22 @@ namespace Editor.Forms
             }
         }
 
-        private void toolStripButton1_Click(object sender, EventArgs e)
+        private void OpenEVEOnlineDirectory(object sender, EventArgs e)
         {
+            FolderBrowserDialog dialog = new FolderBrowserDialog()
+            {
+                InitialDirectory = "C:/Program Files (x86)/CCP/EVE"
+            };
 
+            if (dialog.ShowDialog() == DialogResult.OK)
+            {
+                string path = dialog.SelectedPath;
+                string[] files = Directory
+                    .EnumerateFiles(path, "*.stuff", SearchOption.TopDirectoryOnly)
+                    .ToArray();
+
+                this.ShowChildForm(new StuffExplorer(path, files));
+            }
         }
     }
 }

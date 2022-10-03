@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.CustomMarshal
+namespace EVEmuTool.CustomMarshal
 {
     internal class LogViewerUnmarshaler
     {

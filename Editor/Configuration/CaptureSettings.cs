@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.Configuration
+namespace EVEmuTool.Configuration
 {
     static internal class CaptureSettings
     {

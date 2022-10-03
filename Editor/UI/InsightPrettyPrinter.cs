@@ -1,4 +1,4 @@
-﻿using Editor.CustomMarshal;
+﻿using EVEmuTool.CustomMarshal;
 using EVESharp.PythonTypes.Marshal;
 using EVESharp.PythonTypes.Types.Primitives;
 using System;
@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.UI
+namespace EVEmuTool.UI
 {
     internal class InsightPrettyPrinter
     {

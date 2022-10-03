@@ -2,7 +2,7 @@
 using EVESharp.PythonTypes.Types.Primitives;
 using System.Windows.Forms;
 
-namespace Editor.CustomMarshal;
+namespace EVEmuTool.CustomMarshal;
 
 public class InsightEntry
 {

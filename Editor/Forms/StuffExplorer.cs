@@ -8,29 +8,56 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
-using Editor.EmbedFS;
-using Editor.Trinity;
-using Editor.Forms.Components;
+using EVEmuTool.EmbedFS;
+using EVEmuTool.Trinity;
+using EVEmuTool.Forms.Components;
+using EVESharp.PythonTypes.Compression;
+using Org.BouncyCastle.Utilities.Zlib;
+using LSLib.Granny;
+using LSLib.Granny.Model;
+using EVEmuTool.UI;
 
-namespace Editor.Forms
+namespace EVEmuTool.Forms
 {
 
     public partial class StuffExplorer : Form
     {
         private BackgroundWorker mWorker;
-        private EmbedFSFile mFile;
+        private BackgroundWorker mContentLoader;
+        private EmbedFSFile[] mFiles;
         private List<TreeNode> mNodes = new List<TreeNode> ();
         private TreeNode mTree = new TreeNode("/");
         private Control mPreviewComponent;
+        private StuffEntry mSelectedEntry;
 
         public StuffExplorer(Stream input, string title)
         {
-            this.mFile = new EmbedFSFile(input);
+            this.mFiles = new EmbedFSFile[1];
+            this.mFiles[0] = new EmbedFSFile(input);
 
             InitializeComponent();
 
             this.Text += $" - {title}";
+            this.LoadStuff();
+        }
 
+        public StuffExplorer(string basepath, string[] files)
+        {
+            this.mFiles = new EmbedFSFile [files.Length];
+
+            for (int i = 0; i < files.Length; i ++)
+            {
+                this.mFiles[i] = new EmbedFSFile(File.OpenRead (files[i]));
+            }
+            
+            InitializeComponent();
+
+            this.Text = $"EVE Online Client Tool - {basepath}";
+            this.LoadStuff();
+        }
+
+        private void LoadStuff()
+        {
             // start the background loader for the stuff
             this.mWorker = new BackgroundWorker();
             this.mWorker.WorkerSupportsCancellation = false;
@@ -38,6 +65,13 @@ namespace Editor.Forms
             this.mWorker.DoWork += DoWork;
             this.mWorker.RunWorkerCompleted += OnLoadCompleted;
             this.mWorker.RunWorkerAsync();
+            // setup the content loader worker
+            this.mContentLoader = new BackgroundWorker();
+            this.mContentLoader.WorkerSupportsCancellation = true;
+            this.mContentLoader.WorkerReportsProgress = false;
+            this.mContentLoader.DoWork += LoadPreviewWork;
+            this.mContentLoader.RunWorkerCompleted += OnContentLoadCompleted;
+            this.mContentLoader.RunWorkerAsync();
         }
 
         private void DecideTreeIcon (TreeNode node, string part)
@@ -46,7 +80,9 @@ namespace Editor.Forms
             part = part.ToLower();
 
             // depending on the extension, select a different icon
-            if (part.EndsWith(".tri") == true)
+            if (
+                part.EndsWith(".tri") == true ||
+                part.EndsWith(".gr2") == true)
             {
                 node.SelectedImageIndex = node.ImageIndex = 2;
             }
@@ -126,40 +162,43 @@ namespace Editor.Forms
 
         private void DoWork(object sender, EventArgs e)
         {
-            // load the file information
-            this.mFile.ReadFile();
-
-            // get the file list sorted by filename
-            foreach (StuffEntry file in this.mFile.Files.OrderByDescending(x => x.FileName))
+            foreach (EmbedFSFile file in this.mFiles)
             {
-                TreeNode node = new TreeNode(file.FileName);
+                // load the file information
+                file.ReadFile();
 
-                this.DecideTreeIcon (node, file.FileName);
-                this.mNodes.Add(node);
-            }
-
-            foreach (StuffEntry file in this.mFile.Files)
-            {
-                string[] parts = file.FileName.Split('/');
-                TreeNode current = this.mTree;
-
-                for (int i = 0; i < parts.Length; i ++)
+                // get the file list sorted by filename
+                foreach (StuffEntry entry in file.Files.OrderByDescending(x => x.FileName))
                 {
-                    string part = parts[i];
-                    TreeNode[] list = current.Nodes.Find(part, false);
+                    TreeNode node = new TreeNode(entry.FileName);
 
-                    if (list.Length == 0)
-                        current = current.Nodes.Add(part, part);
-                    else
-                        current = list[0];
+                    this.DecideTreeIcon(node, entry.FileName);
+                    this.mNodes.Add(node);
+                }
 
-                    if (i < parts.Length - 1)
+                foreach (StuffEntry entry in file.Files)
+                {
+                    string[] parts = entry.FileName.Split('/');
+                    TreeNode current = this.mTree;
+
+                    for (int i = 0; i < parts.Length; i++)
                     {
-                        current.ImageIndex = 0;
-                    }
-                    else
-                    {
-                        this.DecideTreeIcon(current, part);
+                        string part = parts[i];
+                        TreeNode[] list = current.Nodes.Find(part, false);
+
+                        if (list.Length == 0)
+                            current = current.Nodes.Add(part, part);
+                        else
+                            current = list[0];
+
+                        if (i < parts.Length - 1)
+                        {
+                            current.ImageIndex = 0;
+                        }
+                        else
+                        {
+                            this.DecideTreeIcon(current, part);
+                        }
                     }
                 }
             }
@@ -212,7 +251,8 @@ namespace Editor.Forms
                 }
             }
 
-            entry = this.mFile.Files.Find(x => x.FileName == filename);
+            filename = filename.ToLower();
+            entry = this.mFiles.Select(x => x.Files.Find(y => y.FileName.ToLower() == filename)).Where(x => x is not null).FirstOrDefault();
 
             if (entry == null)
             {
@@ -238,7 +278,7 @@ namespace Editor.Forms
 
             string outputFilename = Path.GetTempFileName() + ((extension != "") ? ("." + extension) : "");
             Stream output = File.OpenWrite(outputFilename);
-            this.mFile.Export(output, entry);
+            entry.Origin.Export(output, entry);
             output.Flush();
             output.Close();
 
@@ -263,7 +303,7 @@ namespace Editor.Forms
             {
                 // get the file contents
                 Stream output = saveFileDialog.OpenFile();
-                this.mFile.Export(output, entry);
+                entry.Origin.Export(output, entry);
                 output.Flush();
                 output.Close();
             }
@@ -273,42 +313,64 @@ namespace Editor.Forms
         {
             MemoryStream stream = new MemoryStream(entry.Length);
 
-            this.mFile.Export(stream, entry);
+            entry.Origin.Export(stream, entry);
 
             stream.Seek(0, SeekOrigin.Begin);
 
             return stream;
         }
 
+        private void OnContentLoadCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            // remove everything in the second panel
+            this.splitContainer1.Panel2.Controls.Clear();
+
+            if (this.mPreviewComponent is null)
+                return;
+
+            // add the preview component back
+            this.splitContainer1.Panel2.Controls.Add(this.mPreviewComponent);
+        }
+
         private void LoadPreview()
         {
+            // update the selected stuff entry
+            this.mSelectedEntry = this.FindSelectedEntry ();
+
+            // clear the panel and add a "Loading..." text
+            this.splitContainer1.Panel2.Controls.Clear();
+            this.splitContainer1.Panel2.Controls.Add(new Label() { Text = "Loading...", Dock = DockStyle.Fill });
+
             // remove the old component (if any)
             if (this.mPreviewComponent is not null)
             {
-                this.splitContainer1.Panel2.Controls.Remove(this.mPreviewComponent);
                 this.mPreviewComponent.Dispose();
                 this.mPreviewComponent = null;
             }
 
-            StuffEntry entry = this.FindSelectedEntry();
+            if (this.mContentLoader.IsBusy)
+                this.mContentLoader.CancelAsync();
 
+            this.mContentLoader.RunWorkerAsync();
+        }
+
+        private void LoadPreviewWork(object sender, EventArgs e)
+        {
             this.exportToolStripMenuItem.Enabled = false;
             this.viewToolStripMenuItem.Enabled = false;
 
-            if (entry is not null)
+            if (this.mSelectedEntry is not null)
             {
                 this.exportToolStripMenuItem.Enabled = true;
                 this.viewToolStripMenuItem.Enabled = true;
             }
 
-            if (entry is null)
+            if (this.mSelectedEntry is null)
                 return;
-
-            this.helpText.Visible = false;
 
             try
             {
-                string filename = entry.FileName.ToLower();
+                string filename = this.mSelectedEntry.FileName.ToLower();
 
                 // decide what to do based on extension
                 if (
@@ -317,7 +379,7 @@ namespace Editor.Forms
                     filename.EndsWith(".jpg") == true ||
                     filename.EndsWith(".jpeg") == true)
                 {
-                    MemoryStream stream = this.LoadToMemory(entry);
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
                     PictureBox pictureBox = new PictureBox
                     {
                         Image = Image.FromStream(stream),
@@ -330,7 +392,7 @@ namespace Editor.Forms
                 }
                 else if (filename.EndsWith(".dds") == true)
                 {
-                    MemoryStream stream = this.LoadToMemory(entry);
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
                     PictureBox pictureBox = new PictureBox
                     {
                         Image = DDSReader.DDSImage.ConvertDDSToPng(stream.ToArray()),
@@ -359,12 +421,15 @@ namespace Editor.Forms
                     filename.EndsWith(".fxh") == true ||
                     filename.EndsWith(".fxp") == true)
                 {
-                    MemoryStream stream = this.LoadToMemory(entry);
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
                     RichTextBox textBox = new RichTextBox
                     {
                         Text = Encoding.ASCII.GetString(stream.ToArray()),
                         ReadOnly = true
                     };
+
+                    if (filename.EndsWith(".red") == true)
+                        Red.Parse(Encoding.ASCII.GetString(stream.ToArray()));
 
                     stream.Close();
 
@@ -372,8 +437,8 @@ namespace Editor.Forms
                 }
                 else if(filename.EndsWith(".tri") == true)
                 {
-                    MemoryStream stream = this.LoadToMemory(entry);
-                    Model model = new Model(stream);
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
+                    TriModel model = new TriModel(stream);
 
                     ModelViewerComponent viewer = new ModelViewerComponent(model);
 
@@ -383,22 +448,23 @@ namespace Editor.Forms
                 }
                 else if(filename.EndsWith(".ogg") == true)
                 {
-                    MemoryStream stream = this.LoadToMemory(entry);
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
                     this.mPreviewComponent = new AudioPlayer(stream, "ogg");
                 }
                 else if (filename.EndsWith(".mp3") == true)
                 {
-                    MemoryStream stream = this.LoadToMemory(entry);
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
                     this.mPreviewComponent = new AudioPlayer(stream, "mp3");
                 }
                 else if (filename.EndsWith(".wav") == true)
                 {
-                    MemoryStream stream = this.LoadToMemory(entry);
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
                     this.mPreviewComponent = new AudioPlayer(stream, "wav");
                 }
-                else if (filename.EndsWith(".blue") == true)
+                else if (
+                    filename.EndsWith(".blue") == true)
                 {
-                    MemoryStream stream = this.LoadToMemory(entry);
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
                     WpfHexaEditor.HexEditor editor = new WpfHexaEditor.HexEditor()
                     {
                         Stream = stream,
@@ -409,27 +475,44 @@ namespace Editor.Forms
                         Child = editor
                     };
                 }
+                else if (filename.EndsWith(".gr2") == true)
+                {
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
+                    Root result = GR2Utils.LoadModel(stream);
+
+                    ModelViewerComponent viewer = new ModelViewerComponent(result);
+
+                    stream.Close();
+
+                    this.mPreviewComponent = viewer;
+                }
+                else if (filename.EndsWith(".pickle") == true)
+                {
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
+                    TreeView view = new TreeView();
+                    Razorvine.Pickle.Unpickler unpickler = new Razorvine.Pickle.Unpickler();
+                    TreeViewPrettyPrinter.Process(NativeToPython.Convert(unpickler.load(stream)), view.Nodes.Add(""));
+                    this.mPreviewComponent = view;
+                }
                 else
                 {
-                    this.helpText.Text = "Preview not available";
-                    this.helpText.Visible = true;
+                    this.mPreviewComponent = new Label()
+                    {
+                        Text = "Preview not available"
+                    };
                 }
             }
             catch (Exception ex)
             {
-                this.helpText.Text = $"Cannot generate preview: {ex.Message}";
-                this.helpText.Visible = true;
+                this.mPreviewComponent = new Label()
+                {
+                    Text = $"Cannot generate preview: {ex.Message}"
+                };
             }
 
-            // do not setup the component if it's not in use
-            if (this.mPreviewComponent is null)
-                return;
-
             // setup some of the component's information
-            this.mPreviewComponent.Dock = DockStyle.Fill;
-
-            // add the component to the panel
-            this.splitContainer1.Panel2.Controls.Add(this.mPreviewComponent);
+            if (this.mPreviewComponent is not null)
+                this.mPreviewComponent.Dock = DockStyle.Fill;
         }
 
         private void fileTreeView_AfterSelect(object sender, TreeViewEventArgs e)

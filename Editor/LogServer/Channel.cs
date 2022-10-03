@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 
-namespace Editor.LogServer
+namespace EVEmuTool.LogServer
 {
     public class Channel
     {

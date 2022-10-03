@@ -1,4 +1,4 @@
-﻿using Editor.CustomMarshal.CustomTypes;
+﻿using EVEmuTool.CustomMarshal.CustomTypes;
 using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Types.Collections;
 using EVESharp.PythonTypes.Types.Database;
@@ -8,13 +8,13 @@ using System.Collections.Generic;
 using System.Runtime.CompilerServices;
 using System.Windows.Forms;
 
-namespace Editor
+namespace EVEmuTool
 {
     public static class TreeViewPrettyPrinter
     {
         public static void Process(PyDataType data, TreeNode node)
         {
-
+            ProcessPythonType(data, node);
         }
 
         public static void Process(PyDataType data, out TreeNode node)

@@ -1,4 +1,4 @@
-﻿namespace Editor.LogServer
+﻿namespace EVEmuTool.LogServer
 {
     public class Source
     {

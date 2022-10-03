@@ -1,4 +1,4 @@
-﻿namespace Editor.Forms.Components
+﻿namespace EVEmuTool.Forms.Components
 {
     partial class TriRenderComponent
     {

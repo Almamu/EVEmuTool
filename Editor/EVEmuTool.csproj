@@ -7,7 +7,18 @@
         <TargetFramework>net6.0-windows</TargetFramework>
         <DebugType>full</DebugType>
         <PlatformTarget>x64</PlatformTarget>
+        <AllowUnsafeBlocks>True</AllowUnsafeBlocks>
     </PropertyGroup>
+    <ItemGroup>
+      <None Remove="C:\Users\games\.nuget\packages\naudio.vorbis\1.5.0\contentFiles\any\netstandard2.0\README.md" />
+      <None Remove="granny2_x64.dll" />
+      <None Remove="Resources\granny2.dll" />
+    </ItemGroup>
+    <ItemGroup>
+      <Content Include="granny2_x64.dll">
+        <CopyToOutputDirectory>Always</CopyToOutputDirectory>
+      </Content>
+    </ItemGroup>
 
     <ItemGroup>
       <PackageReference Include="NAudio.Vorbis" Version="1.5.0" />
@@ -15,21 +26,27 @@
       <PackageReference Include="OpenTK" Version="4.7.5" />
       <PackageReference Include="OpenTK.WinForms" Version="4.0.0-pre.6" />
       <PackageReference Include="Pfim" Version="0.11.1" />
+      <PackageReference Include="Razorvine.Pickle" Version="1.2.1" />
       <PackageReference Include="Serilog" Version="2.11.0-dev-01380" />
       <PackageReference Include="Serilog.Expressions" Version="3.3.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="4.0.2-dev-00890" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
       <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
       <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
+      <PackageReference Include="YamlDotNet" Version="12.0.1" />
     </ItemGroup>
 
     <ItemGroup>
       <ProjectReference Include="..\External\EVESharp\Server\EVESharp.Common\EVESharp.Common.csproj" />
       <ProjectReference Include="..\External\EVESharp\Server\EVESharp.EVE\EVESharp.EVE.csproj" />
       <ProjectReference Include="..\External\EVESharp\Server\EVESharp.PythonTypes\EVESharp.PythonTypes.csproj" />
+      <ProjectReference Include="..\LSLibNative\LSLibNative.vcxproj" />
     </ItemGroup>
 
     <ItemGroup>
+      <Compile Update="Forms\Components\GR2RenderComponent.cs">
+        <SubType>Component</SubType>
+      </Compile>
       <Compile Update="Properties\Resources.Designer.cs">
         <DesignTime>True</DesignTime>
         <AutoGen>True</AutoGen>

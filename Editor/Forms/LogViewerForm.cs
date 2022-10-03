@@ -1,4 +1,4 @@
-﻿using Editor.LogServer;
+﻿using EVEmuTool.LogServer;
 using EVESharp.PythonTypes.Marshal;
 using System;
 using System.Collections.Generic;
@@ -11,7 +11,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.Forms
+namespace EVEmuTool.Forms
 {
     public partial class LogViewerForm : Form
     {

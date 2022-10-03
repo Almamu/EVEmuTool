@@ -5,31 +5,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.Trinity
+namespace EVEmuTool.Trinity
 {
-    /// <summary>
-    /// Represents a normal 3-dimensional vector
-    /// </summary>
-    public struct Vector3
-    {
-        public float x;
-        public float y;
-        public float z;
-
-        public override string ToString()
-        {
-            return $"{{{x}, {y}, {z}}}";
-        }
-    }
-
-    /// <summary>
-    /// Represents a normal 2-dimensional vector
-    /// </summary>
-    public struct Vector2
-    {
-        public float x;
-        public float y;
-    }
 
     /// <summary>
     /// Represents a 3-dimensional bounding box
@@ -149,7 +126,7 @@ namespace Editor.Trinity
     /// <summary>
     /// Class for working on .tri files
     /// </summary>
-    public class Model
+    public class TriModel
     {
 
         /// <summary>
@@ -246,7 +223,7 @@ namespace Editor.Trinity
         public Box BoundingBox => this.mHeader.boundingBox;
         public int VertexSize => this.mHeader.vertexSize;
 
-        public Model (Stream input)
+        public TriModel (Stream input)
         {
             BinaryReader reader = new BinaryReader (input);
 

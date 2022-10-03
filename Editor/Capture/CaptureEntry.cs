@@ -6,7 +6,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.Capture
+namespace EVEmuTool.Capture
 {
     public enum PacketDirection
     {

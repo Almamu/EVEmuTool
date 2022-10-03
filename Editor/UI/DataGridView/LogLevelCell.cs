@@ -1,4 +1,4 @@
-﻿using Editor.LogServer;
+﻿using EVEmuTool.LogServer;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.UI.DataGridView
+namespace EVEmuTool.UI.DataGridView
 {
     public class LogLevelCell : DataGridViewImageCell
     {
@@ -31,14 +31,14 @@ namespace Editor.UI.DataGridView
             // decide what image to draw based on the data
             Bitmap bitmap = logLevel switch
             {
-                (int)LogLevel.Info => Editor.Properties.Resources.Info,
-                (int)LogLevel.Error => Editor.Properties.Resources.Error,
-                (int)LogLevel.Counter => Editor.Properties.Resources.Counter,
-                (int)LogLevel.Fatal => Editor.Properties.Resources.Fatal,
-                (int)LogLevel.MethodCall => Editor.Properties.Resources.Mcall,
-                (int)LogLevel.Overlap => Editor.Properties.Resources.Overlap,
-                (int)LogLevel.Performance => Editor.Properties.Resources.Performance,
-                (int)LogLevel.Warning => Editor.Properties.Resources.Warning,
+                (int)LogLevel.Info => EVEmuTool.Properties.Resources.Info,
+                (int)LogLevel.Error => EVEmuTool.Properties.Resources.Error,
+                (int)LogLevel.Counter => EVEmuTool.Properties.Resources.Counter,
+                (int)LogLevel.Fatal => EVEmuTool.Properties.Resources.Fatal,
+                (int)LogLevel.MethodCall => EVEmuTool.Properties.Resources.Mcall,
+                (int)LogLevel.Overlap => EVEmuTool.Properties.Resources.Overlap,
+                (int)LogLevel.Performance => EVEmuTool.Properties.Resources.Performance,
+                (int)LogLevel.Warning => EVEmuTool.Properties.Resources.Warning,
                 _ => null
             };
 

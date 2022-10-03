@@ -1,4 +1,4 @@
-﻿namespace Editor.Forms
+﻿namespace EVEmuTool.Forms
 {
     partial class LogViewerForm
     {

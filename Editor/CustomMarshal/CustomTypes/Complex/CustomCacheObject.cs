@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.CustomMarshal.CustomTypes.Complex
+namespace EVEmuTool.CustomMarshal.CustomTypes.Complex
 {
     /// <summary>
     /// Helper class to work with PyCachedObject's (objectCaching.CachedObject) to be sent to the EVE Online client

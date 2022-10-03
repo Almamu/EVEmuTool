@@ -1,4 +1,4 @@
-﻿using Editor.UI.DataGridView;
+﻿using EVEmuTool.UI.DataGridView;
 using System;
 using System.Collections.Generic;
 using System.Drawing;
@@ -7,7 +7,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor
+namespace EVEmuTool
 {
     public static class LogViewerHelper
     {

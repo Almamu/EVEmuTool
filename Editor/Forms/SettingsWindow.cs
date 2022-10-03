@@ -1,4 +1,4 @@
-﻿using Editor.Configuration;
+﻿using EVEmuTool.Configuration;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;
@@ -9,7 +9,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.Forms
+namespace EVEmuTool.Forms
 {
     public partial class SettingsWindow : Form
     {

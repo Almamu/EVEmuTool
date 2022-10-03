@@ -1,4 +1,4 @@
-﻿namespace Editor.Forms.Components
+﻿namespace EVEmuTool.Forms.Components
 {
     partial class MarshalDataViewerComponent
     {
@@ -32,7 +32,7 @@
             this.tabPage3 = new System.Windows.Forms.TabPage();
             this.packetTextBox = new System.Windows.Forms.RichTextBox();
             this.tabPage4 = new System.Windows.Forms.TabPage();
-            this.marshalTreeView = new Editor.Forms.Components.MarshalTreeViewComponent();
+            this.marshalTreeView = new EVEmuTool.Forms.Components.MarshalTreeViewComponent();
             this.tabPage11 = new System.Windows.Forms.TabPage();
             this.splitContainer3 = new System.Windows.Forms.SplitContainer();
             this.insightTreeView = new System.Windows.Forms.TreeView();

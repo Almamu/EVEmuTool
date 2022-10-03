@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.CustomMarshal.CustomTypes
+namespace EVEmuTool.CustomMarshal.CustomTypes
 {
     public class PyInsightSubStream : PySubStream
     {

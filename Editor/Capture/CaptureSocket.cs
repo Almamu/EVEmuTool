@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.Capture
+namespace EVEmuTool.Capture
 {
     internal class ReceiveState
     {

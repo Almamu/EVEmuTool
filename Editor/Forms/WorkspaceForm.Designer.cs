@@ -1,4 +1,4 @@
-﻿namespace Editor.Forms
+﻿namespace EVEmuTool.Forms
 {
     partial class WorkspaceForm
     {
@@ -35,6 +35,7 @@
             this.openRawMarshalData = new System.Windows.Forms.ToolStripMenuItem();
             this.openCacheFile = new System.Windows.Forms.ToolStripMenuItem();
             this.openStuffFile = new System.Windows.Forms.ToolStripMenuItem();
+            this.openEVEOnlineDirectoryToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.toolStripSeparator5 = new System.Windows.Forms.ToolStripSeparator();
             this.exitToolStripMenuItem = new System.Windows.Forms.ToolStripMenuItem();
             this.serverMenu = new System.Windows.Forms.ToolStripMenuItem();
@@ -54,6 +55,7 @@
             this.openRawMarshalButton = new System.Windows.Forms.ToolStripButton();
             this.openCacheFileButton = new System.Windows.Forms.ToolStripButton();
             this.toolStripButton1 = new System.Windows.Forms.ToolStripButton();
+            this.openEVEDirectory = new System.Windows.Forms.ToolStripButton();
             this.toolStripSeparator1 = new System.Windows.Forms.ToolStripSeparator();
             this.startPacketCaptureButton = new System.Windows.Forms.ToolStripButton();
             this.stopPacketCaptureButton = new System.Windows.Forms.ToolStripButton();
@@ -89,6 +91,7 @@
             this.openRawMarshalData,
             this.openCacheFile,
             this.openStuffFile,
+            this.openEVEOnlineDirectoryToolStripMenuItem,
             this.toolStripSeparator5,
             this.exitToolStripMenuItem});
             this.fileMenu.ImageTransparentColor = System.Drawing.SystemColors.ActiveBorder;
@@ -98,7 +101,7 @@
             // 
             // openLogServerWorkspace
             // 
-            this.openLogServerWorkspace.Image = global::Editor.Properties.Resources._1;
+            this.openLogServerWorkspace.Image = global::EVEmuTool.Properties.Resources._1;
             this.openLogServerWorkspace.Name = "openLogServerWorkspace";
             this.openLogServerWorkspace.Size = new System.Drawing.Size(219, 22);
             this.openLogServerWorkspace.Text = "Open LogServer Workspace";
@@ -106,7 +109,7 @@
             // 
             // openRawMarshalData
             // 
-            this.openRawMarshalData.Image = global::Editor.Properties.Resources.Marshal;
+            this.openRawMarshalData.Image = global::EVEmuTool.Properties.Resources.Marshal;
             this.openRawMarshalData.Name = "openRawMarshalData";
             this.openRawMarshalData.Size = new System.Drawing.Size(219, 22);
             this.openRawMarshalData.Text = "Open Raw &Marshal Data";
@@ -114,7 +117,7 @@
             // 
             // openCacheFile
             // 
-            this.openCacheFile.Image = global::Editor.Properties.Resources.CacheFile;
+            this.openCacheFile.Image = global::EVEmuTool.Properties.Resources.CacheFile;
             this.openCacheFile.Name = "openCacheFile";
             this.openCacheFile.Size = new System.Drawing.Size(219, 22);
             this.openCacheFile.Text = "Open Cache File";
@@ -122,11 +125,19 @@
             // 
             // openStuffFile
             // 
-            this.openStuffFile.Image = global::Editor.Properties.Resources.Database;
+            this.openStuffFile.Image = global::EVEmuTool.Properties.Resources.Database;
             this.openStuffFile.Name = "openStuffFile";
             this.openStuffFile.Size = new System.Drawing.Size(219, 22);
             this.openStuffFile.Text = "Open .stuff File";
             this.openStuffFile.Click += new System.EventHandler(this.OpenStuffFile);
+            // 
+            // openEVEOnlineDirectoryToolStripMenuItem
+            // 
+            this.openEVEOnlineDirectoryToolStripMenuItem.Image = global::EVEmuTool.Properties.Resources.eve;
+            this.openEVEOnlineDirectoryToolStripMenuItem.Name = "openEVEOnlineDirectoryToolStripMenuItem";
+            this.openEVEOnlineDirectoryToolStripMenuItem.Size = new System.Drawing.Size(219, 22);
+            this.openEVEOnlineDirectoryToolStripMenuItem.Text = "Open EVE Online Directory";
+            this.openEVEOnlineDirectoryToolStripMenuItem.Click += new System.EventHandler(this.OpenEVEOnlineDirectory);
             // 
             // toolStripSeparator5
             // 
@@ -153,7 +164,7 @@
             // 
             // startPacketCapture
             // 
-            this.startPacketCapture.Image = global::Editor.Properties.Resources.Play;
+            this.startPacketCapture.Image = global::EVEmuTool.Properties.Resources.Play;
             this.startPacketCapture.Name = "startPacketCapture";
             this.startPacketCapture.ShortcutKeys = ((System.Windows.Forms.Keys)((System.Windows.Forms.Keys.Control | System.Windows.Forms.Keys.A)));
             this.startPacketCapture.Size = new System.Drawing.Size(224, 22);
@@ -163,7 +174,7 @@
             // stopPacketCapture
             // 
             this.stopPacketCapture.Enabled = false;
-            this.stopPacketCapture.Image = global::Editor.Properties.Resources.Stop;
+            this.stopPacketCapture.Image = global::EVEmuTool.Properties.Resources.Stop;
             this.stopPacketCapture.Name = "stopPacketCapture";
             this.stopPacketCapture.Size = new System.Drawing.Size(224, 22);
             this.stopPacketCapture.Text = "Stop Packet Capture";
@@ -176,7 +187,7 @@
             // 
             // toolStripMenuItem1
             // 
-            this.toolStripMenuItem1.Image = global::Editor.Properties.Resources.AnalyzeTrace;
+            this.toolStripMenuItem1.Image = global::EVEmuTool.Properties.Resources.AnalyzeTrace;
             this.toolStripMenuItem1.Name = "toolStripMenuItem1";
             this.toolStripMenuItem1.Size = new System.Drawing.Size(224, 22);
             this.toolStripMenuItem1.Text = "Open Packet Capture Viewer";
@@ -243,6 +254,7 @@
             this.openRawMarshalButton,
             this.openCacheFileButton,
             this.toolStripButton1,
+            this.openEVEDirectory,
             this.toolStripSeparator1,
             this.startPacketCaptureButton,
             this.stopPacketCaptureButton,
@@ -257,27 +269,27 @@
             // openLogServerButton
             // 
             this.openLogServerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openLogServerButton.Image = global::Editor.Properties.Resources._1;
+            this.openLogServerButton.Image = global::EVEmuTool.Properties.Resources._1;
             this.openLogServerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openLogServerButton.Name = "openLogServerButton";
             this.openLogServerButton.Size = new System.Drawing.Size(23, 22);
-            this.openLogServerButton.Text = "openLogServerButton";
+            this.openLogServerButton.Text = "Open LogServer Workspace";
             this.openLogServerButton.Click += new System.EventHandler(this.OpenLogServerWorkspace);
             // 
             // openRawMarshalButton
             // 
             this.openRawMarshalButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openRawMarshalButton.Image = global::Editor.Properties.Resources.Marshal;
+            this.openRawMarshalButton.Image = global::EVEmuTool.Properties.Resources.Marshal;
             this.openRawMarshalButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openRawMarshalButton.Name = "openRawMarshalButton";
             this.openRawMarshalButton.Size = new System.Drawing.Size(23, 22);
-            this.openRawMarshalButton.Text = "toolStripButton2";
+            this.openRawMarshalButton.Text = "Open Raw Marshal Data";
             this.openRawMarshalButton.Click += new System.EventHandler(this.OpenRawMarshalData);
             // 
             // openCacheFileButton
             // 
             this.openCacheFileButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openCacheFileButton.Image = global::Editor.Properties.Resources.CacheFile;
+            this.openCacheFileButton.Image = global::EVEmuTool.Properties.Resources.CacheFile;
             this.openCacheFileButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openCacheFileButton.Name = "openCacheFileButton";
             this.openCacheFileButton.Size = new System.Drawing.Size(23, 22);
@@ -287,12 +299,22 @@
             // toolStripButton1
             // 
             this.toolStripButton1.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.toolStripButton1.Image = global::Editor.Properties.Resources.Database;
+            this.toolStripButton1.Image = global::EVEmuTool.Properties.Resources.Database;
             this.toolStripButton1.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.toolStripButton1.Name = "toolStripButton1";
             this.toolStripButton1.Size = new System.Drawing.Size(23, 22);
-            this.toolStripButton1.Text = "openStuffFileButton";
+            this.toolStripButton1.Text = "Open .stuff file";
             this.toolStripButton1.Click += new System.EventHandler(this.OpenStuffFile);
+            // 
+            // openEVEDirectory
+            // 
+            this.openEVEDirectory.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
+            this.openEVEDirectory.Image = global::EVEmuTool.Properties.Resources.eve;
+            this.openEVEDirectory.ImageTransparentColor = System.Drawing.Color.Magenta;
+            this.openEVEDirectory.Name = "openEVEDirectory";
+            this.openEVEDirectory.Size = new System.Drawing.Size(23, 22);
+            this.openEVEDirectory.Text = "Open EVE Online Directory";
+            this.openEVEDirectory.Click += new System.EventHandler(this.OpenEVEOnlineDirectory);
             // 
             // toolStripSeparator1
             // 
@@ -302,7 +324,7 @@
             // startPacketCaptureButton
             // 
             this.startPacketCaptureButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.startPacketCaptureButton.Image = global::Editor.Properties.Resources.Play;
+            this.startPacketCaptureButton.Image = global::EVEmuTool.Properties.Resources.Play;
             this.startPacketCaptureButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.startPacketCaptureButton.Name = "startPacketCaptureButton";
             this.startPacketCaptureButton.Size = new System.Drawing.Size(23, 22);
@@ -312,7 +334,7 @@
             // stopPacketCaptureButton
             // 
             this.stopPacketCaptureButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.stopPacketCaptureButton.Image = global::Editor.Properties.Resources.Stop;
+            this.stopPacketCaptureButton.Image = global::EVEmuTool.Properties.Resources.Stop;
             this.stopPacketCaptureButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.stopPacketCaptureButton.Name = "stopPacketCaptureButton";
             this.stopPacketCaptureButton.Size = new System.Drawing.Size(23, 22);
@@ -327,7 +349,7 @@
             // openPacketCaptureViewerButton
             // 
             this.openPacketCaptureViewerButton.DisplayStyle = System.Windows.Forms.ToolStripItemDisplayStyle.Image;
-            this.openPacketCaptureViewerButton.Image = global::Editor.Properties.Resources.AnalyzeTrace;
+            this.openPacketCaptureViewerButton.Image = global::EVEmuTool.Properties.Resources.AnalyzeTrace;
             this.openPacketCaptureViewerButton.ImageTransparentColor = System.Drawing.Color.Magenta;
             this.openPacketCaptureViewerButton.Name = "openPacketCaptureViewerButton";
             this.openPacketCaptureViewerButton.Size = new System.Drawing.Size(23, 22);
@@ -362,7 +384,7 @@
             this.MainMenuStrip = this.menuStrip;
             this.Margin = new System.Windows.Forms.Padding(4, 3, 4, 3);
             this.Name = "WorkspaceForm";
-            this.Text = "EVEmu Live Packet Tool";
+            this.Text = "EVEmu Tool";
             this.FormClosing += new System.Windows.Forms.FormClosingEventHandler(this.ClosingForm);
             this.menuStrip.ResumeLayout(false);
             this.menuStrip.PerformLayout();
@@ -410,6 +432,8 @@
         private System.Windows.Forms.ToolStripButton openCacheFileButton;
         private System.Windows.Forms.ToolStripMenuItem openStuffFile;
         private System.Windows.Forms.ToolStripButton toolStripButton1;
+        private System.Windows.Forms.ToolStripButton openEVEDirectory;
+        private System.Windows.Forms.ToolStripMenuItem openEVEOnlineDirectoryToolStripMenuItem;
     }
 }
 

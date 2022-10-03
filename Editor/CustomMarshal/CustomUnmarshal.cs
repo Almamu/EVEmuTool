@@ -10,7 +10,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace Editor.CustomMarshal
+namespace EVEmuTool.CustomMarshal
 {
     public class CustomUnmarshal : Unmarshal
     {

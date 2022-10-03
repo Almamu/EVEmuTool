@@ -8,7 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.Forms.Components
+namespace EVEmuTool.Forms.Components
 {
     public partial class MarshalTreeViewComponent : UserControl
     {

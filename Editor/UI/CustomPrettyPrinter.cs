@@ -1,4 +1,4 @@
-﻿using Editor.CustomMarshal.CustomTypes;
+﻿using EVEmuTool.CustomMarshal.CustomTypes;
 using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Types.Primitives;
 using System;
@@ -7,7 +7,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.UI
+namespace EVEmuTool.UI
 {
     public class CustomPrettyPrinter : PrettyPrinter
     {

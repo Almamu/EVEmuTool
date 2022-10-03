@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.UI.DataGridView
+namespace EVEmuTool.UI.DataGridView
 {
     class LogTextCell : DataGridViewTextBoxCell
     {

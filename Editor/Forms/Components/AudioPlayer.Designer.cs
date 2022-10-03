@@ -1,4 +1,4 @@
-﻿namespace Editor.Forms.Components
+﻿namespace EVEmuTool.Forms.Components
 {
     partial class AudioPlayer
     {
@@ -60,7 +60,7 @@
             // stopButton
             // 
             this.stopButton.Enabled = false;
-            this.stopButton.Image = global::Editor.Properties.Resources.Stop;
+            this.stopButton.Image = global::EVEmuTool.Properties.Resources.Stop;
             this.stopButton.Location = new System.Drawing.Point(86, 7);
             this.stopButton.Name = "stopButton";
             this.stopButton.Size = new System.Drawing.Size(75, 23);
@@ -70,7 +70,7 @@
             // 
             // playButton
             // 
-            this.playButton.Image = global::Editor.Properties.Resources.Play;
+            this.playButton.Image = global::EVEmuTool.Properties.Resources.Play;
             this.playButton.Location = new System.Drawing.Point(5, 7);
             this.playButton.Name = "playButton";
             this.playButton.Size = new System.Drawing.Size(75, 23);

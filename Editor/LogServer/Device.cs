@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 
-namespace Editor.LogServer
+namespace EVEmuTool.LogServer
 {
     public class Device
     {

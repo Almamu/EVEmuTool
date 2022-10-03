@@ -1,4 +1,4 @@
-﻿namespace Editor.Forms
+﻿namespace EVEmuTool.Forms
 {
     partial class PacketCaptureForm
     {
@@ -61,7 +61,7 @@
             this.packetListContextMenu = new System.Windows.Forms.ContextMenuStrip(this.components);
             this.openInMarshalViewer = new System.Windows.Forms.ToolStripMenuItem();
             this.saveToFile = new System.Windows.Forms.ToolStripMenuItem();
-            this.marshalTreeView = new Editor.Forms.Components.MarshalTreeViewComponent();
+            this.marshalTreeView = new EVEmuTool.Forms.Components.MarshalTreeViewComponent();
             ((System.ComponentModel.ISupportInitialize)(this.splitContainer1)).BeginInit();
             this.splitContainer1.Panel1.SuspendLayout();
             this.splitContainer1.Panel2.SuspendLayout();

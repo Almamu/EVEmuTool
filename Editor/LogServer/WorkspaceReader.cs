@@ -3,7 +3,7 @@ using System.IO;
 using System.Linq;
 using System.Text;
 
-namespace Editor.LogServer
+namespace EVEmuTool.LogServer
 {
     public class WorkspaceReader : BinaryReader
     {

@@ -1,4 +1,4 @@
-﻿using Editor.CustomMarshal.CustomTypes;
+﻿using EVEmuTool.CustomMarshal.CustomTypes;
 using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Compression;
 using EVESharp.PythonTypes.Marshal;
@@ -12,7 +12,7 @@ using System.Linq;
 using System.Numerics;
 using System.Text;
 
-namespace Editor.CustomMarshal
+namespace EVEmuTool.CustomMarshal
 {
     // TODO: THIS IMPLEMENTATION SHOULD BE BETTER HANDLED BECAUSE RIGHT NOW THERE'S CODE DUPLICATED FOR UNMARSHALLING
     class PartialUnmarshal : InsightUnmarshal

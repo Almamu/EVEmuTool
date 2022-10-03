@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.IO;
-using Editor.CustomMarshal.CustomTypes;
+using EVEmuTool.CustomMarshal.CustomTypes;
 using EVESharp.PythonTypes;
 using EVESharp.PythonTypes.Marshal;
 using EVESharp.PythonTypes.Types.Primitives;
 
-namespace Editor.CustomMarshal;
+namespace EVEmuTool.CustomMarshal;
 
 public class InsightUnmarshal : Unmarshal
 {

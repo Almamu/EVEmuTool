@@ -1,6 +1,6 @@
 ﻿using System.Text;
 
-namespace Editor.LogServer
+namespace EVEmuTool.LogServer
 {
     public class LogLine
     {

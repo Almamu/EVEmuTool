@@ -7,7 +7,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.Capture
+namespace EVEmuTool.Capture
 {
     public class CaptureMessage : IMessage
     {

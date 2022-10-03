@@ -1,5 +1,5 @@
-﻿using Editor.Configuration;
-using Editor.Extensions;
+﻿using EVEmuTool.Configuration;
+using EVEmuTool.Extensions;
 using EVESharp.Common.Network;
 using EVESharp.Common.Network.Messages;
 using Serilog;
@@ -12,7 +12,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.Capture
+namespace EVEmuTool.Capture
 {
     internal class CaptureServer : IDisposable
     {

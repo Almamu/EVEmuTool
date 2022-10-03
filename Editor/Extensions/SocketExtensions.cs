@@ -6,7 +6,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Editor.Extensions
+namespace EVEmuTool.Extensions
 {
     public static class SocketExtensions
     {

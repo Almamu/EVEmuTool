@@ -12,11 +12,11 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
-namespace Editor.Forms.Components
+namespace EVEmuTool.Forms.Components
 {
     public partial class TriRenderComponent : GLControl
     {
-        private Trinity.Model mModel;
+        private Trinity.TriModel mModel;
         private float[] mVertices;
         private uint[] mIndices;
         private int mVertexBufferObject;
@@ -35,7 +35,7 @@ namespace Editor.Forms.Components
         private float mZoomIncrements = 1.0f;
         private float mDistance;
 
-        public TriRenderComponent(Trinity.Model model)
+        public TriRenderComponent(Trinity.TriModel model)
         {
             InitializeComponent();
 
@@ -73,7 +73,7 @@ namespace Editor.Forms.Components
             
             // get the center of the object
             this.mCenter = (max + min) / 2.0f;
-            this.mDistance = (max + min).Length / 2.0f;
+            this.mDistance = (max - min).Length / 2.0f;
             this.mCamera.Position = this.mCenter + new Vector3(this.mDistance);
             this.mZoomIncrements = 0.05f;
         }
@@ -91,15 +91,18 @@ namespace Editor.Forms.Components
 
             // setup buffers and data
             this.mVertices = new float[this.mModel.Vertices.Length * 6]; // includes normals
+            int i = 0;
 
-            for (int i = 0; i < this.mModel.Vertices.Length; i ++)
+            foreach (Trinity.Vertex cur in this.mModel.Vertices)
             {
-                this.mVertices[i * 6 + 0] = this.mModel.Vertices[i].position.x;
-                this.mVertices[i * 6 + 1] = this.mModel.Vertices[i].position.y;
-                this.mVertices[i * 6 + 2] = this.mModel.Vertices[i].position.z;
-                this.mVertices[i * 6 + 3] = this.mModel.Vertices[i].normal.x;
-                this.mVertices[i * 6 + 4] = this.mModel.Vertices[i].normal.y;
-                this.mVertices[i * 6 + 5] = this.mModel.Vertices[i].normal.z;
+                this.mVertices[i * 6 + 0] = cur.position.x;
+                this.mVertices[i * 6 + 1] = cur.position.y;
+                this.mVertices[i * 6 + 2] = cur.position.z;
+                this.mVertices[i * 6 + 3] = cur.normal.x;
+                this.mVertices[i * 6 + 4] = cur.normal.y;
+                this.mVertices[i * 6 + 5] = cur.normal.z;
+
+                i++;
             }
 
             // now setup the triangle indices

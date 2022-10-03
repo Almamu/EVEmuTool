@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Editor.LogServer
+namespace EVEmuTool.LogServer
 {
     public class WorkspaceFile
     {
