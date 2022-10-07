@@ -9,9 +9,9 @@ using YamlDotNet.RepresentationModel;
 
 namespace EVEmuTool.Trinity.Objects.Parameters
 {
-    public class Tr2FloatParameter : Tr2EffectParameter
+    public class TriFloatParameter : Tr2EffectParameter
     {
-        public Tr2FloatParameter(YamlMappingNode root, IEmbedFS source) : base(root, source)
+        public TriFloatParameter(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
             if (root.Children.ContainsKey ("value") == true)
                 this.Value = float.Parse((string)root["value"], CultureInfo.InvariantCulture);

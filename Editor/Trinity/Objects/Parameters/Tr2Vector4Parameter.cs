@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Globalization;
@@ -11,7 +12,7 @@ namespace EVEmuTool.Trinity.Objects.Parameters
 {
     public class Tr2Vector4Parameter : Tr2EffectParameter
     {
-        public Tr2Vector4Parameter(YamlMappingNode root) : base(root)
+        public Tr2Vector4Parameter(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
             if (root.Children.ContainsKey("value") == false)
                 return;

@@ -36,13 +36,15 @@ namespace EVEmuTool.Forms.Components
             InitializeComponent();
 
             this.mModel = model;
-            this.mRefreshTimer = new Timer
+            this.mRefreshTimer = new Timer ()
             {
                 Interval = 16,
                 Enabled = true
             };
 
-            this.mRefreshTimer.Tick += (_, _) => { Invalidate(); };
+            this.mRefreshTimer.Tick += (_, _) => {
+                Invalidate();
+            };
         }
 
         private void CalculateBoundingBox()

@@ -16,6 +16,8 @@ using Org.BouncyCastle.Utilities.Zlib;
 using LSLib.Granny;
 using LSLib.Granny.Model;
 using EVEmuTool.UI;
+using System.Threading;
+using EVEmuTool.Trinity.Objects;
 
 namespace EVEmuTool.Forms
 {
@@ -24,7 +26,7 @@ namespace EVEmuTool.Forms
     {
         private BackgroundWorker mWorker;
         private BackgroundWorker mContentLoader;
-        private EmbedFSFile[] mFiles;
+        private IEmbedFS mSource;
         private List<TreeNode> mNodes = new List<TreeNode> ();
         private TreeNode mTree = new TreeNode("/");
         private Control mPreviewComponent;
@@ -32,8 +34,7 @@ namespace EVEmuTool.Forms
 
         public StuffExplorer(Stream input, string title)
         {
-            this.mFiles = new EmbedFSFile[1];
-            this.mFiles[0] = new EmbedFSFile(input);
+            this.mSource = new EmbedFSFile(input);
 
             InitializeComponent();
 
@@ -43,13 +44,7 @@ namespace EVEmuTool.Forms
 
         public StuffExplorer(string basepath, string[] files)
         {
-            this.mFiles = new EmbedFSFile [files.Length];
-
-            for (int i = 0; i < files.Length; i ++)
-            {
-                this.mFiles[i] = new EmbedFSFile(File.OpenRead (files[i]));
-            }
-            
+            this.mSource = new EmbedFSDirectory(files);
             InitializeComponent();
 
             this.Text = $"EVE Online Client Tool - {basepath}";
@@ -162,43 +157,40 @@ namespace EVEmuTool.Forms
 
         private void DoWork(object sender, EventArgs e)
         {
-            foreach (EmbedFSFile file in this.mFiles)
+            // load the file information
+            this.mSource.InitializeFile();
+
+            // get the file list sorted by filename
+            foreach (StuffEntry entry in this.mSource.Files.OrderByDescending(x => x.FileName))
             {
-                // load the file information
-                file.ReadFile();
+                TreeNode node = new TreeNode(entry.FileName);
 
-                // get the file list sorted by filename
-                foreach (StuffEntry entry in file.Files.OrderByDescending(x => x.FileName))
+                this.DecideTreeIcon(node, entry.FileName);
+                this.mNodes.Add(node);
+            }
+
+            foreach (StuffEntry entry in this.mSource.Files)
+            {
+                string[] parts = entry.FileName.Split('/');
+                TreeNode current = this.mTree;
+
+                for (int i = 0; i < parts.Length; i++)
                 {
-                    TreeNode node = new TreeNode(entry.FileName);
+                    string part = parts[i];
+                    TreeNode[] list = current.Nodes.Find(part, false);
 
-                    this.DecideTreeIcon(node, entry.FileName);
-                    this.mNodes.Add(node);
-                }
+                    if (list.Length == 0)
+                        current = current.Nodes.Add(part, part);
+                    else
+                        current = list[0];
 
-                foreach (StuffEntry entry in file.Files)
-                {
-                    string[] parts = entry.FileName.Split('/');
-                    TreeNode current = this.mTree;
-
-                    for (int i = 0; i < parts.Length; i++)
+                    if (i < parts.Length - 1)
                     {
-                        string part = parts[i];
-                        TreeNode[] list = current.Nodes.Find(part, false);
-
-                        if (list.Length == 0)
-                            current = current.Nodes.Add(part, part);
-                        else
-                            current = list[0];
-
-                        if (i < parts.Length - 1)
-                        {
-                            current.ImageIndex = 0;
-                        }
-                        else
-                        {
-                            this.DecideTreeIcon(current, part);
-                        }
+                        current.ImageIndex = 0;
+                    }
+                    else
+                    {
+                        this.DecideTreeIcon(current, part);
                     }
                 }
             }
@@ -252,7 +244,7 @@ namespace EVEmuTool.Forms
             }
 
             filename = filename.ToLower();
-            entry = this.mFiles.Select(x => x.Files.Find(y => y.FileName.ToLower() == filename)).Where(x => x is not null).FirstOrDefault();
+            entry = this.mSource.Files.FirstOrDefault(y => y.FileName.ToLower() == filename);
 
             if (entry == null)
             {
@@ -325,6 +317,12 @@ namespace EVEmuTool.Forms
             // remove everything in the second panel
             this.splitContainer1.Panel2.Controls.Clear();
 
+            if (this.mSelectedEntry is not null)
+            {
+                this.exportToolStripMenuItem.Enabled = true;
+                this.viewToolStripMenuItem.Enabled = true;
+            }
+
             if (this.mPreviewComponent is null)
                 return;
 
@@ -334,6 +332,9 @@ namespace EVEmuTool.Forms
 
         private void LoadPreview()
         {
+            this.exportToolStripMenuItem.Enabled = false;
+            this.viewToolStripMenuItem.Enabled = false;
+
             // update the selected stuff entry
             this.mSelectedEntry = this.FindSelectedEntry ();
 
@@ -356,20 +357,11 @@ namespace EVEmuTool.Forms
 
         private void LoadPreviewWork(object sender, EventArgs e)
         {
-            this.exportToolStripMenuItem.Enabled = false;
-            this.viewToolStripMenuItem.Enabled = false;
-
-            if (this.mSelectedEntry is not null)
-            {
-                this.exportToolStripMenuItem.Enabled = true;
-                this.viewToolStripMenuItem.Enabled = true;
-            }
-
             if (this.mSelectedEntry is null)
                 return;
 
-            try
-            {
+            /*try
+            {*/
                 string filename = this.mSelectedEntry.FileName.ToLower();
 
                 // decide what to do based on extension
@@ -407,7 +399,6 @@ namespace EVEmuTool.Forms
                     filename.EndsWith(".txt") == true ||
                     filename.EndsWith(".css") == true ||
                     filename.EndsWith(".pink") == true ||
-                    filename.EndsWith(".red") == true ||
                     filename.EndsWith(".yaml") == true ||
                     filename.EndsWith(".color") == true ||
                     filename.EndsWith(".type") == true ||
@@ -428,12 +419,15 @@ namespace EVEmuTool.Forms
                         ReadOnly = true
                     };
 
-                    if (filename.EndsWith(".red") == true)
-                        Red.Parse(Encoding.ASCII.GetString(stream.ToArray()));
-
                     stream.Close();
 
                     this.mPreviewComponent = textBox;
+                }
+                else if (filename.EndsWith (".red") == true)
+                {
+                    MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
+
+                    this.mPreviewComponent = new RedInspector(stream, this.mSource);
                 }
                 else if(filename.EndsWith(".tri") == true)
                 {
@@ -461,19 +455,25 @@ namespace EVEmuTool.Forms
                     MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
                     this.mPreviewComponent = new AudioPlayer(stream, "wav");
                 }
-                else if (
-                    filename.EndsWith(".blue") == true)
+                else if (filename.EndsWith(".blue") == true)
                 {
                     MemoryStream stream = this.LoadToMemory(this.mSelectedEntry);
-                    WpfHexaEditor.HexEditor editor = new WpfHexaEditor.HexEditor()
+                    Thread t = new Thread(() =>
                     {
-                        Stream = stream,
-                    };
+                        WpfHexaEditor.HexEditor editor = new WpfHexaEditor.HexEditor()
+                        {
+                            Stream = stream,
+                        };
 
-                    this.mPreviewComponent = new System.Windows.Forms.Integration.ElementHost()
-                    {
-                        Child = editor
-                    };
+                        this.mPreviewComponent = new System.Windows.Forms.Integration.ElementHost()
+                        {
+                            Child = editor
+                        };
+                    });
+
+                    t.SetApartmentState(ApartmentState.STA);
+                    t.Start();
+                    while (t.ThreadState != ThreadState.Stopped) Thread.Sleep(100);
                 }
                 else if (filename.EndsWith(".gr2") == true)
                 {
@@ -501,14 +501,14 @@ namespace EVEmuTool.Forms
                         Text = "Preview not available"
                     };
                 }
-            }
+            /*}
             catch (Exception ex)
             {
                 this.mPreviewComponent = new Label()
                 {
                     Text = $"Cannot generate preview: {ex.Message}"
                 };
-            }
+            }*/
 
             // setup some of the component's information
             if (this.mPreviewComponent is not null)

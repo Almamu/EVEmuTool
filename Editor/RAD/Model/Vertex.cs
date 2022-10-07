@@ -463,9 +463,9 @@ namespace LSLib.Granny.Model
                         break;
 
                     case "BoneIndices":
-                        if (member.Type != MemberType.UInt8)
+                        if (member.Type != MemberType.UInt8 && member.Type != MemberType.Int8)
                         {
-                            throw new Exception("Bone index must be an UInt8");
+                            throw new Exception("Bone index must be an UInt8 or an Int8");
                         }
                         break;
 

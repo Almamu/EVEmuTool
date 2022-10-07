@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,9 +11,9 @@ namespace EVEmuTool.Trinity.Objects
 {
     public class EveSpriteSetItem : RedObject
     {
-        public EveSpriteSetItem(YamlMappingNode root) : base(root)
+        public EveSpriteSetItem(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
-            this.Position = Red.ParseExpectObject<TriVector>((YamlMappingNode)root["position"]);
+            this.Position = Red.ParseExpectObject<TriVector>((YamlMappingNode)root["position"], source);
 
             if (root.Children.ContainsKey("blinkRate") == true)
                 this.BlinkRate = float.Parse((string)root["blinkRate"], CultureInfo.InvariantCulture);
@@ -23,7 +24,7 @@ namespace EVEmuTool.Trinity.Objects
             if (root.Children.ContainsKey("falloff") == true)
                 this.Falloff = float.Parse((string)root["falloff"], CultureInfo.InvariantCulture);
 
-            this.Color = Red.ParseExpectObject<TriColor>((YamlMappingNode)root["color"]);
+            this.Color = Red.ParseExpectObject<TriColor>((YamlMappingNode)root["color"], source);
         }
 
         public TriVector Position { get; init; }

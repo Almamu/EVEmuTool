@@ -1,4 +1,5 @@
-﻿using EVEmuTool.Trinity.Objects;
+﻿using EVEmuTool.EmbedFS;
+using EVEmuTool.Trinity.Objects;
 using EVEmuTool.Trinity.Objects.Parameters;
 using System;
 using System.Collections.Generic;
@@ -14,7 +15,7 @@ namespace EVEmuTool.Trinity
 {
     public class Red
     {
-        public static void Parse(string content)
+        public static RedObject Parse(string content, IEmbedFS container)
         {
             YamlStream yaml = new YamlStream();
             yaml.Load(new StringReader(content));
@@ -22,36 +23,38 @@ namespace EVEmuTool.Trinity
             YamlDocument document = yaml.Documents.First();
             YamlNode root = document.RootNode;
 
-            RedObject redObject = ParseObject((YamlMappingNode) root);
+            return ParseObject((YamlMappingNode) root, container);
         }
-        public static RedObject ParseObject(YamlMappingNode node)
+        public static RedObject ParseObject(YamlMappingNode node, IEmbedFS container)
         {
             string type = (string) node ["type"];
 
             return type switch
             {
-                "EveShip2" => new EveShip2(node),
-                "EveStation2" => new EveStation2(node),
-                "BlueObjectProxy" => ParseObject((YamlMappingNode) node["object"]),
-                "Tr2Mesh" => new Tr2Mesh(node),
-                "Tr2MeshArea" => new Tr2MeshArea(node),
-                "Tr2Effect" => new Tr2Effect(node),
-                "Tr2FloatParameter" => new Tr2FloatParameter (node),
-                "Tr2Vector4Parameter" => new Tr2Vector4Parameter(node),
-                "TriVariableParameter" => new TriVariableParameter(node),
-                "TriTransformParameter" => new TriTransformParameter(node),
-                "TriVector" => new TriVector(node),
-                "TriColor" => new TriColor(node),
-                "EveSpriteSet" => new EveSpriteSet(node),
-                "EveSpriteSetItem" => new EveSpriteSetItem(node),
-                "EveTransform" => new EveTransform(node),
+                "EveShip2" => new EveShip2(node, container),
+                "EveStation2" => new EveStation2(node, container),
+                "BlueObjectProxy" => ParseObject((YamlMappingNode) node["object"], container),
+                "Tr2Mesh" => new Tr2Mesh(node, container),
+                "Tr2MeshArea" => new Tr2MeshArea(node, container),
+                "Tr2Effect" => new Tr2Effect(node, container),
+                "Tr2FloatParameter" => new Tr2FloatParameter (node, container),
+                "TriFloatParameter" => new TriFloatParameter(node, container),
+                "Tr2Vector4Parameter" => new Tr2Vector4Parameter(node, container),
+                "TriVector4Parameter" => new TriVector4Parameter(node, container),
+                "TriVariableParameter" => new TriVariableParameter(node, container),
+                "TriTransformParameter" => new TriTransformParameter(node, container),
+                "TriVector" => new TriVector(node, container),
+                "TriColor" => new TriColor(node, container),
+                "EveSpriteSet" => new EveSpriteSet(node, container),
+                "EveSpriteSetItem" => new EveSpriteSetItem(node, container),
+                "EveTransform" => new EveTransform(node, container),
                 _ => throw new InvalidDataException($"Unknown red object type {type}")
             };
         }
 
-        public static T ParseExpectObject<T> (YamlMappingNode node) where T : RedObject
+        public static T ParseExpectObject<T> (YamlMappingNode node, IEmbedFS container) where T : RedObject
         {
-            RedObject redObject = ParseObject(node);
+            RedObject redObject = ParseObject(node, container);
 
             return redObject as T;
         }

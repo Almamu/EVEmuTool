@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace EVEmuTool.Trinity.Objects.Parameters
 {
     public class TriTexture2DParameter : Tr2EffectParameter
     {
-        public TriTexture2DParameter(YamlMappingNode root) : base(root)
+        public TriTexture2DParameter(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
             this.ResourcePath = (string)root["resourcePath"];
         }

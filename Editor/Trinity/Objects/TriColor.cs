@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace EVEmuTool.Trinity.Objects
 {
     public class TriColor : RedObject
     {
-        public TriColor(YamlMappingNode root) : base(root)
+        public TriColor(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
             if (root.Children.ContainsKey("r") == true)
                 this.R = float.Parse((string)root.Children["r"], CultureInfo.InvariantCulture);

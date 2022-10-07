@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Globalization;
 using System.Linq;
@@ -10,12 +11,12 @@ namespace EVEmuTool.Trinity.Objects
 {
     public class EveTransform : EveSpaceObject
     {
-        public EveTransform(YamlMappingNode root) : base(root)
+        public EveTransform(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
             this.Name = (string)root["name"];
 
             if (root.Children.ContainsKey("mesh") == true)
-                this.Mesh = Red.ParseExpectObject<Tr2Mesh>((YamlMappingNode)root["mesh"]);
+                this.Mesh = Red.ParseExpectObject<Tr2Mesh>((YamlMappingNode)root["mesh"], source);
 
             YamlSequenceNode scaling = (YamlSequenceNode)root["scaling"];
             YamlSequenceNode rotation = (YamlSequenceNode)root["rotation"];

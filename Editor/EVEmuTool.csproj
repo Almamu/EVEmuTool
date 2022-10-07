@@ -31,6 +31,7 @@
       <PackageReference Include="Serilog.Expressions" Version="3.3.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="4.0.2-dev-00890" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
+      <PackageReference Include="SharpDX.Direct3D9" Version="4.2.0" />
       <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
       <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
       <PackageReference Include="YamlDotNet" Version="12.0.1" />

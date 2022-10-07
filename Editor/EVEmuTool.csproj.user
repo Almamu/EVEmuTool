@@ -19,6 +19,9 @@
     <Compile Update="Forms\Components\ModelViewerComponent.cs">
       <SubType>UserControl</SubType>
     </Compile>
+    <Compile Update="Forms\Components\RedInspector.cs">
+      <SubType>UserControl</SubType>
+    </Compile>
     <Compile Update="Forms\Components\TriRenderComponent.cs">
       <SubType>Component</SubType>
     </Compile>

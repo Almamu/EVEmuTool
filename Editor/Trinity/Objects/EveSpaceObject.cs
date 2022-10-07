@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace EVEmuTool.Trinity.Objects
 {
     public class EveSpaceObject : RedObject
     {
-        public EveSpaceObject(YamlMappingNode root) : base(root)
+        public EveSpaceObject(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
         }
     }

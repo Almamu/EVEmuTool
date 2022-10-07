@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,16 +10,16 @@ namespace EVEmuTool.Trinity.Objects
 {
     public class EveEntity : EveSpaceObject
     {
-        public EveEntity(YamlMappingNode root) : base(root)
+        public EveEntity(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
             if (root.Children.ContainsKey("highDetailMesh") == true)
-                this.HighDetailMesh = Red.ParseExpectObject<Tr2Mesh>((YamlMappingNode)root["highDetailMesh"]);
+                this.HighDetailMesh = Red.ParseExpectObject<Tr2Mesh>((YamlMappingNode)root["highDetailMesh"], source);
             if (root.Children.ContainsKey("mediumDetailMesh") == true)
-                this.MediumDetailMesh = Red.ParseExpectObject<Tr2Mesh>((YamlMappingNode)root["mediumDetailMesh"]);
+                this.MediumDetailMesh = Red.ParseExpectObject<Tr2Mesh>((YamlMappingNode)root["mediumDetailMesh"], source);
             if (root.Children.ContainsKey("lowDetailMesh") == true)
-                this.LowDetailMesh = Red.ParseExpectObject<Tr2Mesh>((YamlMappingNode)root["lowDetailMesh"]);
+                this.LowDetailMesh = Red.ParseExpectObject<Tr2Mesh>((YamlMappingNode)root["lowDetailMesh"], source);
 
-            this.ShadowEffect = Red.ParseExpectObject<Tr2Effect>((YamlMappingNode)root["shadowEffect"]);
+            this.ShadowEffect = Red.ParseExpectObject<Tr2Effect>((YamlMappingNode)root["shadowEffect"], source);
             YamlSequenceNode spriteSets = (YamlSequenceNode)root["spriteSets"];
             // load Tr2MeshArea's
             this.SpriteSets = new EveSpriteSet[spriteSets.Children.Count];
@@ -28,7 +29,7 @@ namespace EVEmuTool.Trinity.Objects
 
             foreach (YamlMappingNode node in spriteSets.Children)
             {
-                this.SpriteSets[index++] = Red.ParseExpectObject<EveSpriteSet>(node);
+                this.SpriteSets[index++] = Red.ParseExpectObject<EveSpriteSet>(node, source);
             }
 
             YamlSequenceNode damageLocators = (YamlSequenceNode)root["damageLocators"];
@@ -40,7 +41,7 @@ namespace EVEmuTool.Trinity.Objects
 
             foreach (YamlMappingNode node in damageLocators.Children)
             {
-                this.DamageLocators[index++] = Red.ParseExpectObject<TriVector>(node);
+                this.DamageLocators[index++] = Red.ParseExpectObject<TriVector>(node, source);
             }
 
             YamlSequenceNode children = (YamlSequenceNode)root["children"];
@@ -51,7 +52,7 @@ namespace EVEmuTool.Trinity.Objects
 
             foreach (YamlMappingNode node in children.Children)
             {
-                this.Children[index++] = Red.ParseExpectObject<EveSpaceObject>(node);
+                this.Children[index++] = Red.ParseExpectObject<EveSpaceObject>(node, source);
             }
         }
         public Tr2Mesh HighDetailMesh { get; init; }

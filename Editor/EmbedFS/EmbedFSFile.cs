@@ -10,20 +10,21 @@ namespace EVEmuTool.EmbedFS
     /// <summary>
     /// Simple class that allows working on .stuff files from EVE Online
     /// </summary>
-    public class EmbedFSFile
+    public class EmbedFSFile : IEmbedFS
     {
         private BinaryReader mInput;
+        private List<StuffEntry> mFiles = new List<StuffEntry>();
         /// <summary>
         /// The found files in the stuff file
         /// </summary>
-        public List<StuffEntry> Files { get; } = new List<StuffEntry>();
+        public IEnumerable<StuffEntry> Files => this.mFiles;
 
         public EmbedFSFile (Stream input)
         {
             this.mInput = new BinaryReader (input);
         }
 
-        public void ReadFile ()
+        public void InitializeFile ()
         {
             this.ReadFileHeader();
             this.ReadFileTree();
@@ -54,7 +55,7 @@ namespace EVEmuTool.EmbedFS
                 string filename = Encoding.ASCII.GetString(this.mInput.ReadBytes(nameLength));
                 this.mInput.BaseStream.Seek(1, SeekOrigin.Current); // skip the nullbyte
 
-                this.Files.Add(
+                this.mFiles.Add(
                     new StuffEntry
                     {
                         Origin = this,
@@ -68,8 +69,8 @@ namespace EVEmuTool.EmbedFS
 
             for (int i = 0; i < fileCount; i++)
             {
-                this.Files[i].Offset = baseOffset;
-                baseOffset += this.Files[i].Length;
+                this.mFiles[i].Offset = baseOffset;
+                baseOffset += this.mFiles[i].Length;
             }
         }
 

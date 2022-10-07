@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,7 +10,7 @@ namespace EVEmuTool.Trinity.Objects
 {
     public class Tr2Mesh : RedObject
     {
-        public Tr2Mesh(YamlMappingNode root) : base(root)
+        public Tr2Mesh(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
             this.GeometryResPath = (string)root["geometryResPath"];
             this.DecalAreas = new object[0];
@@ -25,7 +26,7 @@ namespace EVEmuTool.Trinity.Objects
 
             foreach (YamlMappingNode node in opaqueAreas.Children)
             {
-                this.OpaqueAreas[index++] = Red.ParseExpectObject<Tr2MeshArea>(node);
+                this.OpaqueAreas[index++] = Red.ParseExpectObject<Tr2MeshArea>(node, source);
             }
 
             YamlSequenceNode transparentAreas = (YamlSequenceNode)root["transparentAreas"];
@@ -37,7 +38,7 @@ namespace EVEmuTool.Trinity.Objects
 
             foreach (YamlMappingNode node in transparentAreas.Children)
             {
-                this.TransparentAreas[index++] = Red.ParseExpectObject<Tr2MeshArea>(node);
+                this.TransparentAreas[index++] = Red.ParseExpectObject<Tr2MeshArea>(node, source);
             }
         }
 

@@ -1,4 +1,5 @@
-﻿using EVEmuTool.Trinity.Objects.Parameters;
+﻿using EVEmuTool.EmbedFS;
+using EVEmuTool.Trinity.Objects.Parameters;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -10,7 +11,7 @@ namespace EVEmuTool.Trinity.Objects
 {
     public class Tr2Effect : RedObject
     {
-        public Tr2Effect(YamlMappingNode root) : base(root)
+        public Tr2Effect(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
             // name is optional for Tr2Effect
             if (root.Children.ContainsKey("name") == true)
@@ -28,7 +29,7 @@ namespace EVEmuTool.Trinity.Objects
 
             foreach (YamlMappingNode node in parameters.Children)
             {
-                this.Parameters[index++] = Red.ParseExpectObject<Tr2EffectParameter>(node);
+                this.Parameters[index++] = Red.ParseExpectObject<Tr2EffectParameter>(node, source);
             }
         }
 

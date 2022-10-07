@@ -1,4 +1,5 @@
-﻿using System;
+﻿using EVEmuTool.EmbedFS;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
@@ -9,9 +10,9 @@ namespace EVEmuTool.Trinity.Objects
 {
     public class EveSpriteSet : RedObject
     {
-        public EveSpriteSet(YamlMappingNode root) : base(root)
+        public EveSpriteSet(YamlMappingNode root, IEmbedFS source) : base(root, source)
         {
-            this.Effect = Red.ParseExpectObject<Tr2Effect>((YamlMappingNode) root["effect"]);
+            this.Effect = Red.ParseExpectObject<Tr2Effect>((YamlMappingNode) root["effect"], source);
             // go through the list of sprites
             YamlSequenceNode sprites = (YamlSequenceNode)root["sprites"];
             // load Tr2MeshArea's
@@ -21,7 +22,7 @@ namespace EVEmuTool.Trinity.Objects
 
             foreach (YamlMappingNode node in sprites.Children)
             {
-                this.Sprites[index++] = Red.ParseExpectObject<EveSpriteSetItem>(node);
+                this.Sprites[index++] = Red.ParseExpectObject<EveSpriteSetItem>(node, source);
             }
         }
 
