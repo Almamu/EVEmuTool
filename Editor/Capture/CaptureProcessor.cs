@@ -1,9 +1,8 @@
 ﻿using EVESharp.Common.Logging;
-using EVESharp.Common.Network.Messages;
-using EVESharp.PythonTypes.Marshal;
-using EVESharp.PythonTypes.Types.Collections;
-using EVESharp.PythonTypes.Types.Network;
-using EVESharp.PythonTypes.Types.Primitives;
+using EVESharp.EVE.Types.Network;
+using EVESharp.Types;
+using EVESharp.Types.Collections;
+using EVESharp.Types.Serialization;
 using Serilog;
 using System;
 using System.Collections.Generic;

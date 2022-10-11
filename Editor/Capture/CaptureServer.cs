@@ -1,7 +1,5 @@
 ﻿using EVEmuTool.Configuration;
 using EVEmuTool.Extensions;
-using EVESharp.Common.Network;
-using EVESharp.Common.Network.Messages;
 using Serilog;
 using System;
 using System.Collections.Generic;

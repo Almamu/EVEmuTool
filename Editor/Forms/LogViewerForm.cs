@@ -1,5 +1,5 @@
 ﻿using EVEmuTool.LogServer;
-using EVESharp.PythonTypes.Marshal;
+using EVESharp.Types.Serialization;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

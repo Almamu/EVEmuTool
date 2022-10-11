@@ -1,5 +1,5 @@
-﻿using EVESharp.Common.Network;
-using EVESharp.Common.Network.Messages;
+﻿using EVESharp.EVE.Messages;
+using EVESharp.EVE.Network.Sockets;
 using System;
 using System.Collections.Generic;
 using System.Linq;

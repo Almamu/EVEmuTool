@@ -1,10 +1,9 @@
 ﻿using EVEmuTool.CustomMarshal.CustomTypes;
-using EVESharp.PythonTypes;
-using EVESharp.PythonTypes.Compression;
-using EVESharp.PythonTypes.Marshal;
-using EVESharp.PythonTypes.Types.Collections;
-using EVESharp.PythonTypes.Types.Database;
-using EVESharp.PythonTypes.Types.Primitives;
+using EVESharp.Common;
+using EVESharp.Common.Compression;
+using EVESharp.Types;
+using EVESharp.Types.Collections;
+using EVESharp.Types.Serialization;
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -296,7 +295,7 @@ namespace EVEmuTool.CustomMarshal
 
             foreach (DBRowDescriptor.Column column in descriptor.Columns)
             {
-                int bitLength = Utils.GetTypeBits(column.Type);
+                int bitLength = column.Type.GetBits();
 
                 if (column.Type == FieldType.Bool)
                 {
@@ -311,7 +310,7 @@ namespace EVEmuTool.CustomMarshal
             }
 
             // sort columns by the bit size and calculate other statistics for the PackedRow
-            IOrderedEnumerable<DBRowDescriptor.Column> enumerator = descriptor.Columns.OrderByDescending(c => Utils.GetTypeBits(c.Type));
+            IOrderedEnumerable<DBRowDescriptor.Column> enumerator = descriptor.Columns.OrderByDescending(c => c.Type.GetBits());
 
             MemoryStream decompressedStream = ZeroCompressionUtils.LoadZeroCompressed(this.mReader, wholeBytes + ((nullBits + boolBits) >> 3) + 1);
             BinaryReader decompressedReader = new BinaryReader(decompressedStream);
@@ -428,13 +427,13 @@ namespace EVEmuTool.CustomMarshal
             PyList list = new PyList();
             PyDictionary dict = new PyDictionary();
 
-            while (this.mReader.PeekChar() != Marshal.PACKED_TERMINATOR)
+            while (this.mReader.PeekChar() != Specification.PACKED_TERMINATOR)
                 list.Add(this.ProcessGuard(new PyObject(isType2, null, list, null), false));
 
             // ignore packed terminator
             this.mReader.ReadByte();
 
-            while (this.mReader.PeekChar() != Marshal.PACKED_TERMINATOR)
+            while (this.mReader.PeekChar() != Specification.PACKED_TERMINATOR)
             {
                 PyString key = this.ProcessGuard(new PyObject(isType2, null, list, dict), false) as PyString;
                 PyDataType value = this.ProcessGuard(new PyObject(isType2, null, list, dict), false);

@@ -1,5 +1,5 @@
-﻿using EVESharp.PythonTypes.Marshal;
-using EVESharp.PythonTypes.Types.Primitives;
+﻿using EVESharp.Types;
+using EVESharp.Types.Serialization;
 using System.Windows.Forms;
 
 namespace EVEmuTool.CustomMarshal;

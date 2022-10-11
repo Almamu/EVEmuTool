@@ -1,8 +1,7 @@
 ﻿using EVEmuTool.CustomMarshal;
 using EVEmuTool.UI;
-using EVESharp.PythonTypes;
-using EVESharp.PythonTypes.Compression;
-using EVESharp.PythonTypes.Marshal;
+using EVESharp.Common.Compression;
+using EVESharp.Types.Serialization;
 using Org.BouncyCastle.Utilities.Zlib;
 using System;
 using System.Collections.Generic;

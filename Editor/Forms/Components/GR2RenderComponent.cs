@@ -36,7 +36,7 @@ namespace EVEmuTool.Forms.Components
             InitializeComponent();
 
             this.mModel = model;
-            this.mRefreshTimer = new Timer ()
+            this.mRefreshTimer = new Timer (this.components)
             {
                 Interval = 16,
                 Enabled = true

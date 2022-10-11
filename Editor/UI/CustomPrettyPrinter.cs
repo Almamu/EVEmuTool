@@ -1,6 +1,5 @@
 ﻿using EVEmuTool.CustomMarshal.CustomTypes;
-using EVESharp.PythonTypes;
-using EVESharp.PythonTypes.Types.Primitives;
+using EVESharp.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;

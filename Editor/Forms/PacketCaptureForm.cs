@@ -1,6 +1,6 @@
 ﻿using EVEmuTool.Capture;
 using EVEmuTool.CustomMarshal;
-using EVESharp.PythonTypes.Types.Network;
+using EVESharp.EVE.Types.Network;
 using System;
 using System.Collections.Generic;
 using System.ComponentModel;

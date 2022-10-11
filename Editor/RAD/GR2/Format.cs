@@ -6,7 +6,7 @@ using System.Text;
 using OpenTK.Mathematics;
 using System.IO;
 using System.Reflection;
-using EVESharp.PythonTypes;
+using EVESharp.Common.Checksum;
 
 namespace LSLib.Granny.GR2
 {

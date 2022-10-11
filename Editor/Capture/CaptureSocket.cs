@@ -1,4 +1,4 @@
-﻿using EVESharp.Common.Network;
+﻿using EVESharp.EVE.Network.Sockets;
 using System;
 using System.Collections.Concurrent;
 using System.Collections.Generic;

@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.IO;
 using EVEmuTool.CustomMarshal.CustomTypes;
-using EVESharp.PythonTypes;
-using EVESharp.PythonTypes.Marshal;
-using EVESharp.PythonTypes.Types.Primitives;
+using EVESharp.Common;
+using EVESharp.Types;
+using EVESharp.Types.Serialization;
 
 namespace EVEmuTool.CustomMarshal;
 

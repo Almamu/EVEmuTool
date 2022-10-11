@@ -1,9 +1,6 @@
-﻿using EVESharp.PythonTypes;
-using EVESharp.PythonTypes.Compression;
-using EVESharp.PythonTypes.Marshal;
-using EVESharp.PythonTypes.Types.Collections;
-using EVESharp.PythonTypes.Types.Database;
-using EVESharp.PythonTypes.Types.Primitives;
+﻿using EVESharp.Common;
+using EVESharp.Types;
+using EVESharp.Types.Serialization;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;

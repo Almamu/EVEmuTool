@@ -27,11 +27,11 @@
       <PackageReference Include="OpenTK.WinForms" Version="4.0.0-pre.6" />
       <PackageReference Include="Pfim" Version="0.11.1" />
       <PackageReference Include="Razorvine.Pickle" Version="1.2.1" />
+      <PackageReference Include="SeeingSharp2.WinForms" Version="0.9.1" />
       <PackageReference Include="Serilog" Version="2.11.0-dev-01380" />
       <PackageReference Include="Serilog.Expressions" Version="3.3.0" />
       <PackageReference Include="Serilog.Sinks.Console" Version="4.0.2-dev-00890" />
       <PackageReference Include="Serilog.Sinks.File" Version="5.0.1-dev-00947" />
-      <PackageReference Include="SharpDX.Direct3D9" Version="4.2.0" />
       <PackageReference Include="SixLabors.ImageSharp.Drawing" Version="1.0.0-beta15" />
       <PackageReference Include="WPFHexaEditor" Version="2.1.6" />
       <PackageReference Include="YamlDotNet" Version="12.0.1" />
@@ -40,7 +40,6 @@
     <ItemGroup>
       <ProjectReference Include="..\External\EVESharp\Server\EVESharp.Common\EVESharp.Common.csproj" />
       <ProjectReference Include="..\External\EVESharp\Server\EVESharp.EVE\EVESharp.EVE.csproj" />
-      <ProjectReference Include="..\External\EVESharp\Server\EVESharp.PythonTypes\EVESharp.PythonTypes.csproj" />
       <ProjectReference Include="..\LSLibNative\LSLibNative.vcxproj" />
     </ItemGroup>
 

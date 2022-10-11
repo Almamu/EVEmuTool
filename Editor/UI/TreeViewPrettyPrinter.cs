@@ -1,8 +1,7 @@
 ﻿using EVEmuTool.CustomMarshal.CustomTypes;
-using EVESharp.PythonTypes;
-using EVESharp.PythonTypes.Types.Collections;
-using EVESharp.PythonTypes.Types.Database;
-using EVESharp.PythonTypes.Types.Primitives;
+using EVESharp.Common;
+using EVESharp.Types;
+using EVESharp.Types.Collections;
 using System;
 using System.Collections.Generic;
 using System.Runtime.CompilerServices;

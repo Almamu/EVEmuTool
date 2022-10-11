@@ -11,7 +11,6 @@ using System.IO;
 using EVEmuTool.EmbedFS;
 using EVEmuTool.Trinity;
 using EVEmuTool.Forms.Components;
-using EVESharp.PythonTypes.Compression;
 using Org.BouncyCastle.Utilities.Zlib;
 using LSLib.Granny;
 using LSLib.Granny.Model;

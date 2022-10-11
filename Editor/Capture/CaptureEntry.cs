@@ -1,5 +1,5 @@
-﻿using EVESharp.PythonTypes.Types.Network;
-using EVESharp.PythonTypes.Types.Primitives;
+﻿using EVESharp.EVE.Types.Network;
+using EVESharp.Types;
 using System;
 using System.Collections.Generic;
 using System.Linq;
